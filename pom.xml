@@ -3,7 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.fundaciobit.administraciodigital</groupId>
     <artifactId>fbit-digitalgov-libs</artifactId>
-    <version>1.0.0</version>    <packaging>pom</packaging>
+    <version>1.0.0
+    </version>
+    <packaging>pom</packaging>
 
     <licenses>
         <license>
@@ -13,18 +15,21 @@
         </license>
     </licenses>
 
-    <name>fbit-digitalgov-libs</name>
+    <name>DIGITALGOV Libs</name>
     <description>Fundacio Bit Administracio Digital Libs</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.txt.template.file>./scripts/templates/versio.txt.template</version.txt.template.file>
         <version.txt.file>./versio.txt</version.txt.file>
+        <cxf.version>2.2.12</cxf.version>
+        <global.version>${project.version}</global.version>
     </properties>
 
     <modules>
         <module>scripts</module>
         <module>utils</module>
+        <module>helium-ws-client</module>
     </modules>
 
     <dependencies>
@@ -62,12 +67,23 @@
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
+        
         <repository>
             <id>genapp-maven-repos</id>
             <name>GenApp Maven Repository</name>
             <url>http://GovernIB.github.io/genapp/maven/</url>
         </repository>
+        
+         
+        <repository>
+            <id>github-governib-maven-repos</id>
+            <name>GitHub GovernIB Maven Repository</name>
+            <url>http://GovernIB.github.io/maven/maven/</url>
+        </repository>
+        
     </repositories>
+
+      
 
     <build>
         <pluginManagement>

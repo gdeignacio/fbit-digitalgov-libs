@@ -4,12 +4,14 @@
     <parent>
         <groupId>org.fundaciobit.administraciodigital</groupId>
         <artifactId>fbit-digitalgov-libs</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.0
+</version>
     </parent>
 
     <groupId>org.fundaciobit.administraciodigital</groupId>
     <artifactId>fbit-digitalgov-libs-scripts</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0
+</version>
     <packaging>pom</packaging>
 
     <licenses>
@@ -20,6 +22,6 @@
         </license>
     </licenses>
 
-	  <name>fbit-digitalgov-libs-scripts</name>
+	  <name>DIGITALGOV Libs Scripts</name>
 
 </project>
