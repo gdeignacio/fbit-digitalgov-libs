@@ -12,7 +12,7 @@ public class DadesConnexioFormulariExtern {
     
     public static final String _QNAME = "http://forms.integracio.helium.conselldemallorca.net/"; 
                                        
-    public static final String _CODAPP = "es.caib.cmaib";
+    public static final String _CODAPP = "es.caib.cmaib"; 
     public static final String _CODCLIENT = "helium.formulari";
     
     public static final String _USERNAME = NVL.nvl(System.getProperty(_CODAPP + "." + _CODCLIENT + ".username"), "").trim();

@@ -5,7 +5,7 @@
         <groupId>org.fundaciobit.administraciodigital</groupId>
         <artifactId>fbit-digitalgov-libs</artifactId>
         <version>1.0.0
-</version>
+        </version>
     </parent>
     <artifactId>fbit-digitalgov-libs-helium-ws-client</artifactId>
     <packaging>jar</packaging>
@@ -24,45 +24,73 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-   <dependencies>
-
     
-       
+    <repositories>
+        
+      <repository>
+            <id>github-governib-maven-repos</id>
+            <name>GitHub GovernIB Maven Repository</name>
+            <url>http://GovernIB.github.io/maven/maven/</url>
+        </repository>
+    </repositories>    
+
+    <dependencies>
+
         <dependency>
-             <groupId>org.apache.cxf</groupId>
-             <artifactId>cxf-common-utilities</artifactId>
-             <version>${cxf.version}</version>
-             <scope>provided</scope>
-         </dependency>
-         <dependency>
-             <groupId>org.apache.cxf</groupId>
-             <artifactId>cxf-tools-common</artifactId>
-             <version>${cxf.version}</version>
-             <scope>provided</scope>
-         </dependency>
-         <dependency>
-             <groupId>org.apache.cxf</groupId>
-             <artifactId>cxf-rt-frontend-simple</artifactId>
-             <version>${cxf.version}</version>
-             <scope>provided</scope>
-         </dependency>
-         <dependency>
-             <groupId>org.apache.cxf</groupId>
-             <artifactId>cxf-rt-transports-http</artifactId>
-             <version>${cxf.version}</version>
-             <scope>provided</scope>
-         </dependency>
-
-
-  </dependencies>
+            <groupId>org.fundaciobit.administraciodigital</groupId>
+            <artifactId>fbit-digitalgov-libs-utils</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+    
+        <!--dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-common-utilities</artifactId>
+            <version>${cxf.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-tools-common</artifactId>
+            <version>${cxf.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-simple</artifactId>
+            <version>${cxf.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+            <version>${cxf.version}</version>
+            <scope>provided</scope>
+        </dependency-->
+        
+        <dependency>
+            <groupId>net.conselldemallorca</groupId>
+            <artifactId>helium-ws</artifactId>
+            <version>3.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.conselldemallorca</groupId>
+            <artifactId>helium-ws-client</artifactId>
+            <version>3.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        
+    </dependencies>
 
 
 
 
 
     <build>
-        <finalName>fbit-digitalgov-libs-utils</finalName>
+        <finalName>fbit-digitalgov-libs-helium-ws-client</finalName>
         <plugins>
 
 
@@ -92,73 +120,7 @@
             </plugin>
 
 
-            <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-resources-plugin</artifactId>
-            <version>2.4.3</version>
-            <configuration>
-                <encoding>${project.build.sourceEncoding}</encoding>
-            </configuration>
-        </plugin>
-
-
-     <plugin>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-codegen-plugin</artifactId>
-            <version>${cxf.version}</version>
-            <executions>
-                <execution>
-                    <id>helium-ws-v1-tramitacio</id>
-                    <phase>generate-sources</phase>
-                    <configuration>
-                        <!--sourceRoot>${basedir}/target/generated/cxf-codegen-plugin</sourceRoot-->
-                        <wsdlOptions>
-                            <wsdlOption>
-                                <wsdl>${basedir}/src/main/resources/wsdl/v1/Tramitacio.wsdl</wsdl>
-                                <!--wsdl>http://helium.fundaciobit.org/helium/ws/v1/Tramitacio?wsdl</wsdl-->
-                                <extraargs>
-                                    <extraarg>-xjc-Xts</extraarg>
-                                </extraargs>
-                            </wsdlOption>
-                        </wsdlOptions>
-                    </configuration>
-                    <goals>
-                        <goal>wsdl2java</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>helium-ws-formulariextern</id>
-                    <phase>generate-sources</phase>
-                    <configuration>
-                        <!--sourceRoot>${basedir}/target/generated/cxf-codegen-plugin</sourceRoot-->
-                        <wsdlOptions>
-                            <wsdlOption>
-                                <wsdl>${basedir}/src/main/resources/wsdl/FormulariExtern.wsdl</wsdl>
-                                <!--wsdl>http://helium.fundaciobit.org/helium/ws/FormulariExtern?wsdl</wsdl-->
-                                <extraargs>
-                                    <extraarg>-xjc-Xts</extraarg>
-                                </extraargs>
-                            </wsdlOption>
-                        </wsdlOptions>
-                    </configuration>
-                    <goals>
-                        <goal>wsdl2java</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <dependencies>
-                <dependency>
-                    <groupId>xerces</groupId>
-                    <artifactId>xercesImpl</artifactId>
-                    <version>2.9.1</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.cxf</groupId>
-                    <artifactId>cxf-xjc-ts</artifactId>
-                    <version>${cxf.version}</version>
-                </dependency>
-            </dependencies>
-        </plugin>
+           
 
 
 

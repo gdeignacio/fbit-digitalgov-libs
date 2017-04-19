@@ -1,6 +1,6 @@
 package org.fundaciobit.administraciodigital.helium.ws.tramitacio.v1.client;
 
-import com.google.gson.Gson;
+
 import static org.fundaciobit.administraciodigital.helium.ws.tramitacio.v1.client.DadesConnexioCMAIBTramitacio._CODAPP;
 import static org.fundaciobit.administraciodigital.helium.ws.tramitacio.v1.client.DadesConnexioCMAIBTramitacio._CODCLIENT;
 import java.net.Authenticator;
@@ -354,7 +354,7 @@ public class CMAIBTramitacioClient {
                 iniciat, finalitzat, geoPosX, geoPosY,
                 geoReferencia);
         
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
         
         for (ExpedientInfo expedient:expedients){
             
@@ -366,7 +366,7 @@ public class CMAIBTramitacioClient {
             
             System.out.println(line);
            
-            System.out.println(gson.toJson(expedient));
+          //  System.out.println(gson.toJson(expedient));
             
         }
         
