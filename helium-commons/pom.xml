@@ -4,9 +4,10 @@
     <parent>
         <groupId>org.fundaciobit.administraciodigital</groupId>
         <artifactId>fbit-digitalgov-libs</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.0
+</version>
     </parent>
-    <artifactId>fbit-digitalgov-libs-helium-disseny</artifactId>
+    <artifactId>fbit-digitalgov-libs-helium-commons</artifactId>
     <packaging>jar</packaging>
 
     <licenses>
@@ -17,8 +18,8 @@
         </license>
     </licenses>
 
-    <name>DIGITALGOV Libs Helium Disseny</name>
-    <description>Mòdulo Helium Disseny de DIGITALGOV</description>
+    <name>DIGITALGOV Libs Helium Commons</name>
+    <description>Mòdulo Helium Commons de fbit digitalgov libs</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,47 +28,9 @@
 
     <dependencies>
 
-
-      <!-- https://mvnrepository.com/artifact/org.jbpm.jbpm3/jbpm-jpdl -->
-      <dependency>
-          <groupId>org.jbpm.jbpm3</groupId>
-          <artifactId>jbpm-jpdl</artifactId>
-          <version>3.3.1.GA</version>
-          <exclusions>
-              <exclusion>
-                  <groupId>javax.transaction</groupId>
-                  <artifactId>jta</artifactId>
-              </exclusion>
-          </exclusions>
-          <scope>provided</scope>
-      </dependency>
- 
-      <dependency>
-          <groupId>net.conselldemallorca</groupId>
-          <artifactId>helium-disseny</artifactId>
-          <version>3.1</version>
-          <scope>provided</scope>
-         <type>jar</type>
-      </dependency>
-
-      <dependency>
-          <groupId>com.google.code.gson</groupId>
-          <artifactId>gson</artifactId>
-          <version>1.3</version>
-          <type>jar</type>
-      </dependency>
-    <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-      <version>1.1.1</version>
-      <type>jar</type>
-    </dependency>
-
-
-
     </dependencies>
     <build>
-        <finalName>fbit-digitalgov-libs-helium-disseny</finalName>
+        <finalName>fbit-digitalgov-libs-helium-commons</finalName>
         <plugins>
 
 

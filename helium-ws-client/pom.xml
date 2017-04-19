@@ -43,6 +43,14 @@
             <scope>provided</scope>
         </dependency>
     
+          <dependency>
+            <groupId>org.fundaciobit.administraciodigital</groupId>
+            <artifactId>fbit-digitalgov-libs-helium-commons</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+    
         <!--dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-common-utilities</artifactId>
@@ -73,14 +81,12 @@
             <artifactId>helium-ws</artifactId>
             <version>3.1</version>
             <type>jar</type>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.conselldemallorca</groupId>
             <artifactId>helium-ws-client</artifactId>
             <version>3.1</version>
             <type>jar</type>
-            <scope>compile</scope>
         </dependency>
         
     </dependencies>

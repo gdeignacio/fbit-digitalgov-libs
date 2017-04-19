@@ -7,13 +7,15 @@ import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
+
+/*
 import net.conselldemallorca.helium.ws.tramitacio.v1.ArxiuProces;
 
 
@@ -22,11 +24,11 @@ import net.conselldemallorca.helium.ws.tramitacio.v1.CampTasca;
 import net.conselldemallorca.helium.ws.tramitacio.v1.DocumentProces;
 import net.conselldemallorca.helium.ws.tramitacio.v1.ExpedientInfo;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TascaTramitacio;
-import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Exception;
+import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException;
 
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplService;
-
+*/
 
 
 
@@ -34,22 +36,22 @@ import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplServic
  *
  * @author gdeignacio
  */
-public class CMAIBTramitacioClient {
+public class TramitacioClient {
 
-    protected static final Logger LOG = Logger.getLogger(CMAIBTramitacioClient.class.getName());
+    protected static final Logger LOG = Logger.getLogger(TramitacioClient.class.getName());
 
     /**
      * Objecte que emmagatzema la instancia de la classe segons el patro
      * singleton
      *
      */
-    private static final CMAIBTramitacioClient client = new CMAIBTramitacioClient();
+    private static final TramitacioClient client = new TramitacioClient();
 
     /**
      * Construeix un objecte de la classe. Aquest metode es privat per forcar el
      * patro singleton.
      */
-    private CMAIBTramitacioClient() {
+    private TramitacioClient() {
         super();
     }
 
@@ -58,13 +60,14 @@ public class CMAIBTramitacioClient {
      *
      * @return objete singleton de la clase CMAIBDocumentOrganismeWsClient.
      */
-    public static CMAIBTramitacioClient getClient() {
+    public static TramitacioClient getClient() {
         return client;
     }
 
     private static final QName SERVICE_NAME = new QName(DadesConnexioCMAIBTramitacio._QNAME,
             DadesConnexioCMAIBTramitacio._SERVICE_NAME);
 
+    
     private TramitacioService getServicePort() {
 
         URL wsdlURL = null;
@@ -73,7 +76,7 @@ public class CMAIBTramitacioClient {
             wsdlURL = new URL(DadesConnexioCMAIBTramitacio._WSDL_LOCATION);
 
         } catch (MalformedURLException ex) {
-            Logger.getLogger(CMAIBTramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         Authenticator.setDefault(new Authenticator() {
@@ -118,13 +121,15 @@ public class CMAIBTramitacioClient {
     }
 
     
-    private static List<ExpedientInfo> consultaExpedients(TramitacioService port, String entorn, String numero) throws TramitacioException_Exception   {
+    private static List<ExpedientInfo> consultaExpedients(TramitacioService port, String entorn, String numero) throws TramitacioException   {
         
         String _entorn = entorn;
         String _usuari = null;
         String _numero = numero;
-        XMLGregorianCalendar _dataInici1 = null;
-        XMLGregorianCalendar _dataInici2 = null;
+        Date _dataInici1 = null;
+        Date _dataInici2 = null;
+ //     XMLGregorianCalendar _dataInici1 = null;
+ //     XMLGregorianCalendar _dataInici2 = null;
         String _expedientTipusCodi = null;
         String _estatCodi = null;
         boolean _iniciat = false;
@@ -158,8 +163,8 @@ public class CMAIBTramitacioClient {
                 break;
             }
             
-        } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(CMAIBTramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TramitacioException ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
@@ -174,8 +179,8 @@ public class CMAIBTramitacioClient {
         
         try {
             response = getArxiuProces(port, idArxiuProces);
-        } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(CMAIBTramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TramitacioException ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
         
@@ -183,7 +188,7 @@ public class CMAIBTramitacioClient {
     
     
     
-    private static ArxiuProces getArxiuProces(TramitacioService port, Long idArxiuProces) throws TramitacioException_Exception {
+    private static ArxiuProces getArxiuProces(TramitacioService port, Long idArxiuProces) throws TramitacioException {
 
         ArxiuProces _getArxiuProces__return = port.getArxiuProces(idArxiuProces);
         return _getArxiuProces__return;
@@ -191,7 +196,7 @@ public class CMAIBTramitacioClient {
     }
     
     
-    private static List<DocumentProces> consultarDocumentsProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException_Exception {
+    private static List<DocumentProces> consultarDocumentsProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException {
 
         List<DocumentProces> _consultarDocumentsProces__return = port.consultarDocumentsProces(idEntorn, idProces);
         return _consultarDocumentsProces__return;
@@ -206,15 +211,15 @@ public class CMAIBTramitacioClient {
         
         try {
             response = consultarDocumentsProces(port, idEntorn, idProces);
-        } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(CMAIBTramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TramitacioException ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
         
     }
     
     
-    private static List<CampProces> consultarVariablesProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException_Exception {
+    private static List<CampProces> consultarVariablesProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException {
 
         List<CampProces> _consultarVariablesProces__return = port.consultarVariablesProces(idEntorn, idProces);
         return _consultarVariablesProces__return;
@@ -229,15 +234,15 @@ public class CMAIBTramitacioClient {
 
         try {
             response = consultarVariablesProces(port, idEntorn, idProces);
-        } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(CMAIBTramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TramitacioException ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
     }
     
     
-    private static List<TascaTramitacio> consultaTasquesGrup(TramitacioService port, String idEntorn) throws TramitacioException_Exception {
+    private static List<TascaTramitacio> consultaTasquesGrup(TramitacioService port, String idEntorn) throws TramitacioException {
 
         List<TascaTramitacio> _consultaTasquesGrup__return = port.consultaTasquesGrup(idEntorn);
         return _consultaTasquesGrup__return;
@@ -252,14 +257,14 @@ public class CMAIBTramitacioClient {
 
         try {
             response = consultaTasquesGrup(port, idEntorn).toString();
-        } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(CMAIBTramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TramitacioException ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
     }
 
-    private static List<CampTasca> consultaFormulariTasca(TramitacioService port, String idEntorn, String idTasca) throws TramitacioException_Exception {
+    private static List<CampTasca> consultaFormulariTasca(TramitacioService port, String idEntorn, String idTasca) throws TramitacioException {
 
         List<CampTasca> _consultaFormulariTasca__return = port.consultaFormulariTasca(idEntorn, idTasca);
         return _consultaFormulariTasca__return;
@@ -274,8 +279,8 @@ public class CMAIBTramitacioClient {
 
         try {
             response = consultaFormulariTasca(port, idEntorn, idTasca).toString();
-        } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(CMAIBTramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TramitacioException ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
@@ -322,7 +327,7 @@ public class CMAIBTramitacioClient {
         //System.setProperty("es.caib.subdepen.helium.client.usuario", "u82545");
         //System.setProperty("es.caib.subdepen.helium.client.grupo", "SDE_TRAMIT_JEFSEC");
         //System.setProperty("es.caib.subdepen.helium.client.baseURL", "http://sdesapplin1.caib.es:28080/helium/ws");
-        CMAIBTramitacioClient client = CMAIBTramitacioClient.getClient();
+        TramitacioClient client = TramitacioClient.getClient();
 
         TramitacioService port = client.getServicePort();
 
@@ -337,8 +342,13 @@ public class CMAIBTramitacioClient {
         String usuari = null;
         //String titol = null;
         String numero = "AIA/123-2017";
-        XMLGregorianCalendar dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));
-        XMLGregorianCalendar dataInici2 = null;// GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()));
+        
+        Date dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));
+        Date dataInici2 = null;// GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()));
+       
+        //XMLGregorianCalendar dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));
+        //XMLGregorianCalendar dataInici2 = null;// GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()));
+        
         String expedientTipusCodi = null; //"CMAIB_AIA_SIMPL";
         String estatCodi = null;
         boolean iniciat = false;

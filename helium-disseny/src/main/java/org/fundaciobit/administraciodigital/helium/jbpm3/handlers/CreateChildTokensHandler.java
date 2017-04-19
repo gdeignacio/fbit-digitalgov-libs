@@ -1,7 +1,9 @@
 package org.fundaciobit.administraciodigital.helium.jbpm3.handlers;
 
 import java.util.Arrays;
-import net.conselldemallorca.helium.jbpm3.handlers.BasicActionHandler;
+
+//import net.conselldemallorca.helium.jbpm3.handlers.BasicActionHandler;
+
 import org.jbpm.graph.exe.ExecutionContext;
 import org.jbpm.graph.exe.Token;
 
