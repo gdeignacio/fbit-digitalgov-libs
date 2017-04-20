@@ -1,34 +1,27 @@
 package org.fundaciobit.administraciodigital.helium.ws.tramitacio.v1.client;
 
-
-import static org.fundaciobit.administraciodigital.helium.ws.tramitacio.v1.client.DadesConnexioCMAIBTramitacio._CODAPP;
-import static org.fundaciobit.administraciodigital.helium.ws.tramitacio.v1.client.DadesConnexioCMAIBTramitacio._CODCLIENT;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
-
-/*
 import net.conselldemallorca.helium.ws.tramitacio.v1.ArxiuProces;
-
-
 import net.conselldemallorca.helium.ws.tramitacio.v1.CampProces;
 import net.conselldemallorca.helium.ws.tramitacio.v1.CampTasca;
 import net.conselldemallorca.helium.ws.tramitacio.v1.DocumentProces;
 import net.conselldemallorca.helium.ws.tramitacio.v1.ExpedientInfo;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TascaTramitacio;
-import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException;
-
+import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Exception;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplService;
-*/
+import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
+
 
 
 
@@ -64,17 +57,17 @@ public class TramitacioClient {
         return client;
     }
 
-    private static final QName SERVICE_NAME = new QName(DadesConnexioCMAIBTramitacio._QNAME,
-            DadesConnexioCMAIBTramitacio._SERVICE_NAME);
+    private static final QName SERVICE_NAME = new QName(DadesConnexioTramitacio._QNAME,
+            DadesConnexioTramitacio._SERVICE_NAME);
 
-    
-    private TramitacioService getServicePort() {
+    private TramitacioService getServicePort(String app) {
 
         URL wsdlURL = null;
+        
+        final DadesConnexio dadesConnexio = new DadesConnexioTramitacio(app);
 
         try {
-            wsdlURL = new URL(DadesConnexioCMAIBTramitacio._WSDL_LOCATION);
-
+            wsdlURL = new URL(dadesConnexio.getWsdlLocation());
         } catch (MalformedURLException ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -83,8 +76,9 @@ public class TramitacioClient {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(
-                        DadesConnexioCMAIBTramitacio._USERNAME,
-                        DadesConnexioCMAIBTramitacio._PASSWORD.toCharArray());
+                        dadesConnexio.getUserName(),
+                        dadesConnexio.getPassword().toCharArray()
+                 );
             }
         });
 
@@ -93,22 +87,11 @@ public class TramitacioClient {
 
         Map<String, Object> req = ((BindingProvider) port).getRequestContext();
 
-        req.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                DadesConnexioCMAIBTramitacio._BASE_URL + DadesConnexioCMAIBTramitacio._SERVICE_CONTEXT);
+        req.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, dadesConnexio.getEndPoint());
 
-        req.put(BindingProvider.USERNAME_PROPERTY, DadesConnexioCMAIBTramitacio._USERNAME);
-        req.put(BindingProvider.PASSWORD_PROPERTY, DadesConnexioCMAIBTramitacio._PASSWORD);
-
-        //req.put(BindingProvider.USERNAME_PROPERTY, "idameto");
-        //req.put(BindingProvider.PASSWORD_PROPERTY, "idameto");
-        //Map<String, List<String>> headers = new HashMap<String, List<String>>();
-        //headers.put("Username", Collections.singletonList(DadesConnexioCMAIBTramitacio._USERNAME));
-        //headers.put("Password", Collections.singletonList(DadesConnexioCMAIBTramitacio._PASSWORD));
-        //req.put(MessageContext.HTTP_REQUEST_HEADERS, headers);  
-        //Map<String, List<String>> headers = new HashMap<String, List<String>>();
-        //headers.put("Username", Collections.singletonList("idameto"));
-        //headers.put("Password", Collections.singletonList("idameto"));
-        //req.put(MessageContext.HTTP_REQUEST_HEADERS, headers);  
+        req.put(BindingProvider.USERNAME_PROPERTY, dadesConnexio.getUserName());
+        req.put(BindingProvider.PASSWORD_PROPERTY, dadesConnexio.getPassword());
+ 
         return port;
 
     }
@@ -120,16 +103,32 @@ public class TramitacioClient {
 
     }
 
-    
-    private static List<ExpedientInfo> consultaExpedients(TramitacioService port, String entorn, String numero) throws TramitacioException   {
+    public List<ExpedientInfo> consultaExpedients(String app, String idEntorn, String numero) {
+
+        TramitacioService port = getServicePort(app);
         
+      
+        List<ExpedientInfo> response = null;
+
+        try {
+            response = consultaExpedients(port, idEntorn, numero);
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
+
+    }
+
+    private static List<ExpedientInfo> consultaExpedients(TramitacioService port, String entorn, String numero) throws TramitacioException_Exception {
+
         String _entorn = entorn;
         String _usuari = null;
         String _numero = numero;
-        Date _dataInici1 = null;
-        Date _dataInici2 = null;
- //     XMLGregorianCalendar _dataInici1 = null;
- //     XMLGregorianCalendar _dataInici2 = null;
+        //Date _dataInici1 = null;
+        //Date _dataInici2 = null;
+        XMLGregorianCalendar _dataInici1 = null;
+        XMLGregorianCalendar _dataInici2 = null;
         String _expedientTipusCodi = null;
         String _estatCodi = null;
         boolean _iniciat = false;
@@ -137,149 +136,139 @@ public class TramitacioClient {
         Double _geoPosX = null;
         Double _geoPosY = null;
         String _geoReferencia = null;
-        
-        
-        
-        List<ExpedientInfo> _consultaExpedients__return = port.consultaExpedients(_entorn,_usuari, _numero, 
+
+        List<ExpedientInfo> _consultaExpedients__return = port.consultaExpedients(_entorn, _usuari, _numero,
                 _dataInici1, _dataInici2, _expedientTipusCodi, _estatCodi,
                 _iniciat, _finalitzat, _geoPosX, _geoPosY, _geoReferencia);
-        
-        return _consultaExpedients__return;
-        
-    }
-    
-    
-    public ExpedientInfo consultaExpedient(String numero) {
 
-        TramitacioService port = getServicePort();
-        String entorn = DadesConnexioCMAIBTramitacio._ENTORNO;
+        return _consultaExpedients__return;
+
+    }
+
+    public ExpedientInfo consultaExpedient(String app, String idEntorn, String numero) {
+
+        TramitacioService port = getServicePort(app);
+        
         ExpedientInfo response = null;
 
+        List<ExpedientInfo> expedients = null;
         try {
-            
-            List<ExpedientInfo> expedients = consultaExpedients(port, entorn, numero);
-            for (ExpedientInfo expedient:expedients){
-                response=expedient;
-                break;
-            }
-            
-        } catch (TramitacioException ex) {
+            expedients = consultaExpedients(port, idEntorn, numero);
+        } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for (ExpedientInfo expedient : expedients) {
+            response = expedient;
+            break;
         }
 
         return response;
     }
-    
-    
-    public ArxiuProces getArxiuProces(Long idArxiuProces){
-    
-        TramitacioService port = getServicePort();
-        String idEntorn = DadesConnexioCMAIBTramitacio._ENTORNO;
+
+    public ArxiuProces getArxiuProces(String app, String idEntorn, Long idArxiuProces) {
+
+        TramitacioService port = getServicePort(app);
+  
         ArxiuProces response = null;
-        
+
         try {
             response = getArxiuProces(port, idArxiuProces);
-        } catch (TramitacioException ex) {
+        } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return response;
-        
+
     }
-    
-    
-    
-    private static ArxiuProces getArxiuProces(TramitacioService port, Long idArxiuProces) throws TramitacioException {
+
+    private static ArxiuProces getArxiuProces(TramitacioService port, Long idArxiuProces) throws TramitacioException_Exception {
 
         ArxiuProces _getArxiuProces__return = port.getArxiuProces(idArxiuProces);
         return _getArxiuProces__return;
 
     }
-    
-    
-    private static List<DocumentProces> consultarDocumentsProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException {
+
+    private static List<DocumentProces> consultarDocumentsProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException_Exception {
 
         List<DocumentProces> _consultarDocumentsProces__return = port.consultarDocumentsProces(idEntorn, idProces);
         return _consultarDocumentsProces__return;
 
     }
-    
-    public List<DocumentProces> consultarDocumentsProces(String idProces){
-    
-        TramitacioService port = getServicePort();
-        String idEntorn = DadesConnexioCMAIBTramitacio._ENTORNO;
+
+    public List<DocumentProces> consultarDocumentsProces(String app, String idEntorn, String idProces) {
+
+        TramitacioService port = getServicePort(app);
         List<DocumentProces> response = null;
-        
+
         try {
             response = consultarDocumentsProces(port, idEntorn, idProces);
-        } catch (TramitacioException ex) {
+        } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return response;
-        
+
     }
-    
-    
-    private static List<CampProces> consultarVariablesProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException {
+
+    private static List<CampProces> consultarVariablesProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException_Exception {
 
         List<CampProces> _consultarVariablesProces__return = port.consultarVariablesProces(idEntorn, idProces);
         return _consultarVariablesProces__return;
-        
-    }
-    
-    public List<CampProces> consultarVariablesProces(String idProces) {
 
-        TramitacioService port = getServicePort();
-        String idEntorn = DadesConnexioCMAIBTramitacio._ENTORNO;
+    }
+
+    public List<CampProces> consultarVariablesProces(String app, String idEntorn, String idProces) {
+
+        TramitacioService port = getServicePort(app);
         List<CampProces> response = null;
 
         try {
             response = consultarVariablesProces(port, idEntorn, idProces);
-        } catch (TramitacioException ex) {
+        } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
     }
-    
-    
-    private static List<TascaTramitacio> consultaTasquesGrup(TramitacioService port, String idEntorn) throws TramitacioException {
+
+    private static List<TascaTramitacio> consultaTasquesGrup(TramitacioService port, String idEntorn) throws TramitacioException_Exception {
 
         List<TascaTramitacio> _consultaTasquesGrup__return = port.consultaTasquesGrup(idEntorn);
         return _consultaTasquesGrup__return;
 
     }
 
-    public String consultaTasquesGrup(String idEntorn) {
+    public String consultaTasquesGrup(String app, String idEntorn) {
 
-        TramitacioService port = getServicePort();
+        TramitacioService port = getServicePort(app);
 
         String response = null;
 
         try {
             response = consultaTasquesGrup(port, idEntorn).toString();
-        } catch (TramitacioException ex) {
+        } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
     }
 
-    private static List<CampTasca> consultaFormulariTasca(TramitacioService port, String idEntorn, String idTasca) throws TramitacioException {
+    private static List<CampTasca> consultaFormulariTasca(TramitacioService port, String idEntorn, String idTasca) throws TramitacioException_Exception {
 
         List<CampTasca> _consultaFormulariTasca__return = port.consultaFormulariTasca(idEntorn, idTasca);
         return _consultaFormulariTasca__return;
 
     }
 
-    public String consultaFormulariTasca(String idEntorn, String idTasca) {
+    public String consultaFormulariTasca(String app, String idEntorn, String idTasca) {
 
-        TramitacioService port = getServicePort();
+        TramitacioService port = getServicePort(app);
 
         String response = null;
 
         try {
             response = consultaFormulariTasca(port, idEntorn, idTasca).toString();
-        } catch (TramitacioException ex) {
+        } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -316,12 +305,16 @@ public class TramitacioClient {
      */
     public static void main(String args[]) throws Exception {
 
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".username", "admin");
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".password", "admincmaib");
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".baseURL", "http://helium.fundaciobit.org/helium");
+        String app = "es.caib.cmaib";
+        
+        DadesConnexioTramitacio dadesConnexio = new DadesConnexioTramitacio(app);
+        
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".username", "admin");
+        System.setProperty(app + "." + dadesConnexio.getCodClient()  + ".password", "admincmaib");
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".baseURL", "http://helium.fundaciobit.org/helium");
 
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".entorno", "EntornCMAIB");
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".grupo", "CMI_ADMIN");
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN");
 
         //System.setProperty("es.caib.subdepen.helium.client.entorno", "CONAFESOC");
         //System.setProperty("es.caib.subdepen.helium.client.usuario", "u82545");
@@ -329,26 +322,22 @@ public class TramitacioClient {
         //System.setProperty("es.caib.subdepen.helium.client.baseURL", "http://sdesapplin1.caib.es:28080/helium/ws");
         TramitacioClient client = TramitacioClient.getClient();
 
-        TramitacioService port = client.getServicePort();
-
-        
+        TramitacioService port = client.getServicePort(app);
 
         //List lista = consultaFormulariTasca(port, "EntornCMAIB", "5990");
         //System.out.println(lista);
-        
         //port.consultaExpedients(_CODAPP, _CODAPP, _CODAPP, dataInici1, dataInici2, _CODCLIENT, _CODAPP, true, true, Double.NaN, Double.NaN, _CODCLIENT)
-        
         String entorn = "EntornCMAIB";
         String usuari = null;
         //String titol = null;
         String numero = "AIA/123-2017";
-        
-        Date dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));
-        Date dataInici2 = null;// GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()));
-       
-        //XMLGregorianCalendar dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));
-        //XMLGregorianCalendar dataInici2 = null;// GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()));
-        
+        //numero = null; 
+
+        //Date dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));
+        //Date dataInici2 = null;// GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()));
+
+        XMLGregorianCalendar dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));
+        XMLGregorianCalendar dataInici2 = null;// GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()));
         String expedientTipusCodi = null; //"CMAIB_AIA_SIMPL";
         String estatCodi = null;
         boolean iniciat = false;
@@ -356,93 +345,79 @@ public class TramitacioClient {
         Double geoPosX = null;
         Double geoPosY = null;
         String geoReferencia = null;
-        
+
         //port.consultaExpedients(usuari, usuari, usuari, dataInici2, dataInici2, usuari, usuari, iniciat, iniciat, geoPosY, geoPosY, numero)
-        
-        List<ExpedientInfo> expedients = port.consultaExpedients(entorn,usuari, numero , 
-                                dataInici1, dataInici2, expedientTipusCodi, estatCodi,
+        List<ExpedientInfo> expedients = port.consultaExpedients(entorn, usuari, numero,
+                dataInici1, dataInici2, expedientTipusCodi, estatCodi,
                 iniciat, finalitzat, geoPosX, geoPosY,
                 geoReferencia);
-        
+
         //Gson gson = new Gson();
-        
-        for (ExpedientInfo expedient:expedients){
-            
-            String line = Long.toString(expedient.getProcessInstanceId()) + " " +  expedient.getNumero()  + " " +
-                    expedient.getExpedientTipusCodi()  + " " +
-                    expedient.getExpedientTipusNom() + " " + expedient.getIdentificador() + " " + 
-                    expedient.getEntornCodi() + " " + expedient.getIniciadorCodi() + " " + 
-                    expedient.getInteressatNif() + " " + expedient.getInteressatNom();
-            
+        for (ExpedientInfo expedient : expedients) {
+
+            String line = Long.toString(expedient.getProcessInstanceId()) + " " + expedient.getNumero() + " "
+                    + expedient.getExpedientTipusCodi() + " "
+                    + expedient.getExpedientTipusNom() + " " + expedient.getIdentificador() + " "
+                    + expedient.getEntornCodi() + " " + expedient.getIniciadorCodi() + " "
+                    + expedient.getInteressatNif() + " " + expedient.getInteressatNom();
+
             System.out.println(line);
-           
-          //  System.out.println(gson.toJson(expedient));
-            
+
+            //  System.out.println(gson.toJson(expedient));
         }
-        
-       
-        
-        
+
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Variables");
         System.out.println("-----------------------------------------------------------------------------------------");
-        
-        
-        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "37185" );
-        
-        for (CampProces variable:variables){
-            
-            String linea = variable.getCodi() + " " +  variable.getDominiCampText()  + " " +
-                    variable.getDominiCampValor() + " " + variable.getDominiId() + " " + 
-                    variable.getObservacions() + " " + variable.getTipus() + " " + 
-                    variable.getValor() + " " +//" " + variable.getJbpmAction() + " " + 
+
+        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "37185");
+
+        for (CampProces variable : variables) {
+
+            String linea = variable.getCodi() + " " + variable.getDominiCampText() + " "
+                    + variable.getDominiCampValor() + " " + variable.getDominiId() + " "
+                    + variable.getObservacions() + " " + variable.getTipus() + " "
+                    + variable.getValor() + " "
+                    +//" " + variable.getJbpmAction() + " " + 
                     variable.getDominiParams() + " " + variable.getEtiqueta();
-            
+
             System.out.println(linea);
-            
-            String line = "public static final DVariablesAiaSimplificada " + variable.getCodi().toUpperCase() +
-                      " = new DVariablesAiaSimplificada(\"" +  variable.getCodi() + "\",\"" + variable.getEtiqueta() + "\");"; 
-            
+
+            String line = "public static final DVariablesAiaSimplificada " + variable.getCodi().toUpperCase()
+                    + " = new DVariablesAiaSimplificada(\"" + variable.getCodi() + "\",\"" + variable.getEtiqueta() + "\");";
+
             //System.out.println("------------------------------Fin valores");
-            
             //System.out.println(line);
         }
-        
-        
+
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Fi Variables");
         System.out.println("-----------------------------------------------------------------------------------------");
-        
-        
-        for (CampProces variable:variables){
+
+        for (CampProces variable : variables) {
             /*
             String line = variable.getCodi() + " " +  variable.getDominiCampText()  + " " +
                     variable.getDominiCampValor() + " " + variable.getDominiId() + " " + 
                     variable.getObservacions() + " " + variable.getTipus() + " " + 
                     variable.getValor() + " " + variable.getJbpmAction() + " " + 
                     variable.getDominiParams() + " " + variable.getEtiqueta();
-            */
-            
-            String line = "DVariablesAiaSimplificada." + variable.getCodi().toUpperCase() + ","; 
-                            
-            
+             */
+
+            String line = "DVariablesAiaSimplificada." + variable.getCodi().toUpperCase() + ",";
+
             System.out.println(line);
         }
-        
-        
-                
+
         List lista = consultaTasquesGrup(port, "EntornCMAIB");
         System.out.println(lista);
 
         lista = port.consultaTasquesPersonals("EntornCMAIB");
-        
+
         for (Object tasca : lista) {
             TascaTramitacio task = (TascaTramitacio) tasca;
             System.out.println(task.getCodi() + " " + task.getExpedient() + " " + task.getId() + " " + task.getProcessInstanceId());
             //System.out.println(tasca.toString());
         }
-        
-        
 
 //        System.out.println(lista);
     }

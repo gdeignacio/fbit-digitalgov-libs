@@ -1,10 +1,14 @@
 package org.fundaciobit.administraciodigital.helium.jbpm3.handlers;
 
 import java.util.Arrays;
-
-//import net.conselldemallorca.helium.jbpm3.handlers.BasicActionHandler;
-
+import java.util.List;
+import net.conselldemallorca.helium.jbpm3.api.HeliumActionHandler;
+import net.conselldemallorca.helium.jbpm3.api.HeliumApi;
+import net.conselldemallorca.helium.jbpm3.handlers.exception.HeliumHandlerException;
+import org.jbpm.JbpmConfiguration;
+import org.jbpm.JbpmContext;
 import org.jbpm.graph.exe.ExecutionContext;
+import org.jbpm.graph.exe.ProcessInstance;
 import org.jbpm.graph.exe.Token;
 
 
@@ -12,7 +16,7 @@ import org.jbpm.graph.exe.Token;
  *
  * @author gdeignacio
  */
-public class CreateChildTokensHandler extends BasicActionHandler {
+public class CreateChildTokensHandler extends HeliumActionHandler {
 
     String nodeDesti;
     String varFilla;
@@ -22,10 +26,19 @@ public class CreateChildTokensHandler extends BasicActionHandler {
     private static final long serialVersionUID = 3513847803530877133L;
 
     @Override
-    public final void execute(ExecutionContext executionContext) throws Exception {
+    public final void execute(HeliumApi api) throws HeliumHandlerException {
 
         //List tokenSuffixes =  new ArrayList();
-         
+        
+        JbpmContext context = JbpmConfiguration.getInstance().createJbpmContext();
+        
+        ExecutionContext executionContext = new ExecutionContext(context.getToken(api.getToken().getId()));
+        
+        
+        
+        ProcessInstance processInstance = context.getToken(api.getToken().getId()).getProcessInstance();
+        
+        
         Object obj = executionContext.getVariable(varMultiple);
         boolean multiple = "true".equalsIgnoreCase(esMultiple);
         if (obj==null) return;
@@ -53,7 +66,10 @@ public class CreateChildTokensHandler extends BasicActionHandler {
             Token tokenFill = new Token(tokenPare, tokenName);
             executionContext.setVariable(varFilla, tokenSuffix);
             printInfo(tokenName, nodeDesti, varFilla, tokenSuffix);
-            tokenRedirigir(tokenFill.getId(), nodeDesti, false);
+            //tokenRedirigir(tokenFill.getId(), nodeDesti, false);
+            
+            api.expedientTokenRedirigir(tokenFill.getId(), nodeDesti, multiple);
+            
         }
     }
 
@@ -101,6 +117,11 @@ public class CreateChildTokensHandler extends BasicActionHandler {
 
         return tokenName;
 
+    }
+    
+     @Override
+    public void retrocedir(HeliumApi api, List<String> list) throws Exception {
+        return;
     }
 
 }

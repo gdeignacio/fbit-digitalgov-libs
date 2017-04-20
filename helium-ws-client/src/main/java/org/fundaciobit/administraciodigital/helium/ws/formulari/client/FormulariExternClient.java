@@ -1,8 +1,8 @@
 package org.fundaciobit.administraciodigital.helium.ws.formulari.client;
 
 import org.fundaciobit.administraciodigital.helium.commons.IDominiHeliumItem;
-import static org.fundaciobit.administraciodigital.helium.ws.formulari.client.DadesConnexioFormulariExtern._CODAPP;
-import static org.fundaciobit.administraciodigital.helium.ws.formulari.client.DadesConnexioFormulariExtern._CODCLIENT;
+//import static org.fundaciobit.administraciodigital.helium.ws.formulari.client.DadesConnexioFormulariExtern._CODAPP;
+//import static org.fundaciobit.administraciodigital.helium.ws.formulari.client.DadesConnexioFormulariExtern._CODCLIENT;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
@@ -17,6 +17,7 @@ import javax.xml.ws.BindingProvider;
 import net.conselldemallorca.helium.integracio.forms.GuardarFormulari;
 import net.conselldemallorca.helium.integracio.forms.GuardarFormulariImplService;
 import net.conselldemallorca.helium.integracio.forms.ParellaCodiValor;
+import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
 
 /**
  *
@@ -53,36 +54,50 @@ public class FormulariExternClient {
     private static final QName SERVICE_NAME = new QName(DadesConnexioFormulariExtern._QNAME,
             DadesConnexioFormulariExtern._SERVICE_NAME);
 
-    private GuardarFormulari getServicePort() {
+    private GuardarFormulari getServicePort(String app) {
         
         URL wsdlURL = null;
+        
+        final DadesConnexio dadesConnexio = new DadesConnexioFormulariExtern(app);
 
+        try {
+            wsdlURL = new URL(dadesConnexio.getWsdlLocation());
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(FormulariExternClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        /*
         try {
             wsdlURL = new URL(DadesConnexioFormulariExtern._WSDL_LOCATION);
         } catch (MalformedURLException ex) {
             Logger.getLogger(FormulariExternClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
         
         Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(
-                        DadesConnexioFormulariExtern._USERNAME,
-                        DadesConnexioFormulariExtern._PASSWORD.toCharArray());
+                        dadesConnexio.getUserName(),
+                        dadesConnexio.getPassword().toCharArray()
+                 );
             }
         });
         
+        
+      
         GuardarFormulariImplService ss = new GuardarFormulariImplService(wsdlURL, SERVICE_NAME);
         GuardarFormulari port = ss.getGuardarFormulariImplPort();
 
         
         Map<String, Object> req = ((BindingProvider) port).getRequestContext();
-        
-        req.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                DadesConnexioFormulariExtern._BASE_URL + DadesConnexioFormulariExtern._SERVICE_CONTEXT);
+       
+        req.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, dadesConnexio.getEndPoint());
 
-        req.put(BindingProvider.USERNAME_PROPERTY, DadesConnexioFormulariExtern._USERNAME);
-        req.put(BindingProvider.PASSWORD_PROPERTY, DadesConnexioFormulariExtern._PASSWORD);
+        req.put(BindingProvider.USERNAME_PROPERTY, dadesConnexio.getUserName());
+        req.put(BindingProvider.PASSWORD_PROPERTY, dadesConnexio.getPassword());
+        
+        
         
         //req.put(BindingProvider.USERNAME_PROPERTY, "idameto");
         //req.put(BindingProvider.PASSWORD_PROPERTY, "idameto");
@@ -102,9 +117,9 @@ public class FormulariExternClient {
 
     }
    
-    public void guardar(String idFormulari, List<IDominiHeliumItem> variables){
+    public void guardar(String app, String idFormulari, List<IDominiHeliumItem> variables){
         
-        GuardarFormulari port = getServicePort();
+        GuardarFormulari port = getServicePort(app);
         
         
     }
@@ -148,14 +163,19 @@ public class FormulariExternClient {
     
     public static void main(String args[]) throws Exception {
 
+        String app = "es.caib.cmaib";
         
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".username", "admin");
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".password", "admincmaib");
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".baseURL", "http://helium.fundaciobit.org/helium");
+        DadesConnexioFormulariExtern dadesConnexio = new DadesConnexioFormulariExtern(app);
+        
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".username", "admin");
+        System.setProperty(app + "." + dadesConnexio.getCodClient()  + ".password", "admincmaib");
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".baseURL", "http://helium.fundaciobit.org/helium");
+
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN"); 
         
         
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".entorno", "EntornCMAIB");
-        System.setProperty(_CODAPP + "." + _CODCLIENT + ".grupo", "CMI_ADMIN");
+ 
         
         
         //System.setProperty("es.caib.subdepen.helium.client.entorno", "CONAFESOC");
@@ -165,7 +185,7 @@ public class FormulariExternClient {
 
         FormulariExternClient client = FormulariExternClient.getClient();
         
-        GuardarFormulari port = client.getServicePort();
+        GuardarFormulari port = client.getServicePort(app);
         
         LOG.log(Level.INFO, "Resultados0LOK");
         System.out.println("-------------------------Resultados0LOK ");

@@ -25,14 +25,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
-    <repositories>
-        
-      <repository>
-            <id>github-governib-maven-repos</id>
-            <name>GitHub GovernIB Maven Repository</name>
-            <url>http://GovernIB.github.io/maven/maven/</url>
-        </repository>
-    </repositories>    
+     
 
     <dependencies>
 
@@ -40,7 +33,7 @@
             <groupId>org.fundaciobit.administraciodigital</groupId>
             <artifactId>fbit-digitalgov-libs-utils</artifactId>
             <version>1.0.0</version>
-            <scope>provided</scope>
+            
         </dependency>
     
           <dependency>
@@ -49,46 +42,13 @@
             <version>1.0.0</version>
             <scope>provided</scope>
         </dependency>
-        
-    
-        <!--dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-common-utilities</artifactId>
-            <version>${cxf.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-tools-common</artifactId>
-            <version>${cxf.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-simple</artifactId>
-            <version>${cxf.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-            <version>${cxf.version}</version>
-            <scope>provided</scope>
-        </dependency-->
-        
-        <dependency>
-            <groupId>net.conselldemallorca</groupId>
-            <artifactId>helium-ws</artifactId>
-            <version>3.1</version>
-            <type>jar</type>
-        </dependency>
+  
         <dependency>
             <groupId>net.conselldemallorca</groupId>
             <artifactId>helium-ws-client</artifactId>
             <version>3.1</version>
             <type>jar</type>
         </dependency>
-        
     </dependencies>
 
 
@@ -124,12 +84,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
-           
-
-
-
 
         </plugins>
     </build>
