@@ -11,7 +11,6 @@ import org.jbpm.graph.exe.ExecutionContext;
 import org.jbpm.graph.exe.ProcessInstance;
 import org.jbpm.graph.exe.Token;
 
-
 /**
  *
  * @author gdeignacio
@@ -22,28 +21,26 @@ public class CreateChildTokensHandler extends HeliumActionHandler {
     String varFilla;
     String varMultiple;
     String esMultiple;
-    
+
     private static final long serialVersionUID = 3513847803530877133L;
 
     @Override
     public final void execute(HeliumApi api) throws HeliumHandlerException {
 
         //List tokenSuffixes =  new ArrayList();
-        
         JbpmContext context = JbpmConfiguration.getInstance().createJbpmContext();
-        
+
         ExecutionContext executionContext = new ExecutionContext(context.getToken(api.getToken().getId()));
-        
-        
-        
+
         ProcessInstance processInstance = context.getToken(api.getToken().getId()).getProcessInstance();
-        
-        
+
         Object obj = executionContext.getVariable(varMultiple);
         boolean multiple = "true".equalsIgnoreCase(esMultiple);
-        if (obj==null) return;
-        Object[] tokenSuffixes = (multiple && obj instanceof Object[])?(Object[])obj:new Object[]{obj};
-        
+        if (obj == null) {
+            return;
+        }
+        Object[] tokenSuffixes = (multiple && obj instanceof Object[]) ? (Object[]) obj : new Object[]{obj};
+
         /*
         if (o instanceof Object[]){
             for (Object element:(Object[])o){
@@ -54,22 +51,19 @@ public class CreateChildTokensHandler extends HeliumActionHandler {
             //tokenSuffixes.add(getTokenSuffixElement(o));
             tokenSuffixes.add(o);
         }*/
-        
         for (Object tokenSuffix : tokenSuffixes) {
-            
-            
+
             //String.join("_", (List)Arrays.asList((Object[])tokenSuffix) )
-                    
-            String strTokenSuffix = (tokenSuffix instanceof Object[])?Arrays.toString((Object[])tokenSuffix).replace(", ", "#").replaceAll("[\\[\\]]", ""):tokenSuffix.toString();
+            String strTokenSuffix = (tokenSuffix instanceof Object[]) ? Arrays.toString((Object[]) tokenSuffix).replace(", ", "#").replaceAll("[\\[\\]]", "") : tokenSuffix.toString();
             Token tokenPare = executionContext.getToken();
             String tokenName = getTokenName(tokenPare, nodeDesti + "_" + strTokenSuffix);
             Token tokenFill = new Token(tokenPare, tokenName);
             executionContext.setVariable(varFilla, tokenSuffix);
             printInfo(tokenName, nodeDesti, varFilla, tokenSuffix);
             //tokenRedirigir(tokenFill.getId(), nodeDesti, false);
-            
+
             api.expedientTokenRedirigir(tokenFill.getId(), nodeDesti, multiple);
-            
+
         }
     }
 
@@ -88,11 +82,8 @@ public class CreateChildTokensHandler extends HeliumActionHandler {
     public void setEsMultiple(String esMultiple) {
         this.esMultiple = esMultiple;
     }
-    
-    
-    
+
     //protected abstract String getTokenSuffixElement(Object o);
-    
     private void printInfo(String tokenName, String nodeDesti, String varFilla, Object valor) {
 
         String s = ">>> Redirigint token fill (tokenName=" + tokenName + ", "
@@ -118,8 +109,8 @@ public class CreateChildTokensHandler extends HeliumActionHandler {
         return tokenName;
 
     }
-    
-     @Override
+
+    @Override
     public void retrocedir(HeliumApi api, List<String> list) throws Exception {
         return;
     }

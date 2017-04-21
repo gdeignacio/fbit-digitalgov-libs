@@ -26,9 +26,12 @@ import org.json.simple.parser.ParseException;
  * @author gdeignacio
  */
 public class ConsolidacioHandler extends HeliumActionHandler {
+    
+    String domini;
+    String id;
 
-    private static final String DOMINI = "cmaibDominiHelium";
-    private static final String DOMINIEXPORT = "es.caib.cmaib.helium.domini.DominiExportToCMAIB";
+    //private static final String DOMINI = "cmaibDominiHelium";
+    //private static final String DOMINIEXPORT = "es.caib.cmaib.helium.domini.DominiExportToCMAIB";
     
     @Override
     public void execute(HeliumApi api) throws HeliumHandlerException {
@@ -88,7 +91,9 @@ public class ConsolidacioHandler extends HeliumActionHandler {
         
         parametros.put("jsonVariables", jsonVariables);
         
-        api.consultaDomini(DOMINI, DOMINIEXPORT, parametros);
+        api.consultaDomini(domini, id, parametros);
+        
+        //api.consultaDomini(DOMINI, DOMINIEXPORT, parametros);
         
         //Map<String, Object> expedientInfoMap = new BeanMap(expedientInfo);
         //parametros.putAll(expedientInfoMap);
@@ -106,5 +111,17 @@ public class ConsolidacioHandler extends HeliumActionHandler {
     public void retrocedir(HeliumApi api, List<String> list) throws Exception {
         return;
     }
+
+    public final void setDomini(String domini) {
+        this.domini = domini;
+    }
+
+    public final void setId(String id) {
+        this.id = id;
+    }
+    
+    
+    
+    
     
 }
