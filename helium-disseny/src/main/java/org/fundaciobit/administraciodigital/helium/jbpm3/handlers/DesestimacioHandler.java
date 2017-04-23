@@ -26,12 +26,12 @@ import org.jbpm.taskmgmt.exe.TaskInstance;
  */
 public class DesestimacioHandler extends HeliumActionHandler {
 
-    String nodeDesti; // = "desestimacio";
+    String nodeDesti = "desestimacio";
 
     public void execute(HeliumApi api) throws HeliumHandlerException {
  
         JbpmContext context = JbpmConfiguration.getInstance().createJbpmContext();
-
+        
         ExecutionContext executionContext = new ExecutionContext(context.getToken(api.getToken().getId()));
 
         suspendreTasquesPendents(
@@ -48,10 +48,17 @@ public class DesestimacioHandler extends HeliumActionHandler {
             fill.end(false);
         }
         // Redirigeix el token cap al node desti
+        
+        api.expedientTokenRedirigir(
+                tokenArrel.getId(),
+                nodeDesti,
+                false);
+        /*
         tokenRedirigir(
                 tokenArrel.getId(),
                 nodeDesti,
                 false);
+*/
     }
 
     public final void setNodeDesti(String nodeDesti) {
