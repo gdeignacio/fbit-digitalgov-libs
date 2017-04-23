@@ -30,6 +30,8 @@ import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
  * @author gdeignacio
  */
 public class TramitacioClient {
+    
+    private String propertyBase = "es.caib.cmaib";
 
     protected static final Logger LOG = Logger.getLogger(TramitacioClient.class.getName());
 
@@ -57,14 +59,18 @@ public class TramitacioClient {
         return client;
     }
 
+    public void setPropertyBase(String propertyBase) {
+        this.propertyBase = propertyBase;
+    }
+
     private static final QName SERVICE_NAME = new QName(DadesConnexioTramitacio._QNAME,
             DadesConnexioTramitacio._SERVICE_NAME);
 
-    private TramitacioService getServicePort(String app) {
+    private TramitacioService getServicePort() {
 
         URL wsdlURL = null;
         
-        final DadesConnexio dadesConnexio = new DadesConnexioTramitacio(app);
+        final DadesConnexio dadesConnexio = new DadesConnexioTramitacio(propertyBase);
 
         try {
             wsdlURL = new URL(dadesConnexio.getWsdlLocation());
@@ -105,7 +111,7 @@ public class TramitacioClient {
 
     public List<ExpedientInfo> consultaExpedients(String app, String idEntorn, String numero) {
 
-        TramitacioService port = getServicePort(app);
+        TramitacioService port = getServicePort();
         
       
         List<ExpedientInfo> response = null;
@@ -147,7 +153,7 @@ public class TramitacioClient {
 
     public ExpedientInfo consultaExpedient(String app, String idEntorn, String numero) {
 
-        TramitacioService port = getServicePort(app);
+        TramitacioService port = getServicePort();
         
         ExpedientInfo response = null;
 
@@ -167,7 +173,7 @@ public class TramitacioClient {
 
     public ArxiuProces getArxiuProces(String app, String idEntorn, Long idArxiuProces) {
 
-        TramitacioService port = getServicePort(app);
+        TramitacioService port = getServicePort();
   
         ArxiuProces response = null;
 
@@ -197,7 +203,7 @@ public class TramitacioClient {
 
     public List<DocumentProces> consultarDocumentsProces(String app, String idEntorn, String idProces) {
 
-        TramitacioService port = getServicePort(app);
+        TramitacioService port = getServicePort();
         List<DocumentProces> response = null;
 
         try {
@@ -219,7 +225,7 @@ public class TramitacioClient {
 
     public List<CampProces> consultarVariablesProces(String app, String idEntorn, String idProces) {
 
-        TramitacioService port = getServicePort(app);
+        TramitacioService port = getServicePort();
         List<CampProces> response = null;
 
         try {
@@ -240,7 +246,7 @@ public class TramitacioClient {
 
     public String consultaTasquesGrup(String app, String idEntorn) {
 
-        TramitacioService port = getServicePort(app);
+        TramitacioService port = getServicePort();
 
         String response = null;
 
@@ -262,7 +268,7 @@ public class TramitacioClient {
 
     public String consultaFormulariTasca(String app, String idEntorn, String idTasca) {
 
-        TramitacioService port = getServicePort(app);
+        TramitacioService port = getServicePort();
 
         String response = null;
 
@@ -307,6 +313,7 @@ public class TramitacioClient {
 
         String app = "es.caib.cmaib";
         
+        
         DadesConnexioTramitacio dadesConnexio = new DadesConnexioTramitacio(app);
         
         System.setProperty(app + "." + dadesConnexio.getCodClient() + ".username", "admin");
@@ -322,7 +329,7 @@ public class TramitacioClient {
         //System.setProperty("es.caib.subdepen.helium.client.baseURL", "http://sdesapplin1.caib.es:28080/helium/ws");
         TramitacioClient client = TramitacioClient.getClient();
 
-        TramitacioService port = client.getServicePort(app);
+        TramitacioService port = client.getServicePort();
 
         //List lista = consultaFormulariTasca(port, "EntornCMAIB", "5990");
         //System.out.println(lista);
@@ -371,7 +378,8 @@ public class TramitacioClient {
         System.out.println("-----------------------------------------------------------------------------------------");
 
         List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "37185");
-
+        
+        
         for (CampProces variable : variables) {
 
             String linea = variable.getCodi() + " " + variable.getDominiCampText() + " "

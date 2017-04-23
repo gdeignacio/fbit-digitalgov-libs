@@ -24,6 +24,8 @@ import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
  * @author gdeignacio
  */
 public class FormulariExternClient {
+    
+    private String propertyBase = "es.caib.cmaib";
 
     protected static final Logger LOG = Logger.getLogger(FormulariExternClient.class.getName());
 
@@ -51,14 +53,20 @@ public class FormulariExternClient {
         return client;
     }
 
+    public void setPropertyBase(String propertyBase) {
+        this.propertyBase = propertyBase;
+    }
+    
+    
+
     private static final QName SERVICE_NAME = new QName(DadesConnexioFormulariExtern._QNAME,
             DadesConnexioFormulariExtern._SERVICE_NAME);
 
-    private GuardarFormulari getServicePort(String app) {
+    private GuardarFormulari getServicePort() {
         
         URL wsdlURL = null;
         
-        final DadesConnexio dadesConnexio = new DadesConnexioFormulariExtern(app);
+        final DadesConnexio dadesConnexio = new DadesConnexioFormulariExtern(propertyBase);
 
         try {
             wsdlURL = new URL(dadesConnexio.getWsdlLocation());
@@ -119,7 +127,7 @@ public class FormulariExternClient {
    
     public void guardar(String app, String idFormulari, List<IDominiHeliumItem> variables){
         
-        GuardarFormulari port = getServicePort(app);
+        GuardarFormulari port = getServicePort();
         
         
     }
@@ -185,7 +193,7 @@ public class FormulariExternClient {
 
         FormulariExternClient client = FormulariExternClient.getClient();
         
-        GuardarFormulari port = client.getServicePort(app);
+        GuardarFormulari port = client.getServicePort();
         
         LOG.log(Level.INFO, "Resultados0LOK");
         System.out.println("-------------------------Resultados0LOK ");
