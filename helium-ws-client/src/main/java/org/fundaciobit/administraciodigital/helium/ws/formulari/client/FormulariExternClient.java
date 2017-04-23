@@ -125,7 +125,7 @@ public class FormulariExternClient {
 
     }
    
-    public void guardar(String app, String idFormulari, List<IDominiHeliumItem> variables){
+    public void guardar(String idFormulari, List<IDominiHeliumItem> variables){
         
         GuardarFormulari port = getServicePort();
         

@@ -109,7 +109,7 @@ public class TramitacioClient {
 
     }
 
-    public List<ExpedientInfo> consultaExpedients(String app, String idEntorn, String numero) {
+    public List<ExpedientInfo> consultaExpedients(String idEntorn, String numero) {
 
         TramitacioService port = getServicePort();
         
@@ -171,7 +171,7 @@ public class TramitacioClient {
         return response;
     }
 
-    public ArxiuProces getArxiuProces(String app, String idEntorn, Long idArxiuProces) {
+    public ArxiuProces getArxiuProces(String idEntorn, Long idArxiuProces) {
 
         TramitacioService port = getServicePort();
   
@@ -201,7 +201,7 @@ public class TramitacioClient {
 
     }
 
-    public List<DocumentProces> consultarDocumentsProces(String app, String idEntorn, String idProces) {
+    public List<DocumentProces> consultarDocumentsProces(String idEntorn, String idProces) {
 
         TramitacioService port = getServicePort();
         List<DocumentProces> response = null;
@@ -223,7 +223,7 @@ public class TramitacioClient {
 
     }
 
-    public List<CampProces> consultarVariablesProces(String app, String idEntorn, String idProces) {
+    public List<CampProces> consultarVariablesProces(String idEntorn, String idProces) {
 
         TramitacioService port = getServicePort();
         List<CampProces> response = null;
@@ -244,7 +244,7 @@ public class TramitacioClient {
 
     }
 
-    public String consultaTasquesGrup(String app, String idEntorn) {
+    public String consultaTasquesGrup(String idEntorn) {
 
         TramitacioService port = getServicePort();
 
@@ -266,7 +266,7 @@ public class TramitacioClient {
 
     }
 
-    public String consultaFormulariTasca(String app, String idEntorn, String idTasca) {
+    public String consultaFormulariTasca(String idEntorn, String idTasca) {
 
         TramitacioService port = getServicePort();
 
