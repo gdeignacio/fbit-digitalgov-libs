@@ -171,6 +171,29 @@ public class TramitacioClient {
         return response;
     }
 
+    
+    public void setVariableProces(String idEntorn, String idProces, String idVariable, String valor ) {
+
+        TramitacioService port = getServicePort();
+  
+        try {
+            setVariableProces(port, idEntorn, idProces, idVariable, valor);
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return;
+
+    }
+
+    private static void setVariableProces(TramitacioService port, String idEntorn, String idProces, String idVariable, String valor ) throws TramitacioException_Exception {
+ 
+        port.setVariableProces(idEntorn, idProces, idVariable, valor);
+        return;
+    }
+    
+    
+    
     public ArxiuProces getArxiuProces(String idEntorn, Long idArxiuProces) {
 
         TramitacioService port = getServicePort();
