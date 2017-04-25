@@ -1,7 +1,7 @@
 /**
  *
  */
-package net.conselldemallorca.helium.integracio.domini;
+package net.conselldemallorca.helium.ws.domini;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,14 +1,14 @@
 /**
  *
  */
-package net.conselldemallorca.helium.integracio.domini;
+package  net.conselldemallorca.helium.ws.formulari;
 
 import java.io.Serializable;
 
 
 
 /**
- * Un paràmetre per a cridar al web service d'un domini
+ * Un paràmetre per a cridar al web service de formularis externs
  *
  * @author Limit Tecnologies <limit@limit.es>
  */

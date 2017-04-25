@@ -1,7 +1,7 @@
 /**
  *
  */
-package  net.conselldemallorca.helium.integracio.forms;
+package  net.conselldemallorca.helium.ws.formulari;
 
 import java.io.Serializable;
 
