@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.fundaciobit.administraciodigital.helium.ws.domini;
+package net.conselldemallorca.helium.integracio.domini;
 
 import java.util.List;
 

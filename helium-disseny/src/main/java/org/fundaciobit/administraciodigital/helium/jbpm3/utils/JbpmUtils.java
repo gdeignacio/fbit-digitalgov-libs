@@ -15,7 +15,6 @@
  */
 package org.fundaciobit.administraciodigital.helium.jbpm3.utils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import org.jbpm.graph.exe.ProcessInstance;

@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.fundaciobit.administraciodigital.helium.ws.domini;
+package net.conselldemallorca.helium.integracio.domini;
 
 import java.io.Serializable;
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.fundaciobit.administraciodigital.helium.ws.formulari;
+package net.conselldemallorca.helium.integracio.forms;
 
 import java.util.List;
 

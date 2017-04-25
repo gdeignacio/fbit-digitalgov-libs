@@ -19,7 +19,7 @@
     </licenses>
 
     <name>DIGITALGOV Libs Utils</name>
-    <description>MÃ²dulo Utils de fbit digitalgov libs</description>
+    <description>Mòdulo Utils de fbit digitalgov libs</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,20 +34,20 @@
           <type>jar</type>
           <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.4</version>
             <type>jar</type>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
+        </dependency-->
+        <!--dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>13.0.1</version>
             <type>jar</type>
-        </dependency>
-        <dependency>
+        </dependency-->
+        <!--dependency>
             <groupId>org.libreoffice</groupId>
             <artifactId>ridl</artifactId>
             <version>5.1.1</version>
@@ -64,38 +64,41 @@
             <artifactId>juh</artifactId>
             <version>5.1.1</version>
             <type>jar</type>
-        </dependency>
-        <dependency>
+        </dependency-->
+        <!--dependency>
             <groupId>net.sf.jodreports</groupId>
             <artifactId>jodreports</artifactId>
             <version>2.4.0</version>
             <type>jar</type>
-        </dependency>
+        </dependency-->
+       
+       
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.2</version>
-            <type>jar</type>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.13</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency-->
 
-        <dependency>
+        <!--dependency>
             <groupId>org.directwebremoting</groupId>
             <artifactId>dwr</artifactId>
             <version>3.0.M1</version>
-        </dependency>
+        </dependency-->
         
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.5</version>
             <type>jar</type>
+            <scope>provided</scope>
         </dependency>
         <!--dependency>
             <groupId>javax</groupId>

@@ -1,7 +1,7 @@
 /**
  *
  */
-package  org.fundaciobit.administraciodigital.helium.ws.formulari;
+package  net.conselldemallorca.helium.integracio.forms;
 
 import java.io.Serializable;
 
