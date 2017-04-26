@@ -19,7 +19,7 @@
     </licenses>
 
     <name>DIGITALGOV Libs Utils</name>
-    <description>Mòdulo Utils de fbit digitalgov libs</description>
+    <description>Mï¿½dulo Utils de fbit digitalgov libs</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,6 +27,7 @@
 
 
     <dependencies>
+        
         <dependency>
           <groupId>javax.servlet</groupId>
           <artifactId>servlet-api</artifactId>
@@ -34,65 +35,14 @@
           <type>jar</type>
           <scope>provided</scope>
         </dependency>
-        <!--dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.4</version>
-            <type>jar</type>
-            <scope>provided</scope>
-        </dependency-->
-        <!--dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>13.0.1</version>
-            <type>jar</type>
-        </dependency-->
-        <!--dependency>
-            <groupId>org.libreoffice</groupId>
-            <artifactId>ridl</artifactId>
-            <version>5.1.1</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.libreoffice</groupId>
-            <artifactId>unoil</artifactId>
-            <version>5.1.1</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.libreoffice</groupId>
-            <artifactId>juh</artifactId>
-            <version>5.1.1</version>
-            <type>jar</type>
-        </dependency-->
-        <!--dependency>
-            <groupId>net.sf.jodreports</groupId>
-            <artifactId>jodreports</artifactId>
-            <version>2.4.0</version>
-            <type>jar</type>
-        </dependency-->
-       
-       
+        
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>6.0</version>
             <scope>provided</scope>
         </dependency>
-
-        <!--dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.13</version>
-            <scope>provided</scope>
-        </dependency-->
-
-        <!--dependency>
-            <groupId>org.directwebremoting</groupId>
-            <artifactId>dwr</artifactId>
-            <version>3.0.M1</version>
-        </dependency-->
-        
+ 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -100,17 +50,11 @@
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
-        <!--dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>6.0</version>
-            <type>jar</type>
-        </dependency-->
+ 
     </dependencies>
     <build>
         <finalName>fbit-digitalgov-libs-utils</finalName>
         <plugins>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

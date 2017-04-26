@@ -20,6 +20,7 @@ import net.conselldemallorca.helium.ws.tramitacio.v1.TascaTramitacio;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Exception;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplService;
+
 import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
 
 
