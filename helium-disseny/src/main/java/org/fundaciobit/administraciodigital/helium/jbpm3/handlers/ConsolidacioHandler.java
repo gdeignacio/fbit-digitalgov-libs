@@ -17,6 +17,7 @@ import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.jbpm.graph.exe.ProcessInstance;
 
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -82,12 +83,24 @@ public class ConsolidacioHandler extends HeliumActionHandler {
         
         Map<String, Object> variablesMap = (subProcessInstance!=null)?subProcessInstance.getContextInstance().getVariables():processInstance.getContextInstance().getVariables();
         
+        System.out.println("Control variables");
+        if (variablesMap!= null){
+            System.out.println(variablesMap.toString());
+        }
+        
         String jsonVariables;
         
         gson = gsonBuilder.create();
         jsonVariables = (variablesMap!=null)?gson.toJson(variablesMap):"";
         
+        System.out.println("Control variables json");
+        
+        System.out.println(jsonVariables);
+        
+        
         //if (variablesMap!=null) parametros.putAll(variablesMap);
+        
+        
         
         parametros.put("jsonVariables", jsonVariables);
         

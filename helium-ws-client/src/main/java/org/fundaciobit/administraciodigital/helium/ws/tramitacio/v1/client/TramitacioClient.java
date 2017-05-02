@@ -361,7 +361,7 @@ public class TramitacioClient {
         String entorn = "EntornCMAIB";
         String usuari = null;
         //String titol = null;
-        String numero = "AIA/123-2017";
+        String numero = "AIA/139-2017";
         //numero = null; 
 
         //Date dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));
@@ -401,7 +401,7 @@ public class TramitacioClient {
         System.out.println("                                     Variables");
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "37185");
+        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "45568" /*"37185"*/);
         
         
         for (CampProces variable : variables) {
