@@ -5,6 +5,7 @@ import java.util.List;
 import net.conselldemallorca.helium.jbpm3.api.HeliumActionHandler;
 import net.conselldemallorca.helium.jbpm3.api.HeliumApi;
 import net.conselldemallorca.helium.jbpm3.handlers.exception.HeliumHandlerException;
+import org.fundaciobit.administraciodigital.helium.jbpm3.utils.Dir3Client;
 import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.jbpm.graph.exe.ExecutionContext;
@@ -15,17 +16,23 @@ import org.jbpm.graph.exe.Token;
  *
  * @author gdeignacio
  */
-public class CreateChildTokensHandler extends HeliumActionHandler {
+public abstract class CreateChildTokensHandler extends HeliumActionHandler {
 
     String nodeDesti;
     String varFilla;
+    String varFillaDesc;
     String varMultiple;
     String esMultiple;
 
     private static final long serialVersionUID = 3513847803530877133L;
 
+    /**
+     *
+     * @param api
+     * @throws HeliumHandlerException
+     */
     @Override
-    public final void execute(HeliumApi api) throws HeliumHandlerException {
+    public void execute(HeliumApi api) throws HeliumHandlerException {
 
         //List tokenSuffixes =  new ArrayList();
         JbpmContext context = JbpmConfiguration.getInstance().createJbpmContext();
@@ -53,12 +60,32 @@ public class CreateChildTokensHandler extends HeliumActionHandler {
         }*/
         for (Object tokenSuffix : tokenSuffixes) {
 
+            Object[] aTokenSuffix = null;
+            String sTokenSuffix = null;
+            boolean isArray;
+            String lastItem = null;
+            if (tokenSuffix instanceof Object[]){
+                aTokenSuffix = (Object[]) tokenSuffix;
+                isArray = true;
+                lastItem = aTokenSuffix[aTokenSuffix.length -1].toString();
+            } else {
+                sTokenSuffix = tokenSuffix.toString();
+                isArray = false;
+                lastItem = sTokenSuffix;
+            }
+            
+            String strTokenSuffix = (isArray)?Arrays.toString(aTokenSuffix).replace(", ", "#").replaceAll("[\\[\\]]", ""):sTokenSuffix;
+            
             //String.join("_", (List)Arrays.asList((Object[])tokenSuffix) )
-            String strTokenSuffix = (tokenSuffix instanceof Object[]) ? Arrays.toString((Object[]) tokenSuffix).replace(", ", "#").replaceAll("[\\[\\]]", "") : tokenSuffix.toString();
+            //String strTokenSuffix = (tokenSuffix instanceof Object[]) ? Arrays.toString((Object[]) tokenSuffix).replace(", ", "#").replaceAll("[\\[\\]]", "") : tokenSuffix.toString();
             Token tokenPare = executionContext.getToken();
             String tokenName = getTokenName(tokenPare, nodeDesti + "_" + strTokenSuffix);
             Token tokenFill = new Token(tokenPare, tokenName);
             executionContext.setVariable(varFilla, tokenSuffix);
+            
+            String description = fillDescription(lastItem); 
+            
+            executionContext.setVariable(varFillaDesc, description);
             printInfo(tokenName, nodeDesti, varFilla, tokenSuffix);
             //tokenRedirigir(tokenFill.getId(), nodeDesti, false);
 
@@ -67,12 +94,18 @@ public class CreateChildTokensHandler extends HeliumActionHandler {
         }
     }
 
-    public final void setNodeDesti(String nodeDesti) {
+    protected abstract String fillDescription(String key);
+    
+    public void setNodeDesti(String nodeDesti) {
         this.nodeDesti = nodeDesti;
     }
 
-    public final void setVarFilla(String varFilla) {
+    public void setVarFilla(String varFilla) {
         this.varFilla = varFilla;
+    }
+    
+     public void setVarFillaDesc(String varFillaDesc) {
+        this.varFillaDesc = varFillaDesc;
     }
 
     public void setVarMultiple(String varMultiple) {
