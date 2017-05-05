@@ -1,5 +1,6 @@
 package org.fundaciobit.administraciodigital.helium.ws.tramitacio.v1.client;
 
+import java.lang.reflect.Field;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
@@ -152,7 +153,7 @@ public class TramitacioClient {
 
     }
 
-    public ExpedientInfo consultaExpedient(String app, String idEntorn, String numero) {
+    public ExpedientInfo consultaExpedient(String idEntorn, String numero) {
 
         TramitacioService port = getServicePort();
         
@@ -168,7 +169,7 @@ public class TramitacioClient {
             response = expedient;
             break;
         }
-
+ 
         return response;
     }
 
@@ -361,7 +362,28 @@ public class TramitacioClient {
         String entorn = "EntornCMAIB";
         String usuari = null;
         //String titol = null;
-        String numero = "AIA/139-2017";
+        String numero = "AIA/150-2017";
+        
+        
+        System.out.println("-----------------------------------------------------------------------------------------");
+        System.out.println("                                     Expedient");
+        System.out.println("-----------------------------------------------------------------------------------------");
+        
+        
+        ExpedientInfo expediente = client.consultaExpedient(entorn, numero);
+        
+        for (Field fi:expediente.getClass().getDeclaredFields()){
+            fi.setAccessible(true);
+            System.out.println(fi.getName() + ":   " + fi.get(expediente));
+        }
+      
+        
+        System.out.println("-----------------------------------------------------------------------------------------");
+        System.out.println("                                     Expedients");
+        System.out.println("-----------------------------------------------------------------------------------------");
+        
+        
+        
         //numero = null; 
 
         //Date dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));

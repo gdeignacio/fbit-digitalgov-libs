@@ -16,7 +16,7 @@ import org.jbpm.graph.exe.Token;
  *
  * @author gdeignacio
  */
-public abstract class CreateChildTokensHandler extends HeliumActionHandler {
+public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
 
     String nodeDesti;
     String varFilla;
@@ -83,7 +83,12 @@ public abstract class CreateChildTokensHandler extends HeliumActionHandler {
             Token tokenFill = new Token(tokenPare, tokenName);
             executionContext.setVariable(varFilla, tokenSuffix);
             
+            System.out.println("Last item abans: "  + lastItem);
+            
             String description = fillDescription(lastItem); 
+            
+            System.out.println("Last item: "  + lastItem);
+            System.out.println("Descripcion: "  + description);
             
             executionContext.setVariable(varFillaDesc, description);
             printInfo(tokenName, nodeDesti, varFilla, tokenSuffix);
@@ -94,7 +99,13 @@ public abstract class CreateChildTokensHandler extends HeliumActionHandler {
         }
     }
 
-    protected abstract String fillDescription(String key);
+    private String fillDescription(String key) {
+        Dir3Client client = Dir3Client.getClient();
+        System.out.println("Denominacion[" + key + "]: ");
+        String denominacion = client.getDenominacion(key);
+        System.out.println(denominacion);
+        return denominacion;
+    }
     
     public void setNodeDesti(String nodeDesti) {
         this.nodeDesti = nodeDesti;

@@ -12,6 +12,7 @@ import net.conselldemallorca.helium.jbpm3.api.HeliumActionHandler;
 import net.conselldemallorca.helium.jbpm3.api.HeliumApi;
 import net.conselldemallorca.helium.jbpm3.handlers.exception.HeliumHandlerException;
 import net.conselldemallorca.helium.jbpm3.handlers.tipus.ExpedientInfo;
+import net.conselldemallorca.helium.jbpm3.handlers.tipus.ProcessInstanceInfo;
 import org.fundaciobit.administraciodigital.helium.jbpm3.utils.CustomProcessDefinitionInfo;
 import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
@@ -41,14 +42,29 @@ public class ConsolidacioHandler extends HeliumActionHandler {
         ProcessInstance processInstance = context.getToken(api.getToken().getId()).getProcessInstance();
         ProcessInstance subProcessInstance = context.getToken(api.getToken().getId()).getSubProcessInstance();
         
-        ExpedientInfo expedientInfo = api.getExpedient();
-        
         CustomProcessDefinitionInfo customProcessDefinitionInfo = new CustomProcessDefinitionInfo(api.getProcessDefinition());
         
         Gson gson;
         
         Map<String, Object> parametros = new HashMap<String, Object>();
         
+        ExpedientInfo expedientInfo = api.getExpedient();
+        ProcessInstanceInfo processInstanceInfo = api.getProcessInstance();
+        //ProcessInstanceInfo subProcessInstanceInfo = api.getSubProcessInstance();
+        
+        //subProcessInstanceInfo = (subProcessInstanceInfo != null)?subProcessInstanceInfo:processInstanceInfo;
+        
+        String numeroExpedient = expedientInfo.getNumero();
+        String entornCodi = expedientInfo.getEntornCodi();
+        String idProcessInstanceExpedient = String.valueOf(expedientInfo.getProcessInstanceId());
+        String idProcessInstance = String.valueOf(processInstanceInfo.getId());
+        //String idSubProcessInstance = String.valueOf(subProcessInstanceInfo.getId());
+        
+        parametros.put("numeroExpedient", numeroExpedient);
+        parametros.put("entornCodi", entornCodi);
+        parametros.put("idProcessInstance", idProcessInstance);
+        parametros.put("idProcessInstanceExpedient", idProcessInstanceExpedient);
+      
         GsonBuilder gsonBuilder = new GsonBuilder();
         
         gson = gsonBuilder.create();

@@ -102,9 +102,6 @@ public class Dir3Client {
         }
             
         
-        
-        
-        
         return denominacion;
     }
     
@@ -113,9 +110,9 @@ public class Dir3Client {
         
       //  http://registre3.fundaciobit.org/dir3caib/rest/unidad/denominacion?codigo=E04096103
         
+       // E03143601
         
-        
-        String codi = "E04096103";
+        String codi = "E03143601"; // "E04096103";
                 
         Dir3Client client = Dir3Client.getClient();
          
