@@ -341,8 +341,8 @@ public class TramitacioClient {
         
         DadesConnexioTramitacio dadesConnexio = new DadesConnexioTramitacio(app);
         
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".username", "admin");
-        System.setProperty(app + "." + dadesConnexio.getCodClient()  + ".password", "admincmaib");
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".username", "");
+        System.setProperty(app + "." + dadesConnexio.getCodClient()  + ".password", "");
         System.setProperty(app + "." + dadesConnexio.getCodClient() + ".baseURL", "http://helium.fundaciobit.org/helium");
 
         System.setProperty(app + "." + dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
