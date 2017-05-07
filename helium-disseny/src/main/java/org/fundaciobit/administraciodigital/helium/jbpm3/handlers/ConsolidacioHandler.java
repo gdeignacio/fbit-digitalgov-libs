@@ -12,6 +12,7 @@ import net.conselldemallorca.helium.jbpm3.api.HeliumActionHandler;
 import net.conselldemallorca.helium.jbpm3.api.HeliumApi;
 import net.conselldemallorca.helium.jbpm3.handlers.exception.HeliumHandlerException;
 import net.conselldemallorca.helium.jbpm3.handlers.tipus.ExpedientInfo;
+import net.conselldemallorca.helium.jbpm3.handlers.tipus.ProcessDefinitionInfo;
 import net.conselldemallorca.helium.jbpm3.handlers.tipus.ProcessInstanceInfo;
 import org.fundaciobit.administraciodigital.helium.jbpm3.utils.CustomProcessDefinitionInfo;
 import org.jbpm.JbpmConfiguration;
@@ -50,6 +51,7 @@ public class ConsolidacioHandler extends HeliumActionHandler {
         
         ExpedientInfo expedientInfo = api.getExpedient();
         ProcessInstanceInfo processInstanceInfo = api.getProcessInstance();
+        ProcessDefinitionInfo processDefinitionInfo = api.getProcessDefinition();
         //ProcessInstanceInfo subProcessInstanceInfo = api.getSubProcessInstance();
         
         //subProcessInstanceInfo = (subProcessInstanceInfo != null)?subProcessInstanceInfo:processInstanceInfo;
@@ -58,13 +60,15 @@ public class ConsolidacioHandler extends HeliumActionHandler {
         String entornCodi = expedientInfo.getEntornCodi();
         String idProcessInstanceExpedient = String.valueOf(expedientInfo.getProcessInstanceId());
         String idProcessInstance = String.valueOf(processInstanceInfo.getId());
+        String processDefinitionName = processDefinitionInfo.getName();
         //String idSubProcessInstance = String.valueOf(subProcessInstanceInfo.getId());
         
         parametros.put("numeroExpedient", numeroExpedient);
         parametros.put("entornCodi", entornCodi);
         parametros.put("idProcessInstance", idProcessInstance);
         parametros.put("idProcessInstanceExpedient", idProcessInstanceExpedient);
-      
+        parametros.put("processDefinitionName", processDefinitionName);
+        
         GsonBuilder gsonBuilder = new GsonBuilder();
         
         gson = gsonBuilder.create();
