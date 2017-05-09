@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
@@ -21,6 +22,8 @@ import net.conselldemallorca.helium.ws.tramitacio.v1.TascaTramitacio;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Exception;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplService;
+import net.java.dev.jaxb.array.AnyTypeArray;
+import net.java.dev.jaxb.array.AnyTypeArrayArray;
 
 import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
 
@@ -341,8 +344,8 @@ public class TramitacioClient {
         
         DadesConnexioTramitacio dadesConnexio = new DadesConnexioTramitacio(app);
         
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".username", "");
-        System.setProperty(app + "." + dadesConnexio.getCodClient()  + ".password", "");
+        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".username", "admin");
+        System.setProperty(app + "." + dadesConnexio.getCodClient()  + ".password", "admincmaib");
         System.setProperty(app + "." + dadesConnexio.getCodClient() + ".baseURL", "http://helium.fundaciobit.org/helium");
 
         System.setProperty(app + "." + dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
@@ -423,7 +426,9 @@ public class TramitacioClient {
         System.out.println("                                     Variables");
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "45568" /*"37185"*/);
+        
+        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "60770" /*"60941"*/ /*"45568"*/ /*"37185"*/);
+
         
         
         for (CampProces variable : variables) {
@@ -431,7 +436,7 @@ public class TramitacioClient {
             String linea = variable.getCodi() + " " + variable.getDominiCampText() + " "
                     + variable.getDominiCampValor() + " " + variable.getDominiId() + " "
                     + variable.getObservacions() + " " + variable.getTipus() + " "
-                    + variable.getValor() + " "
+                    + variable.getValor().toString() + " "
                     +//" " + variable.getJbpmAction() + " " + 
                     variable.getDominiParams() + " " + variable.getEtiqueta();
 
