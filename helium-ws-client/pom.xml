@@ -148,7 +148,9 @@
                                     <!--wsdl>${basedir}/src/main/resources/wsdl/v1/Tramitacio.wsdl</wsdl-->
                                     <wsdl>http://helium.fundaciobit.org/helium/ws/v1/Tramitacio?wsdl</wsdl>
                                     <extraargs>
+                                        <!--
                                         <extraarg>-xjc-Xts</extraarg>
+                                        -->
                                     </extraargs>
                                 </wsdlOption>
                             </wsdlOptions>

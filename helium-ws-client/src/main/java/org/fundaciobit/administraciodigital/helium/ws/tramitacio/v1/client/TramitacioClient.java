@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
@@ -22,8 +21,6 @@ import net.conselldemallorca.helium.ws.tramitacio.v1.TascaTramitacio;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Exception;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplService;
-import net.java.dev.jaxb.array.AnyTypeArray;
-import net.java.dev.jaxb.array.AnyTypeArrayArray;
 
 import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
 
@@ -93,6 +90,18 @@ public class TramitacioClient {
             }
         });
 
+        /*
+         btnPrevious = (ImageButton) findViewById(R.id.btnPrevious);
+        btnPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                anteriorContacto();
+            }
+});
+        */
+        
+        
+        
         TramitacioServiceImplService ss = new TramitacioServiceImplService(wsdlURL, SERVICE_NAME);
         TramitacioService port = ss.getTramitacioServiceImplPort();
 
@@ -246,6 +255,19 @@ public class TramitacioClient {
 
     private static List<CampProces> consultarVariablesProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException_Exception {
 
+        /*
+        btnPrevious = (ImageButton) findViewById(R.id.btnPrevious);
+        btnPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                anteriorContacto();
+            }
+        });
+        */
+        
+        
+        
+        
         List<CampProces> _consultarVariablesProces__return = port.consultarVariablesProces(idEntorn, idProces);
         return _consultarVariablesProces__return;
 
