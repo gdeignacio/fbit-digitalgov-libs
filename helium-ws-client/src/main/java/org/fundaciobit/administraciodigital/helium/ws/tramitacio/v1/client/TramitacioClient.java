@@ -21,6 +21,9 @@ import net.conselldemallorca.helium.ws.tramitacio.v1.TascaTramitacio;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Exception;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplService;
+import org.apache.cxf.jaxb.JAXBToStringBuilder;
+import org.apache.cxf.jaxb.JAXBToStringStyle;
+
 
 import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
 
@@ -363,6 +366,8 @@ public class TramitacioClient {
 
         String app = "es.caib.cmaib";
         
+        String str = JAXBToStringBuilder.valueOf(app, JAXBToStringStyle.DEFAULT_STYLE);
+        
         
         DadesConnexioTramitacio dadesConnexio = new DadesConnexioTramitacio(app);
         
@@ -459,6 +464,7 @@ public class TramitacioClient {
                     + variable.getDominiCampValor() + " " + variable.getDominiId() + " "
                     + variable.getObservacions() + " " + variable.getTipus() + " "
                     + variable.getValor().toString() + " "
+                    + variable.getValor() + " "
                     +//" " + variable.getJbpmAction() + " " + 
                     variable.getDominiParams() + " " + variable.getEtiqueta();
 
