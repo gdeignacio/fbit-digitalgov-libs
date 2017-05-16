@@ -52,8 +52,8 @@ public class ConsolidacioHandler extends HeliumActionHandler {
         ExpedientInfo expedientInfo = api.getExpedient();
         ProcessInstanceInfo processInstanceInfo = api.getProcessInstance();
         ProcessDefinitionInfo processDefinitionInfo = api.getProcessDefinition();
-        //ProcessInstanceInfo subProcessInstanceInfo = api.getSubProcessInstance();
         
+        //ProcessInstanceInfo subProcessInstanceInfo = api.getSubProcessInstance();
         //subProcessInstanceInfo = (subProcessInstanceInfo != null)?subProcessInstanceInfo:processInstanceInfo;
         
         String numeroExpedient = expedientInfo.getNumero();
