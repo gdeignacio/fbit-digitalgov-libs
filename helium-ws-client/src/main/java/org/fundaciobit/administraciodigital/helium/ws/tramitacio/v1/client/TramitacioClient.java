@@ -5,6 +5,7 @@ import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -188,6 +189,73 @@ public class TramitacioClient {
         return response;
     }
 
+    
+    
+
+
+    public CampProces consultarVariableProces(String idEntorn, String idProces, String variable) {
+
+        TramitacioService port = getServicePort();
+
+        try {
+
+            List<CampProces> variables = consultarVariablesProces(port, idEntorn, idProces);
+
+            for (CampProces cp : variables) {
+                if (cp.getCodi().equals(variable)) {
+                    return cp;
+                }
+            }
+
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+    
+
+      public Map<String, CampProces> consultarVariablesProcesMap(String idEntorn, String idProces) {
+
+        TramitacioService port = getServicePort();
+
+        Map<String, CampProces> response = new HashMap<String, CampProces>();
+
+        try {
+            List<CampProces> variables = consultarVariablesProces(port, idEntorn, idProces);
+
+            for (CampProces cp : variables) {
+                response.put(cp.getCodi(), cp);
+            }
+
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
+    }
+      
+      
+    public Map<String, Object> consultarVariablesProcesMapValues(String idEntorn, String idProces) {
+
+        TramitacioService port = getServicePort();
+
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        try {
+            List<CampProces> variables = consultarVariablesProces(port, idEntorn, idProces);
+
+            for (CampProces cp : variables) {
+                response.put(cp.getCodi(), cp.getValor());
+            }
+
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
+    }  
+    
     
     public void setVariableProces(String idEntorn, String idProces, String idVariable, String valor ) {
 
