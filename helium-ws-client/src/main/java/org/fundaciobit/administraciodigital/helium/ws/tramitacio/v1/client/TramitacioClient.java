@@ -22,9 +22,14 @@ import net.conselldemallorca.helium.ws.tramitacio.v1.TascaTramitacio;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Exception;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplService;
+import net.java.dev.jaxb.array.AnyTypeArray;
 import org.apache.cxf.jaxb.JAXBToStringBuilder;
 import org.apache.cxf.jaxb.JAXBToStringStyle;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
 
@@ -257,6 +262,29 @@ public class TramitacioClient {
     }  
     
     
+     public String consultarVariablesProcesJson(String idEntorn, String idProces) {
+
+        TramitacioService port = getServicePort();
+        
+        JSONObject json = new JSONObject();
+
+        //Map<String, Object> variablesMap = new HashMap<String, Object>();
+   
+        try {
+            List<CampProces> variables = consultarVariablesProces(port, idEntorn, idProces);
+            
+            for (CampProces cp : variables) {
+                json.put(cp.getCodi(), cp.getValor());
+            }
+        
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return json.toJSONString();
+    }  
+    
+    
     public void setVariableProces(String idEntorn, String idProces, String idVariable, String valor ) {
 
         TramitacioService port = getServicePort();
@@ -274,6 +302,19 @@ public class TramitacioClient {
     private static void setVariableProces(TramitacioService port, String idEntorn, String idProces, String idVariable, String valor ) throws TramitacioException_Exception {
  
         port.setVariableProces(idEntorn, idProces, idVariable, valor);
+        return;
+    }
+    
+    
+    
+     private static void setVariableProcesOnHelium(TramitacioService port, String idEntorn, String idProces, String idVariable, String valor ) throws TramitacioException_Exception {
+ 
+        // entorn, usuari, prodesinstanceid, 
+        
+        String idAccio = "setVariable";
+        
+        port.executarAccioProces(idEntorn, idProces, idAccio);
+        //port.setVariableProces(idEntorn, idProces, idVariable, valor);
         return;
     }
     
@@ -460,7 +501,7 @@ public class TramitacioClient {
         String entorn = "EntornCMAIB";
         String usuari = null;
         //String titol = null;
-        String numero = "AIA/150-2017";
+        String numero = "AIAs/182a-2017";
         
         
         System.out.println("-----------------------------------------------------------------------------------------");
@@ -522,16 +563,30 @@ public class TramitacioClient {
         System.out.println("-----------------------------------------------------------------------------------------");
 
         
-        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "60770" /*"60941"*/ /*"45568"*/ /*"37185"*/);
-
+       
         
+        
+        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "67247" /**"60770"**/ /*"60941"*/ /*"45568"*/ /*"37185"*/);
+
+           JSONObject json = new JSONObject();
+        
+        
+            for (CampProces cp : variables) {
+                
+                Object valor = (cp.getValor() instanceof AnyTypeArray)?((AnyTypeArray)cp.getValor()).toString():cp.getValor();
+                
+                json.put(cp.getCodi(), valor);
+            }
+            
+            System.out.println(json.toJSONString());
+            
         
         for (CampProces variable : variables) {
 
             String linea = variable.getCodi() + " " + variable.getDominiCampText() + " "
                     + variable.getDominiCampValor() + " " + variable.getDominiId() + " "
                     + variable.getObservacions() + " " + variable.getTipus() + " "
-                    + variable.getValor().toString() + " "
+                  //  + variable.getValor().toString() + " "
                     + variable.getValor() + " "
                     +//" " + variable.getJbpmAction() + " " + 
                     variable.getDominiParams() + " " + variable.getEtiqueta();
