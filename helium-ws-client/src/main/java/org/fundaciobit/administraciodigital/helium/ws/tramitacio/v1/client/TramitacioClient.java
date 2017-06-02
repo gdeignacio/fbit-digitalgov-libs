@@ -1,5 +1,6 @@
 package org.fundaciobit.administraciodigital.helium.ws.tramitacio.v1.client;
 
+
 import java.lang.reflect.Field;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
@@ -23,6 +24,7 @@ import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Excepti
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplService;
 import net.java.dev.jaxb.array.AnyTypeArray;
+import net.java.dev.jaxb.array.AnyTypeArrayArray;
 import org.apache.cxf.jaxb.JAXBToStringBuilder;
 import org.apache.cxf.jaxb.JAXBToStringStyle;
 
@@ -267,15 +269,50 @@ public class TramitacioClient {
         TramitacioService port = getServicePort();
         
         JSONObject json = new JSONObject();
-
+        
+        
         //Map<String, Object> variablesMap = new HashMap<String, Object>();
    
         try {
             List<CampProces> variables = consultarVariablesProces(port, idEntorn, idProces);
-            
+         
             for (CampProces cp : variables) {
-                json.put(cp.getCodi(), cp.getValor());
+                
+                if (cp.getValor()==null) continue;
+                
+                Object valor = cp.getValor();
+                
+                if (cp.getValor() instanceof AnyTypeArrayArray){
+                    
+                    AnyTypeArrayArray aa = (AnyTypeArrayArray)cp.getValor();
+                    JSONArray jsonArrayArray = new JSONArray();
+                    
+                    for (AnyTypeArray a: aa.getItem()){
+                        JSONArray jsonArray = new JSONArray();
+                        jsonArray.addAll(a.getItem());
+                        jsonArrayArray.add(jsonArray);
+                    }
+                 
+                    valor = jsonArrayArray;
+                    json.put(cp.getCodi(), valor);
+                    continue;
+                }
+                
+                if (cp.getValor() instanceof AnyTypeArray){
+                    
+                    AnyTypeArray a = (AnyTypeArray)cp.getValor();
+                    JSONArray jsonArray = new JSONArray();
+                    jsonArray.addAll(a.getItem());
+                    valor = jsonArray;
+                    json.put(cp.getCodi(), valor);
+                    continue;
+                }
+                
+                json.put(cp.getCodi(), valor);
             }
+            
+            
+     
         
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -569,11 +606,38 @@ public class TramitacioClient {
         List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "67247" /**"60770"**/ /*"60941"*/ /*"45568"*/ /*"37185"*/);
 
            JSONObject json = new JSONObject();
-        
-        
+         
             for (CampProces cp : variables) {
                 
-                Object valor = (cp.getValor() instanceof AnyTypeArray)?((AnyTypeArray)cp.getValor()).toString():cp.getValor();
+                if (cp.getValor()==null) continue;
+                
+                Object valor = cp.getValor();
+                
+                if (cp.getValor() instanceof AnyTypeArrayArray){
+                    
+                    AnyTypeArrayArray aa = (AnyTypeArrayArray)cp.getValor();
+                    JSONArray jsonArrayArray = new JSONArray();
+                    
+                    for (AnyTypeArray a: aa.getItem()){
+                        JSONArray jsonArray = new JSONArray();
+                        jsonArray.addAll(a.getItem());
+                        jsonArrayArray.add(jsonArray);
+                    }
+                 
+                    valor = jsonArrayArray;
+                    json.put(cp.getCodi(), valor);
+                    continue;
+                }
+                
+                if (cp.getValor() instanceof AnyTypeArray){
+                    
+                    AnyTypeArray a = (AnyTypeArray)cp.getValor();
+                    JSONArray jsonArray = new JSONArray();
+                    jsonArray.addAll(a.getItem());
+                    valor = jsonArray;
+                    json.put(cp.getCodi(), valor);
+                    continue;
+                }
                 
                 json.put(cp.getCodi(), valor);
             }
