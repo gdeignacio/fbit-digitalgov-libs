@@ -34,6 +34,7 @@
         <module>helium-disseny</module>
         <module>helium-ws-client</module>
         <module>helium-ws</module>
+        <module>dir3-rest-client</module>
     </modules>
 
     <dependencies>
