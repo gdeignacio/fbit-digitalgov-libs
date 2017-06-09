@@ -1,14 +1,14 @@
 
 package org.fundaciobit.administraciodigital.helium.ws.formulari.client;
 
-import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
+import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioSOAP;
 
 
 /**
  *
  * @author gdeignacio
  */
-public class DadesConnexioFormulariExtern extends DadesConnexio {
+public class DadesConnexioFormulariExtern extends DadesConnexioSOAP {
     
     public static final String _QNAME = "http://forms.integracio.helium.conselldemallorca.net/"; 
                                        

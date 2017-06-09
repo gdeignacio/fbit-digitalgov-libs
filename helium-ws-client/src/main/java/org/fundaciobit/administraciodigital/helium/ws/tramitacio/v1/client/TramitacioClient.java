@@ -33,7 +33,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
+import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioSOAP;
 
 
 
@@ -44,7 +44,7 @@ import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
  */
 public class TramitacioClient {
     
-    private String propertyBase = "es.caib.cmaib";
+    private String propertyBase = "es.caib.cmaib.";
 
     protected static final Logger LOG = Logger.getLogger(TramitacioClient.class.getName());
 
@@ -83,7 +83,7 @@ public class TramitacioClient {
 
         URL wsdlURL = null;
         
-        final DadesConnexio dadesConnexio = new DadesConnexioTramitacio(propertyBase);
+        final DadesConnexioSOAP dadesConnexio = new DadesConnexioTramitacio(propertyBase);
 
         try {
             wsdlURL = new URL(dadesConnexio.getWsdlLocation());
@@ -510,19 +510,18 @@ public class TramitacioClient {
      */
     public static void main(String args[]) throws Exception {
 
-        String app = "es.caib.cmaib";
+        String app = "es.caib.cmaib.";
         
         String str = JAXBToStringBuilder.valueOf(app, JAXBToStringStyle.DEFAULT_STYLE);
         
-        
         DadesConnexioTramitacio dadesConnexio = new DadesConnexioTramitacio(app);
         
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".username", "admin");
-        System.setProperty(app + "." + dadesConnexio.getCodClient()  + ".password", "admincmaib");
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".baseURL", "http://helium.fundaciobit.org/helium");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".username", "admin");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".password", "admincmaib");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://helium.fundaciobit.org/helium");
 
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN");
 
         //System.setProperty("es.caib.subdepen.helium.client.entorno", "CONAFESOC");
         //System.setProperty("es.caib.subdepen.helium.client.usuario", "u82545");

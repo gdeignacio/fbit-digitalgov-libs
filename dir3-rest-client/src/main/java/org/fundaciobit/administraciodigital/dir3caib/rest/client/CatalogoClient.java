@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class CatalogoClient {
     
-    private String propertyBase = "es.caib.cmaib";
+    private String propertyBase = "es.caib.cmaib.";
 
     protected static final Logger LOG = Logger.getLogger(CatalogoClient.class.getName());
 
@@ -52,6 +52,8 @@ public class CatalogoClient {
         this.propertyBase = propertyBase;
     }
 
+    //rivate static final String REST_URL = ;
+    
     private static final QName SERVICE_NAME = new QName(DadesConnexioTramitacio._QNAME,
             DadesConnexioTramitacio._SERVICE_NAME);
 
@@ -116,7 +118,7 @@ public class CatalogoClient {
         
         List<Map<String, Object>> listaCodigoValor = new ArrayList<Map<String, Object>>();
     
-        String urlBase = System.getProperty(dir3PropertyrBaseUrl);
+        String urlBase = System.getProperty(dir3PropertyBaseUrl);
         String urlRest = "/rest/busqueda/unidades/denominacion/comunidad";
 
         String param = (String) parametrosMap.get("param");
