@@ -1,9 +1,7 @@
 
 package org.fundaciobit.administraciodigital.dir3caib.rest.client;
 
-//import org.fundaciobit.administraciodigital.helium.ws.connexio.DadesConnexio;
 import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioREST;
-
 
 
 /**
@@ -19,7 +17,7 @@ public class DadesConnexioDIR3 extends DadesConnexioREST {
     
     public static final String _SERVICE_NAME = "TramitacioServiceImplService";
     
-    private static final String _SERVICE_CONTEXT = "/ws/v1/Tramitacio";
+    private static final String _SERVICE_CONTEXT = "/rest";
 
     //private static final String _WSDL_ENDING = "?wsdl";
 

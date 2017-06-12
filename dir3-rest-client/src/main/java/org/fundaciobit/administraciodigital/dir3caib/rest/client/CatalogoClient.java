@@ -12,7 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioREST;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -54,9 +59,12 @@ public class CatalogoClient {
 
     //rivate static final String REST_URL = ;
     
+    /*
     private static final QName SERVICE_NAME = new QName(DadesConnexioTramitacio._QNAME,
             DadesConnexioTramitacio._SERVICE_NAME);
-
+    */
+    
+    /*
     private TramitacioService getServicePort() {
 
         URL wsdlURL = null;
@@ -79,17 +87,7 @@ public class CatalogoClient {
             }
         });
 
-        /*
-         btnPrevious = (ImageButton) findViewById(R.id.btnPrevious);
-        btnPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                anteriorContacto();
-            }
-});
-        */
-        
-        
+       
         
         TramitacioServiceImplService ss = new TramitacioServiceImplService(wsdlURL, SERVICE_NAME);
         TramitacioService port = ss.getTramitacioServiceImplPort();
@@ -104,16 +102,112 @@ public class CatalogoClient {
         return port;
 
     }
+    */
+    
+    
+    private URL getUrl(Map parametrosMap){
+        
+        final DadesConnexioREST dadesConnexio = new DadesConnexioDIR3(propertyBase);
+        
+        String endPoint = dadesConnexio.getEndPoint();
+        
+        String requestMapping= (String)parametrosMap.get("requestMapping");
+        String requestParams = (String)parametrosMap.get("requestParams");
+        StringBuffer strbUrl = new StringBuffer();
+        
+        strbUrl.append(endPoint);
+        strbUrl.append(requestMapping);
+        
+        JSONParser parser = new JSONParser();
+        try {
+            JSONObject jsonParams = (JSONObject) parser.parse(requestParams);
+            String separador = "?";
+            for (Object obj: jsonParams.entrySet()){
+                strbUrl.append(separador);
+                Map.Entry<String, Object> entry = (Map.Entry<String, Object>)obj;
+                strbUrl.append(entry.getKey());
+                strbUrl.append("=");
+                strbUrl.append((String)entry.getValue());
+                separador="&";
+            }
+            URL url = new URL(strbUrl.toString());
+            return url;
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return null;
+    }
 
-    private static void dummy(TramitacioService port) {
+    private static void dummy(HttpURLConnection conn) {
 
         LOG.log(Level.INFO, "Invoking dummy...");
         // port.consultaFormulariTasca(_CODAPP, _CODAPP)
 
     }
 
- 
+    
+    public List<Map<String, Object>> list(Map parametrosMap, String codigo, String valor){
+        
+        URL url = getUrl(parametrosMap);        
+        return list(url, codigo, valor);
+       
+    }
+    
+    private static List<Map<String, Object>> list(URL url, String codigo, String valor) {
 
+        List<Map<String, Object>> listaCodigoValor = new ArrayList<Map<String, Object>>();
+        if (url == null) {
+            return listaCodigoValor;
+        }
+        try {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+            String output;
+            StringBuffer stringResult = new StringBuffer();
+            while ((output = br.readLine()) != null) {
+                stringResult.append(output);
+            }
+
+            String jsonString = stringResult.toString();
+
+            JSONParser parser = new JSONParser();
+
+            JSONArray jsonUnidades;
+            try {
+                jsonUnidades = (JSONArray) parser.parse(jsonString);
+                for (Object obj : jsonUnidades) {
+                    JSONObject jsonUnidad = (JSONObject) parser.parse(obj.toString());
+                    Map<String, Object> unidadMap = new HashMap<String, Object>();
+                    unidadMap.put("codigo", jsonUnidad.get(codigo));
+                    unidadMap.put("denominacion", jsonUnidad.get(valor));
+                    listaCodigoValor.add(unidadMap);
+                }
+            } catch (ParseException ex) {
+                Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                conn.disconnect();
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listaCodigoValor;
+    }
+    
+
+    /*
     public List<Map<String, Object>> dir3Busqueda(Map parametrosMap) throws I18NException {
         
         List<Map<String, Object>> listaCodigoValor = new ArrayList<Map<String, Object>>();
@@ -183,6 +277,9 @@ public class CatalogoClient {
         return listaCodigoValor;
     }
     
+    */
+    
+    /*
 
     private static List<CampTasca> consultaFormulariTasca(TramitacioService port, String idEntorn, String idTasca) throws TramitacioException_Exception {
 
@@ -206,23 +303,67 @@ public class CatalogoClient {
         return response;
     }
 
+*/  
   
     
     
     public static void main(String args[]) throws Exception {
 
-        String app = "es.caib.cmaib";
+        String app = "es.caib.cmaib.";
         
-        DadesConnexioTramitacio dadesConnexio = new DadesConnexioTramitacio(app);
+        DadesConnexioDIR3 dadesConnexio = new DadesConnexioDIR3(app);
         
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".username", "admin");
-        System.setProperty(app + "." + dadesConnexio.getCodClient()  + ".password", "admincmaib");
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".baseURL", "http://helium.fundaciobit.org/helium");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".username", "admin");
+        System.setProperty(app + dadesConnexio.getCodClient()  + ".password", "admincmaib");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://registre3.fundaciobit.org/dir3caib");
 
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
-        System.setProperty(app + "." + dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN");
+        System.setProperty(app +  dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
+        System.setProperty(app +  dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN");
 
-       
+        CatalogoClient client = CatalogoClient.getClient();
+
+        Map parametrosMap = new HashMap<String, Object>();
+        
+        parametrosMap.put("requestMapping", "/catalogo/nivelesAdministracion");
+        parametrosMap.put("requestParams", "{}");
+        
+        //parametrosMap.put("requestParams", "{\"codigo\":\"coduno\", \"valor\":\"valor\"}");
+        
+        URL url = client.getUrl(parametrosMap);        
+        
+        System.out.println(url);
+        
+        List<Map<String, Object>> l = list(url, "id", "descripcion");
+        
+        for (Map mp: l){
+            System.out.println(mp.entrySet());
+        }
+        
+        
+        
+        
+   /*
+    ResponseEntity<List<Nodo>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion, @RequestParam Long codComunidadAutonoma, @RequestParam boolean conOficinas, @RequestParam boolean unidadRaiz, @RequestParam Long provincia, @RequestParam String localidad) throws Exception {
+*/
+        
+        parametrosMap = new HashMap<String, Object>();
+        
+        parametrosMap.put("requestMapping", "/busqueda/organismos");
+        parametrosMap.put("requestParams",  "{\"codigo\":\"coduno\", \"denominacion\":\"valor\"}");
+        
+        
+        url = client.getUrl(parametrosMap);        
+        
+        System.out.println(url);
+        
+        l = list(url, "codigo", "denominacion");
+        
+        for (Map mp: l){
+            System.out.println(mp.entrySet());
+        }
+        
+        
+        
     }
 
 }
