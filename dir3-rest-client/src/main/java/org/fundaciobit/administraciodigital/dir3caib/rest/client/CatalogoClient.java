@@ -340,27 +340,145 @@ public class CatalogoClient {
         }
         
         
-        
-        
-   /*
-    ResponseEntity<List<Nodo>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion, @RequestParam Long codComunidadAutonoma, @RequestParam boolean conOficinas, @RequestParam boolean unidadRaiz, @RequestParam Long provincia, @RequestParam String localidad) throws Exception {
-*/
-        
         parametrosMap = new HashMap<String, Object>();
         
-        parametrosMap.put("requestMapping", "/busqueda/organismos");
-        parametrosMap.put("requestParams",  "{\"codigo\":\"coduno\", \"denominacion\":\"valor\"}");
+        parametrosMap.put("requestMapping", "/catalogo/entidadesGeograficas");
+        parametrosMap.put("requestParams", "{}");
         
         
         url = client.getUrl(parametrosMap);        
         
         System.out.println(url);
         
+        l = list(url, "id", "descripcion");
+        
+        for (Map mp: l){
+            System.out.println(mp.entrySet());
+        }
+        
+        
+        parametrosMap = new HashMap<String, Object>();
+        
+        parametrosMap.put("requestMapping", "/catalogo/comunidadesAutonomas");
+        parametrosMap.put("requestParams", "{}");
+        
+        
+        url = client.getUrl(parametrosMap);        
+        
+        System.out.println(url);
+        
+        l = list(url, "id", "descripcion");
+        
+        for (Map mp: l){
+            System.out.println(mp.entrySet());
+        }
+        
+        parametrosMap = new HashMap<String, Object>();
+        
+        parametrosMap.put("requestMapping", "/catalogo/provincias/comunidadAutonoma");
+        parametrosMap.put("requestParams", "{\"id\":\"4\"}");
+        
+        
+        url = client.getUrl(parametrosMap);        
+        
+        System.out.println(url);
+        
+        l = list(url, "id", "descripcion");
+        
+        for (Map mp: l){
+            System.out.println(mp.entrySet());
+        }
+        
+        
+        parametrosMap = new HashMap<String, Object>();
+        
+        parametrosMap.put("requestMapping", "/catalogo/localidades/provincia/entidadGeografica");
+        parametrosMap.put("requestParams", "{\"codigoProvincia\":\"7\", \"codigoEntidadGeografica\":\"01\"}");
+        
+        
+        url = client.getUrl(parametrosMap);        
+        
+        System.out.println(url);
+        
+        l = list(url, "id", "descripcion");
+        
+        for (Map mp: l){
+            System.out.println(mp.entrySet());
+        }
+        
+        
+        
+   /*
+    ResponseEntity<List<Nodo>> busquedaOrganismos(@RequestParam String codigo, @RequestParam String denominacion, @RequestParam Long codNivelAdministracion, @RequestParam Long codComunidadAutonoma, @RequestParam boolean conOficinas, @RequestParam boolean unidadRaiz, @RequestParam Long provincia, @RequestParam String localidad) throws Exception {
+*/
+        parametrosMap = new HashMap<String, Object>();
+        
+        parametrosMap.put("requestMapping", "/busqueda/organismos");
+        
+        StringBuffer par = new StringBuffer();
+        /*
+        par.append("{");
+        par.append("\"codigo\":\"\"");
+        par.append("\"denominacion\":\"Catarroja\"");
+        par.append("\"codNivelAdministracion\":\"\"");
+        par.append("\"codComunidadAutonoma\":\"\"");
+        par.append("\"conOficinas\":\"false\"");
+        par.append("\"unidadRaiz\":\"false\"");
+        par.append("\"provincia\":\"\"");
+        par.append("\"localidad\":\"\"");
+        par.append("}");
+        */
+        
+        /*
+        par.append("{");
+        par.append("\"codigo\":\"\"");
+        par.append("\"denominacion\":\"\"");
+        par.append("\"codNivelAdministracion\":\"3\"");
+        par.append("\"codComunidadAutonoma\":\"4\"");
+        par.append("\"conOficinas\":\"false\"");
+        par.append("\"unidadRaiz\":\"false\"");
+        par.append("\"provincia\":\"7\"");
+        par.append("\"localidad\":\"407\"");
+        par.append("}");
+        */
+        
+        par.append("{");
+        par.append("\"codigo\":\"\"");
+        par.append("\"denominacion\":\"\"");
+        par.append("\"codNivelAdministracion\":\"4\"");
+        par.append("\"codComunidadAutonoma\":\"\"");
+        par.append("\"conOficinas\":\"false\"");
+        par.append("\"unidadRaiz\":\"false\"");
+        par.append("\"provincia\":\"\"");
+        par.append("\"localidad\":\"407\"");
+        par.append("}");
+        
+        
+        
+        parametrosMap.put("requestParams",  par.toString());
+        
+        //parametrosMap.put("requestParams",  "{\"codnivelAdministracion\":\"3\", \"codComunidadAutonoma\":\"4\", \"provincia\":\"7\", \"localidad\":\"407\"}");
+        //parametrosMap.put("requestParams",  "{}");
+        
+        
+        //http://localhost:8080/dir3caib/rest/busqueda/organismos?
+        
+        //codigo=&denominacion=Catarroja&codNivelAdministracion=&codComunidadAutonoma=&conOficinas=false&unidadRaiz=false&provincia=&localidad=
+        
+        url = client.getUrl(parametrosMap);        
+        
+        System.out.println(url);
+        
+        
         l = list(url, "codigo", "denominacion");
         
         for (Map mp: l){
             System.out.println(mp.entrySet());
         }
+        
+        
+        
+        
         
         
         
