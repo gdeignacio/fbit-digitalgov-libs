@@ -23,24 +23,24 @@ import org.json.simple.parser.ParseException;
  *
  * @author gdeignacio
  */
-public class CatalogoClient {
+public class CatalogoDIR3Client {
     
     private String propertyBase = "es.caib.cmaib.";
 
-    protected static final Logger LOG = Logger.getLogger(CatalogoClient.class.getName());
+    protected static final Logger LOG = Logger.getLogger(CatalogoDIR3Client.class.getName());
 
     /**
      * Objecte que emmagatzema la instancia de la classe segons el patro
      * singleton
      *
      */
-    private static final CatalogoClient client = new CatalogoClient();
+    private static final CatalogoDIR3Client client = new CatalogoDIR3Client();
 
     /**
      * Construeix un objecte de la classe. Aquest metode es privat per forcar el
      * patro singleton.
      */
-    private CatalogoClient() {
+    private CatalogoDIR3Client() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class CatalogoClient {
      *
      * @return objete singleton de la clase CMAIBDocumentOrganismeWsClient.
      */
-    public static CatalogoClient getClient() {
+    public static CatalogoDIR3Client getClient() {
         return client;
     }
 
@@ -74,7 +74,7 @@ public class CatalogoClient {
         try {
             wsdlURL = new URL(dadesConnexio.getWsdlLocation());
         } catch (MalformedURLException ex) {
-            Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         Authenticator.setDefault(new Authenticator() {
@@ -117,27 +117,51 @@ public class CatalogoClient {
         
         strbUrl.append(endPoint);
         strbUrl.append(requestMapping);
+        strbUrl.append(requestParams);
         
-        JSONParser parser = new JSONParser();
+        URL url;
         try {
-            JSONObject jsonParams = (JSONObject) parser.parse(requestParams);
-            String separador = "?";
-            for (Object obj: jsonParams.entrySet()){
-                strbUrl.append(separador);
-                Map.Entry<String, Object> entry = (Map.Entry<String, Object>)obj;
-                strbUrl.append(entry.getKey());
-                strbUrl.append("=");
-                strbUrl.append((String)entry.getValue());
-                separador="&";
-            }
-            URL url = new URL(strbUrl.toString());
+            url = new URL(strbUrl.toString());
             return url;
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        
+        
+        /*
+        JSONParser parser = new JSONParser();
+        
+        try {
+            
+            
+            if (parser.parse(requestParams) instanceof JSONObject)  {
+                JSONObject jsonParams = (JSONObject) parser.parse(requestParams);
+                String separador = "?";
+                for (Object obj : jsonParams.entrySet()) {
+                    strbUrl.append(separador);
+                    Map.Entry<String, Object> entry = (Map.Entry<String, Object>) obj;
+                    strbUrl.append(entry.getKey());
+                    strbUrl.append("=");
+                    strbUrl.append((String) entry.getValue());
+                    separador = "&";
+                }
+                URL url = new URL(strbUrl.toString());
+                return url;
+            }
+            
+            
+            
             
         } catch (ParseException ex) {
-            Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
-            Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
         } 
+        
+        */
+        
+        
         return null;
     }
 
@@ -151,7 +175,8 @@ public class CatalogoClient {
     
     public List<Map<String, Object>> list(Map parametrosMap, String codigo, String valor){
         
-        URL url = getUrl(parametrosMap);        
+        URL url = getUrl(parametrosMap);     
+        Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, url.toString());
         return list(url, codigo, valor);
        
     }
@@ -190,18 +215,18 @@ public class CatalogoClient {
                 for (Object obj : jsonUnidades) {
                     JSONObject jsonUnidad = (JSONObject) parser.parse(obj.toString());
                     Map<String, Object> unidadMap = new HashMap<String, Object>();
-                    unidadMap.put("codigo", jsonUnidad.get(codigo));
-                    unidadMap.put("denominacion", jsonUnidad.get(valor));
+                    unidadMap.put("id", jsonUnidad.get(codigo));
+                    unidadMap.put("val", jsonUnidad.get(valor));
                     listaCodigoValor.add(unidadMap);
                 }
             } catch (ParseException ex) {
-                Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 conn.disconnect();
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listaCodigoValor;
     }
@@ -297,7 +322,7 @@ public class CatalogoClient {
         try {
             response = consultaFormulariTasca(port, idEntorn, idTasca).toString();
         } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(CatalogoClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
@@ -320,12 +345,12 @@ public class CatalogoClient {
         System.setProperty(app +  dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
         System.setProperty(app +  dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN");
 
-        CatalogoClient client = CatalogoClient.getClient();
+        CatalogoDIR3Client client = CatalogoDIR3Client.getClient();
 
         Map parametrosMap = new HashMap<String, Object>();
         
         parametrosMap.put("requestMapping", "/catalogo/nivelesAdministracion");
-        parametrosMap.put("requestParams", "{}");
+        parametrosMap.put("requestParams", "");
         
         //parametrosMap.put("requestParams", "{\"codigo\":\"coduno\", \"valor\":\"valor\"}");
         
@@ -343,7 +368,7 @@ public class CatalogoClient {
         parametrosMap = new HashMap<String, Object>();
         
         parametrosMap.put("requestMapping", "/catalogo/entidadesGeograficas");
-        parametrosMap.put("requestParams", "{}");
+        parametrosMap.put("requestParams", "");
         
         
         url = client.getUrl(parametrosMap);        
@@ -360,7 +385,7 @@ public class CatalogoClient {
         parametrosMap = new HashMap<String, Object>();
         
         parametrosMap.put("requestMapping", "/catalogo/comunidadesAutonomas");
-        parametrosMap.put("requestParams", "{}");
+        parametrosMap.put("requestParams", "");
         
         
         url = client.getUrl(parametrosMap);        
@@ -376,8 +401,8 @@ public class CatalogoClient {
         parametrosMap = new HashMap<String, Object>();
         
         parametrosMap.put("requestMapping", "/catalogo/provincias/comunidadAutonoma");
-        parametrosMap.put("requestParams", "{\"id\":\"4\"}");
-        
+        //parametrosMap.put("requestParams", "{\"id\":\"4\"}");
+        parametrosMap.put("requestParams", "?id=4");
         
         url = client.getUrl(parametrosMap);        
         
@@ -393,8 +418,8 @@ public class CatalogoClient {
         parametrosMap = new HashMap<String, Object>();
         
         parametrosMap.put("requestMapping", "/catalogo/localidades/provincia/entidadGeografica");
-        parametrosMap.put("requestParams", "{\"codigoProvincia\":\"7\", \"codigoEntidadGeografica\":\"01\"}");
-        
+        //parametrosMap.put("requestParams", "{\"codigoProvincia\":\"7\", \"codigoEntidadGeografica\":\"01\"}");
+        parametrosMap.put("requestParams", "?codigoProvincia=7&codigoEntidadGeografica=01");
         
         url = client.getUrl(parametrosMap);        
         
@@ -443,19 +468,25 @@ public class CatalogoClient {
         */
         
         par.append("{");
-        par.append("\"codigo\":\"\"");
-        par.append("\"denominacion\":\"\"");
-        par.append("\"codNivelAdministracion\":\"4\"");
-        par.append("\"codComunidadAutonoma\":\"\"");
-        par.append("\"conOficinas\":\"false\"");
-        par.append("\"unidadRaiz\":\"false\"");
-        par.append("\"provincia\":\"\"");
+        par.append("\"codigo\":\"\",");
+        par.append("\"denominacion\":\"\",");
+        par.append("\"codNivelAdministracion\":\"3\",");
+        par.append("\"codComunidadAutonoma\":\"\",");
+        par.append("\"conOficinas\":\"false\",");
+        par.append("\"unidadRaiz\":\"false\",");
+        par.append("\"provincia\":\"\",");
         par.append("\"localidad\":\"407\"");
         par.append("}");
         
+        String wpar = "?codigo=&denominacion=&codNivelAdministracion=3&codComunidadAutonoma=&conOficinas=false&unidadRaiz=false&provincia=&localidad=407";
+        
+        //parametrosMap.put("requestParams",  par.toString());
+        parametrosMap.put("requestParams",  wpar);
         
         
-        parametrosMap.put("requestParams",  par.toString());
+        System.out.println(par.toString());
+        
+        System.out.println(par.toString().replace("\"", "_").replace(":", "-").replace(",", "|"));
         
         //parametrosMap.put("requestParams",  "{\"codnivelAdministracion\":\"3\", \"codComunidadAutonoma\":\"4\", \"provincia\":\"7\", \"localidad\":\"407\"}");
         //parametrosMap.put("requestParams",  "{}");
