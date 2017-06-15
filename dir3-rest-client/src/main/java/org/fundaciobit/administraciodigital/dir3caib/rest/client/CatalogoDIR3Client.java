@@ -217,6 +217,7 @@ public class CatalogoDIR3Client {
                     Map<String, Object> unidadMap = new HashMap<String, Object>();
                     unidadMap.put("id", jsonUnidad.get(codigo));
                     unidadMap.put("val", jsonUnidad.get(valor));
+                    //Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, "Recuperat: " + unidadMap.get("id")+ " " + unidadMap.get("val"));
                     listaCodigoValor.add(unidadMap);
                 }
             } catch (ParseException ex) {
@@ -228,6 +229,12 @@ public class CatalogoDIR3Client {
         } catch (IOException ex) {
             Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+        /*
+        for (Map<String, Object> unidadMap: listaCodigoValor){
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, "Testing: " + unidadMap.get("id")+ " " + unidadMap.get("val"));
+        }
+        */
+        
         return listaCodigoValor;
     }
     
