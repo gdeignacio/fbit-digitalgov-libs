@@ -34,7 +34,6 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
     @Override
     public void execute(HeliumApi api) throws HeliumHandlerException {
 
-        //List tokenSuffixes =  new ArrayList();
         JbpmContext context = JbpmConfiguration.getInstance().createJbpmContext();
 
         ExecutionContext executionContext = new ExecutionContext(context.getToken(api.getToken().getId()));
@@ -43,21 +42,13 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
 
         Object obj = executionContext.getVariable(varMultiple);
         boolean multiple = "true".equalsIgnoreCase(esMultiple);
+        
         if (obj == null) {
             return;
         }
+        
         Object[] tokenSuffixes = (multiple && obj instanceof Object[]) ? (Object[]) obj : new Object[]{obj};
 
-        /*
-        if (o instanceof Object[]){
-            for (Object element:(Object[])o){
-                //tokenSuffixes.add(getTokenSuffixElement(element));
-                tokenSuffixes.add(element);
-            }
-        } else {
-            //tokenSuffixes.add(getTokenSuffixElement(o));
-            tokenSuffixes.add(o);
-        }*/
         for (Object tokenSuffix : tokenSuffixes) {
 
             Object[] aTokenSuffix = null;
@@ -78,6 +69,7 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
             
             //String.join("_", (List)Arrays.asList((Object[])tokenSuffix) )
             //String strTokenSuffix = (tokenSuffix instanceof Object[]) ? Arrays.toString((Object[]) tokenSuffix).replace(", ", "#").replaceAll("[\\[\\]]", "") : tokenSuffix.toString();
+            
             Token tokenPare = executionContext.getToken();
             String tokenName = getTokenName(tokenPare, nodeDesti + "_" + strTokenSuffix);
             Token tokenFill = new Token(tokenPare, tokenName);
@@ -92,6 +84,7 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
             
             executionContext.setVariable(varFillaDesc, description);
             printInfo(tokenName, nodeDesti, varFilla, tokenSuffix);
+            
             //tokenRedirigir(tokenFill.getId(), nodeDesti, false);
 
             api.expedientTokenRedirigir(tokenFill.getId(), nodeDesti, multiple);
