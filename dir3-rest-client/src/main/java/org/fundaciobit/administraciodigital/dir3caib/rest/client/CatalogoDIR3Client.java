@@ -105,6 +105,39 @@ public class CatalogoDIR3Client {
     */
     
     
+    private URL getUrl(String requestMapping, String requestParams){
+        
+        final DadesConnexioREST dadesConnexio = new DadesConnexioDIR3(propertyBase);
+        
+        String endPoint = dadesConnexio.getEndPoint();
+        
+        //String requestMapping= (String)parametrosMap.get("requestMapping");
+        //String requestParams = (String)parametrosMap.get("requestParams");
+        
+        StringBuffer strbUrl = new StringBuffer();
+        
+        strbUrl.append(endPoint);
+        strbUrl.append(requestMapping);
+        strbUrl.append(requestParams);
+        
+        URL url;
+        try {
+            url = new URL(strbUrl.toString());
+            return url;
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    private URL getUrl(Map parametrosMap){
+        String requestMapping= (String)parametrosMap.get("requestMapping");
+        String requestParams = (String)parametrosMap.get("requestParams");
+        return getUrl(requestMapping, requestParams);
+    }
+    
+    /*
     private URL getUrl(Map parametrosMap){
         
         final DadesConnexioREST dadesConnexio = new DadesConnexioDIR3(propertyBase);
@@ -128,42 +161,9 @@ public class CatalogoDIR3Client {
         }
          
         
-        
-        /*
-        JSONParser parser = new JSONParser();
-        
-        try {
-            
-            
-            if (parser.parse(requestParams) instanceof JSONObject)  {
-                JSONObject jsonParams = (JSONObject) parser.parse(requestParams);
-                String separador = "?";
-                for (Object obj : jsonParams.entrySet()) {
-                    strbUrl.append(separador);
-                    Map.Entry<String, Object> entry = (Map.Entry<String, Object>) obj;
-                    strbUrl.append(entry.getKey());
-                    strbUrl.append("=");
-                    strbUrl.append((String) entry.getValue());
-                    separador = "&";
-                }
-                URL url = new URL(strbUrl.toString());
-                return url;
-            }
-            
-            
-            
-            
-        } catch (ParseException ex) {
-            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        
-        */
-        
-        
         return null;
     }
+    */
 
     private static void dummy(HttpURLConnection conn) {
 
@@ -172,6 +172,46 @@ public class CatalogoDIR3Client {
 
     }
 
+    
+    private static String getByCodigo(String dir3Url, String codigo){
+    
+        String denominacion = null;
+        
+        URL url;
+        try {
+            
+            url = new URL(dir3Url + codigo);
+            
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+            String output;
+            StringBuffer stringResult = new StringBuffer();
+            while ((output = br.readLine()) != null) {
+                stringResult.append(output);
+            }
+
+            String jsonString = stringResult.toString();
+            
+            denominacion = jsonString;
+            
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return denominacion;
+    }
+    
     
     public List<Map<String, Object>> list(Map parametrosMap, String codigo, String valor){
         
@@ -184,10 +224,13 @@ public class CatalogoDIR3Client {
     private static List<Map<String, Object>> list(URL url, String codigo, String valor) {
 
         List<Map<String, Object>> listaCodigoValor = new ArrayList<Map<String, Object>>();
+        
         if (url == null) {
             return listaCodigoValor;
         }
+        
         try {
+            
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -210,6 +253,7 @@ public class CatalogoDIR3Client {
             JSONParser parser = new JSONParser();
 
             JSONArray jsonUnidades;
+            
             try {
                 jsonUnidades = (JSONArray) parser.parse(jsonString);
                 for (Object obj : jsonUnidades) {
@@ -229,6 +273,7 @@ public class CatalogoDIR3Client {
         } catch (IOException ex) {
             Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         /*
         for (Map<String, Object> unidadMap: listaCodigoValor){
             Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, "Testing: " + unidadMap.get("id")+ " " + unidadMap.get("val"));
@@ -523,3 +568,36 @@ public class CatalogoDIR3Client {
     }
 
 }
+
+
+/*
+        JSONParser parser = new JSONParser();
+        
+        try {
+            
+            
+            if (parser.parse(requestParams) instanceof JSONObject)  {
+                JSONObject jsonParams = (JSONObject) parser.parse(requestParams);
+                String separador = "?";
+                for (Object obj : jsonParams.entrySet()) {
+                    strbUrl.append(separador);
+                    Map.Entry<String, Object> entry = (Map.Entry<String, Object>) obj;
+                    strbUrl.append(entry.getKey());
+                    strbUrl.append("=");
+                    strbUrl.append((String) entry.getValue());
+                    separador = "&";
+                }
+                URL url = new URL(strbUrl.toString());
+                return url;
+            }
+            
+            
+            
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        
+        */

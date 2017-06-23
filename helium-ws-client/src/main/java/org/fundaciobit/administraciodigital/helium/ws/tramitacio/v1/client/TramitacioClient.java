@@ -537,7 +537,7 @@ public class TramitacioClient {
         String entorn = "EntornCMAIB";
         String usuari = null;
         //String titol = null;
-        String numero = "AIAs/182a-2017";
+        String numero = "AIAs/212a-2017";
         
         
         System.out.println("-----------------------------------------------------------------------------------------");
@@ -602,7 +602,7 @@ public class TramitacioClient {
        
         
         
-        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "67247" /**"60770"**/ /*"60941"*/ /*"45568"*/ /*"37185"*/);
+        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "78000" /**"60770"**/ /*"60941"*/ /*"45568"*/ /*"37185"*/);
 
            JSONObject json = new JSONObject();
          
