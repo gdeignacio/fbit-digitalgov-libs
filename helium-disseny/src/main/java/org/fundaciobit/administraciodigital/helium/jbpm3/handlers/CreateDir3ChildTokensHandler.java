@@ -5,12 +5,12 @@ import java.util.List;
 import net.conselldemallorca.helium.jbpm3.api.HeliumActionHandler;
 import net.conselldemallorca.helium.jbpm3.api.HeliumApi;
 import net.conselldemallorca.helium.jbpm3.handlers.exception.HeliumHandlerException;
-import org.fundaciobit.administraciodigital.helium.jbpm3.utils.Dir3Client;
 import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.jbpm.graph.exe.ExecutionContext;
 import org.jbpm.graph.exe.ProcessInstance;
 import org.jbpm.graph.exe.Token;
+import org.fundaciobit.administraciodigital.dir3caib.rest.client.CatalogoDIR3Client;
 
 /**
  *
@@ -91,7 +91,15 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
 
         }
     }
+    
+    
+    private String fillDescription(String key){
+        CatalogoDIR3Client client = CatalogoDIR3Client.getClient();
+        String denominacion = client.getByCodigo(key);
+        return denominacion;
+    }
 
+    /*
     private String fillDescription(String key) {
         Dir3Client client = Dir3Client.getClient();
         System.out.println("Denominacion[" + key + "]: ");
@@ -99,6 +107,7 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
         System.out.println(denominacion);
         return denominacion;
     }
+    */
     
     public void setNodeDesti(String nodeDesti) {
         this.nodeDesti = nodeDesti;

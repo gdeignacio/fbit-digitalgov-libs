@@ -59,7 +59,7 @@ public class Dir3Client {
     }
 
     
-    public String getDenominacion(String codigo){
+    public String _getDenominacion(String codigo){
         return getDenominacion(dir3RestUrlByCode, codigo);
     }
     
@@ -116,7 +116,7 @@ public class Dir3Client {
                 
         Dir3Client client = Dir3Client.getClient();
          
-        String denom = client.getDenominacion(codi);
+        String denom = client._getDenominacion(codi);
      
         System.out.println(denom);
      

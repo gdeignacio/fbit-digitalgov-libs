@@ -172,15 +172,25 @@ public class CatalogoDIR3Client {
 
     }
 
+    public String getByCodigo(String codigo){
+        
+        String requestMapping = "/unidad/denominacion";
+        String requestParams = "?codigo=" + codigo;
+        
+        URL url = getUrl(requestMapping, requestParams);
+        
+        //URL url = getUrl(parametrosMap);     
+        Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, url.toString());
+        return getByCodigo(url);
+       
+    }
     
-    private static String getByCodigo(String dir3Url, String codigo){
+    
+    private static String getByCodigo(URL url){
     
         String denominacion = null;
         
-        URL url;
         try {
-            
-            url = new URL(dir3Url + codigo);
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
