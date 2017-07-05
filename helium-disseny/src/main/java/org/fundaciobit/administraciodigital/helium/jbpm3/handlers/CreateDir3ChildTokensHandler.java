@@ -17,6 +17,8 @@ import org.fundaciobit.administraciodigital.dir3caib.rest.client.CatalogoDIR3Cli
  * @author gdeignacio
  */
 public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
+    
+    private final static String NO_DIR3 = "NDIR3";
 
     String nodeDesti;
     String varFilla;
@@ -55,10 +57,15 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
             String sTokenSuffix = null;
             boolean isArray;
             String lastItem = null;
+            String lastButOneItem = null;
             if (tokenSuffix instanceof Object[]){
                 aTokenSuffix = (Object[]) tokenSuffix;
                 isArray = true;
                 lastItem = aTokenSuffix[aTokenSuffix.length -1].toString();
+                if (aTokenSuffix.length>1){   
+                    lastButOneItem = aTokenSuffix[aTokenSuffix.length -2].toString();
+                    lastItem = (NO_DIR3.equals(lastButOneItem))?lastItem:lastButOneItem;
+                }    
             } else {
                 sTokenSuffix = tokenSuffix.toString();
                 isArray = false;
