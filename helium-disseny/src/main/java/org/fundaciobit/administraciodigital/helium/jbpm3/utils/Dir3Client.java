@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class Dir3Client {
     
-    
+    private final static String NO_DIR3 = "NDIR3";
     
     private String dir3RestUrlByCode = "http://registre3.fundaciobit.org/dir3caib/rest/unidad/denominacion?codigo=";
     
@@ -59,13 +59,19 @@ public class Dir3Client {
     }
 
     
-    public String _getDenominacion(String codigo){
+    public String getDenominacion(String codigo){
         return getDenominacion(dir3RestUrlByCode, codigo);
     }
     
     
     private static String getDenominacion(String dir3Url, String codigo){
     
+        if (codigo == null) return null;
+        
+        if ("".equals(codigo)) return "";
+        
+        if (NO_DIR3.equals(codigo)) return "Altres";
+        
         String denominacion = null;
         
         
@@ -116,7 +122,7 @@ public class Dir3Client {
                 
         Dir3Client client = Dir3Client.getClient();
          
-        String denom = client._getDenominacion(codi);
+        String denom = client.getDenominacion(codi);
      
         System.out.println(denom);
      

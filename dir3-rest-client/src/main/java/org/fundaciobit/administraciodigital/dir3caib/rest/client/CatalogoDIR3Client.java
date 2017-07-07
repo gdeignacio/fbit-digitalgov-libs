@@ -25,6 +25,8 @@ import org.json.simple.parser.ParseException;
  */
 public class CatalogoDIR3Client {
     
+    private final static String NO_DIR3 = "NDIR3";
+    
     private String propertyBase = "es.caib.cmaib.";
 
     protected static final Logger LOG = Logger.getLogger(CatalogoDIR3Client.class.getName());
@@ -132,8 +134,17 @@ public class CatalogoDIR3Client {
     }
     
     private URL getUrl(Map parametrosMap){
+        
         String requestMapping= (String)parametrosMap.get("requestMapping");
         String requestParams = (String)parametrosMap.get("requestParams");
+        
+        for (Object key:parametrosMap.keySet()){
+            String param = (String)key;
+            if (param.startsWith("arg")){
+                requestParams = requestParams.replaceAll(param, (String)parametrosMap.get(key));
+            }
+        }
+        
         return getUrl(requestMapping, requestParams);
     }
     
@@ -174,8 +185,16 @@ public class CatalogoDIR3Client {
 
     public String getByCodigo(String codigo){
         
+        if (codigo == null) return null;
+        
+        if ("".equals(codigo)) return "";
+        
+        if (NO_DIR3.equals(codigo)) return "Altres";
+        
         String requestMapping = "/unidad/denominacion";
         String requestParams = "?codigo=" + codigo;
+        
+        Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, requestMapping + requestParams);
         
         URL url = getUrl(requestMapping, requestParams);
         

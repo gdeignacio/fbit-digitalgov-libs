@@ -78,13 +78,14 @@
          <scope>provided</scope>
       </dependency>
       
+      <!--
       <dependency>
             <groupId>org.fundaciobit.administraciodigital</groupId>
             <artifactId>fbit-digitalgov-libs-dir3-rest-client</artifactId>
             <version>1.0.0</version>
             <type>jar</type>
         </dependency>
-
+      -->
       <dependency>
           <groupId>com.google.code.gson</groupId>
           <artifactId>gson</artifactId>
