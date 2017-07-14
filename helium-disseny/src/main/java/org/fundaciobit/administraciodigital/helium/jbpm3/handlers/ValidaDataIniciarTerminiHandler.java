@@ -30,10 +30,7 @@ public class ValidaDataIniciarTerminiHandler extends TerminiIniciarHandler {
 
     /**
      * Ejecuta las operaciones del handler.
-     * @param context
-     * @throws java.lang.Exception
      */
-    @Override
     public void execute(ExecutionContext context) throws Exception {
 
         if (varData != null && varData.length() > 0) {
@@ -45,14 +42,13 @@ public class ValidaDataIniciarTerminiHandler extends TerminiIniciarHandler {
     }
 
     private void cridaSuperHandler(ExecutionContext context) throws Exception {
-        super.setVarData(varData);
 
+        super.setVarData(varData);
         super.execute(context);
+
     }
 
-    @Override
     public void setVarData(String varData) {
         this.varData = varData;
     }
-
 }
