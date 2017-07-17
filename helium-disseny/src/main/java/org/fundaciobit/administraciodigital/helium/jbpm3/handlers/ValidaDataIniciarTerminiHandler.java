@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 gdeignacio.
+ * Copyright 2017 fundaciobit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,9 @@ import org.jbpm.graph.exe.ExecutionContext;
 
 /**
  *
- * @author gdeignacio
+ * @author josepg-limit
  */
+
 @SuppressWarnings("serial")
 public class ValidaDataIniciarTerminiHandler extends TerminiIniciarHandler {
 
@@ -42,10 +43,9 @@ public class ValidaDataIniciarTerminiHandler extends TerminiIniciarHandler {
     }
 
     private void cridaSuperHandler(ExecutionContext context) throws Exception {
-
         super.setVarData(varData);
-        super.execute(context);
 
+        super.execute(context);
     }
 
     public void setVarData(String varData) {
