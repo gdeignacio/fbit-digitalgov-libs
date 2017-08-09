@@ -7,11 +7,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.fundaciobit.administraciodigital.utils.util.Strings;
 import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioREST;
 
 import org.json.simple.JSONArray;
@@ -508,10 +511,22 @@ public class CatalogoDIR3Client {
         
         l = list(url, "id", "descripcion");
         
+        Collections.reverse(l);
+        
         for (Map mp: l){
-            System.out.println(mp.entrySet());
+            //System.out.println(mp.entrySet());
+            // public static final DMunicipiiosBalearsDIR3 ALMERIA = new DMunicipiiosBalearsDIR3("04", "Almería", "01");
+            
+            String id = mp.get("id").toString();
+            String descripcion = mp.get("val").toString();
+            String name = Strings.quitarAcentos(descripcion).replace(" ", "_").toUpperCase();
+            
+            String miembro = "public static final DMunicipiosBalearsDIR3 " + name + " = new DMunicipiiosBalearsDIR3(\"" + id  + "\"," + descripcion + "\", \"01\");";
+            
+            System.out.println(miembro);
         }
         
+      
         
         
    /*
