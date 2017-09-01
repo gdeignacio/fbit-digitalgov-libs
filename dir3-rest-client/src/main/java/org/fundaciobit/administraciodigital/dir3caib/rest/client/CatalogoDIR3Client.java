@@ -519,13 +519,25 @@ public class CatalogoDIR3Client {
             
             String id = mp.get("id").toString();
             String descripcion = mp.get("val").toString();
-            String name = Strings.quitarAcentos(descripcion).replace(" ", "_").toUpperCase();
+            String name = Strings.quitarAcentos(descripcion).replace(",","").replace(" ", "_").toUpperCase();
             
-            String miembro = "public static final DMunicipiosBalearsDIR3 " + name + " = new DMunicipiiosBalearsDIR3(\"" + id  + "\"," + descripcion + "\", \"01\");";
+            String miembro = "public static final DMunicipiosBalearsDIR3 " + name + " = new DMunicipiosBalearsDIR3(\"" + id  + "\",\"" + descripcion + "\", DIsla.MALLORCA.getCodigoLOV());";
             
             System.out.println(miembro);
         }
         
+           for (Map mp: l){
+            //System.out.println(mp.entrySet());
+            // public static final DMunicipiiosBalearsDIR3 ALMERIA = new DMunicipiiosBalearsDIR3("04", "Almería", "01");
+            
+            String id = mp.get("id").toString();
+            String descripcion = mp.get("val").toString();
+            String name = Strings.quitarAcentos(descripcion).replace(",","").replace(" ", "_").toUpperCase();
+            
+            String miembro = "DMunicipiosBalearsDIR3." + name + ",";
+            
+            System.out.println(miembro);
+        }
       
         
         
