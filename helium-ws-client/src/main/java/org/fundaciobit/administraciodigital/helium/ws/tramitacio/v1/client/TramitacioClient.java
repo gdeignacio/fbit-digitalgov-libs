@@ -122,7 +122,10 @@ public class TramitacioClient {
 
         req.put(BindingProvider.USERNAME_PROPERTY, dadesConnexio.getUserName());
         req.put(BindingProvider.PASSWORD_PROPERTY, dadesConnexio.getPassword());
- 
+       
+        //req.put("com.sun.xml.ws.request.timeout", 60000);
+        //req.put("com.sun.xml.ws.connect.timeout", 60000);
+       
         return port;
 
     }
@@ -537,8 +540,11 @@ public class TramitacioClient {
         String entorn = "EntornCMAIB";
         String usuari = null;
         //String titol = null;
-        String numero = "AIAs/212a-2017";
         
+        String numero = "";
+        
+        numero = "AIAs/261a-2017";  // "AIAs/212a-2017";
+        //numero = "AIAs/212a-2017";  // "AIAs/212a-2017";
         
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Expedient");
@@ -599,10 +605,29 @@ public class TramitacioClient {
         System.out.println("-----------------------------------------------------------------------------------------");
 
         
+        
+         try {
+              
+              port.setVariableProces("EntornCMAIB", "100694", "osObservacions", "Escrit per WS");
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        List<CampProces> variables=null;
+        //variables = port.consultarVariablesProces("EntornCMAIB","100694" /*"78000"*/ /**"60770"**/ /*"60941"*/ /*"45568"*/ /*"37185"*/);
        
+        try {
+             variables = port.consultarVariablesProces("EntornCMAIB","100694");
+             //variables = port.consultarVariablesProces("EntornCMAIB","101022");
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
-        List<CampProces> variables = port.consultarVariablesProces("EntornCMAIB", "78000" /**"60770"**/ /*"60941"*/ /*"45568"*/ /*"37185"*/);
+        
+       
 
            JSONObject json = new JSONObject();
          

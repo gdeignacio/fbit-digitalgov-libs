@@ -105,6 +105,18 @@ public class ConsolidacioHandler extends HeliumActionHandler {
         
         System.out.println("Control variables");
         if (variablesMap!= null){
+            
+            /**
+             * eliminem el possible valor de "nodeGuardat" *
+             */
+            if (variablesMap.containsKey("nodeGuardat")) {
+                variablesMap.remove("nodeGuardat");
+            }
+            /**
+             * **********************************************
+             */
+
+
             System.out.println(variablesMap.toString());
         }
         
