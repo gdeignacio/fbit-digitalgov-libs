@@ -16,45 +16,54 @@ import net.conselldemallorca.helium.jbpm3.api.HeliumApi;
 import net.conselldemallorca.helium.jbpm3.handlers.exception.HeliumHandlerException;
 
 public class EsmenesHandler extends HeliumActionHandler {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7155770911354661252L;
-	
-	String nodeDesti = "esmenes";
 
-	public void execute(HeliumApi api) throws HeliumHandlerException {
-		JbpmContext context = JbpmConfiguration.getInstance().createJbpmContext();
-		ExecutionContext executionContext = new ExecutionContext(context.getToken(api.getToken().getId()));
-		
-		suspendreTasquesPendents(executionContext.getProcessInstance());
+    private static final long serialVersionUID = -7155770911354661252L;
+    String nodeDesti = "esmenes";
 
-		Token tokenArrel = executionContext.getProcessInstance().getRootToken();
-		
-		executionContext.setVariable("nodeGuardat", tokenArrel.getNode());
+    public void execute(HeliumApi api) throws HeliumHandlerException {
+        JbpmContext context = JbpmConfiguration.getInstance().createJbpmContext();
+        ExecutionContext executionContext = new ExecutionContext(context.getToken(api.getToken().getId()));
 
-		Map<String, Token> fills = tokenArrel.getActiveChildren();
-		for (Token fill : fills.values()) {
-			if (fill.getSubProcessInstance() != null) {
-				suspendreTasquesPendents(fill.getSubProcessInstance());
-			}
-		}
-		api.expedientTokenRedirigir(Long.valueOf(tokenArrel.getId()), this.nodeDesti, false);
-	}
+        suspendreTasquesPendents(executionContext.getProcessInstance());
 
-	public final void setNodeDesti(String nodeDesti) {
-		this.nodeDesti = nodeDesti;
-	}
+        Token tokenArrel = executionContext.getProcessInstance().getRootToken();
 
-	private void suspendreTasquesPendents(ProcessInstance processInstance) {
-		Collection<TaskInstance> tasks = processInstance.getTaskMgmtInstance().getTaskInstances();
-		for (TaskInstance task : tasks) {
-			if ((task.isOpen()) && (!task.hasEnded())) {
-				task.suspend();
-			}
-		}
-	}
+        executionContext.setVariable("nodeGuardat", tokenArrel.getNode());
 
-	public void retrocedir(HeliumApi heliumApi, List<String> parametres) throws Exception {
-	}
+        Map<String, Token> fills = tokenArrel.getActiveChildren();
+        for (Token fill : fills.values()) {
+            if (fill.getSubProcessInstance() != null) {
+                suspendreTasquesPendents(fill.getSubProcessInstance());
+            }
+        }
+
+        unsignal(executionContext.getProcessInstance());
+
+        api.expedientTokenRedirigir(Long.valueOf(tokenArrel.getId()), this.nodeDesti, false);
+    }
+
+    public final void setNodeDesti(String nodeDesti) {
+        this.nodeDesti = nodeDesti;
+    }
+
+    private void suspendreTasquesPendents(ProcessInstance processInstance) {
+        Collection<TaskInstance> tasks = processInstance.getTaskMgmtInstance().getTaskInstances();
+        for (TaskInstance task : tasks) {
+            if ((task.isOpen()) && (!task.hasEnded())) {
+                task.suspend();
+            }
+        }
+    }
+
+    private void unsignal(ProcessInstance processInstance) {
+        Collection<TaskInstance> tasks = processInstance.getTaskMgmtInstance().getTaskInstances();
+        for (TaskInstance task : tasks) {
+            if ((task.isOpen()) && (!task.hasEnded())) {
+                task.setSignalling(false);
+            }
+        }
+    }
+
+    public void retrocedir(HeliumApi heliumApi, List<String> parametres) throws Exception {
+    }
 }
