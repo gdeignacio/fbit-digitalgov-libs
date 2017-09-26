@@ -72,6 +72,8 @@ public class Dir3Client {
         
         if (NO_DIR3.equals(codigo)) return "Altres";
         
+        if (codigo.startsWith(NO_DIR3)) return  codigo.replace(NO_DIR3, "");
+        
         String denominacion = null;
         
         
@@ -118,7 +120,11 @@ public class Dir3Client {
         
        // E03143601
         
-        String codi = "E03143601"; // "E04096103";
+        //String codi = "E03143601"; // "E04096103";
+        
+        String codi = "NDIR3Perico"; // "E04096103";
+        
+        System.out.println(codi);
                 
         Dir3Client client = Dir3Client.getClient();
          

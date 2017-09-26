@@ -136,6 +136,30 @@ public class CatalogoDIR3Client {
         return null;
     }
     
+      private boolean isDir3(Map parametrosMap){
+        
+        String requestMapping= (String)parametrosMap.get("requestMapping");
+        String requestParams = (String)parametrosMap.get("requestParams");
+        
+        for (Object key:parametrosMap.keySet()){
+            String param = (String)key;
+            if (param.startsWith("arg")){
+                String valor = (String)parametrosMap.get(key);
+                if (NO_DIR3.equals(valor)){
+                    return false;
+                }
+            }
+            if (param.startsWith("arg0")){
+                String valor = (String)parametrosMap.get(key);
+                if ((valor == null) || "".equals(valor)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    
     private URL getUrl(Map parametrosMap){
         
         String requestMapping= (String)parametrosMap.get("requestMapping");
@@ -246,6 +270,10 @@ public class CatalogoDIR3Client {
     
     
     public List<Map<String, Object>> list(Map parametrosMap, String codigo, String valor){
+        
+        if (!isDir3(parametrosMap)){
+            return new ArrayList<Map<String, Object>>();
+        }
         
         URL url = getUrl(parametrosMap);     
         Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, url.toString());

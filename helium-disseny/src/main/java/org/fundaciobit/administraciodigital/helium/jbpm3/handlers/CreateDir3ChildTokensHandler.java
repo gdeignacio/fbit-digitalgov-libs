@@ -65,7 +65,8 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
                 lastItem = aTokenSuffix[aTokenSuffix.length -1].toString();
                 if (aTokenSuffix.length>1){   
                     lastButOneItem = aTokenSuffix[aTokenSuffix.length -2].toString();
-                    lastItem = (NO_DIR3.equals(lastButOneItem))?lastItem:lastButOneItem;
+                    String lastItemNoDir3 = NO_DIR3.concat(lastItem);
+                    lastItem = (NO_DIR3.equals(lastButOneItem))?lastItemNoDir3:lastButOneItem;
                 }    
             } else {
                 sTokenSuffix = tokenSuffix.toString();
@@ -85,7 +86,7 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
             
             System.out.println("Last item abans: "  + lastItem);
             
-            String description = fillDescription(lastItem); 
+            String description = fillDescription(lastItem);
             
             System.out.println("Last item: "  + lastItem);
             System.out.println("Descripcion: "  + description);

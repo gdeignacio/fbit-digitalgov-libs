@@ -517,7 +517,8 @@ public class TramitacioClient {
 
         String numero = "";
 
-        numero = "AIAs/261a-2017";  // "AIAs/212a-2017";
+        numero = "AIAs/261a-2017";
+        numero = "AIAs/280a-2017";  // "AIAs/212a-2017";
         //numero = "AIAs/212a-2017";  // "AIAs/212a-2017";
 
         System.out.println("-----------------------------------------------------------------------------------------");
@@ -531,6 +532,8 @@ public class TramitacioClient {
             System.out.println(fi.getName() + ":   " + fi.get(expediente));
         }
 
+        numero = "AIAs/261a-2017";
+        
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Expedients");
         System.out.println("-----------------------------------------------------------------------------------------");
@@ -575,6 +578,7 @@ public class TramitacioClient {
         
         
         try {
+            
             System.out.println("SET VARIABLE PRE");
             port.setVariableProces("EntornCMAIB", "100694", "osObservacions", "Escrit per WS");
             System.out.println("SET VARIABLE POST");

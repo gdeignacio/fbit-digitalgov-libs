@@ -14,6 +14,8 @@ import net.conselldemallorca.helium.jbpm3.handlers.exception.HeliumHandlerExcept
 import net.conselldemallorca.helium.jbpm3.handlers.tipus.ExpedientInfo;
 import net.conselldemallorca.helium.jbpm3.handlers.tipus.ProcessDefinitionInfo;
 import net.conselldemallorca.helium.jbpm3.handlers.tipus.ProcessInstanceInfo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.fundaciobit.administraciodigital.helium.jbpm3.utils.CustomProcessDefinitionInfo;
 import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
@@ -30,6 +32,8 @@ import org.json.simple.parser.ParseException;
  */
 public class ConsolidacioHandler extends HeliumActionHandler {
     
+    private final Log log = LogFactory.getLog(getClass());
+    
     String domini;
     String id;
 
@@ -38,6 +42,8 @@ public class ConsolidacioHandler extends HeliumActionHandler {
     
     @Override
     public void execute(HeliumApi api) throws HeliumHandlerException {
+        
+        if (id != null) return;
         
         JbpmContext context = JbpmConfiguration.getInstance().createJbpmContext();
         ProcessInstance processInstance = context.getToken(api.getToken().getId()).getProcessInstance();
