@@ -14,6 +14,8 @@ import net.conselldemallorca.helium.jbpm3.handlers.exception.HeliumHandlerExcept
 import net.conselldemallorca.helium.jbpm3.handlers.tipus.ExpedientInfo;
 import net.conselldemallorca.helium.jbpm3.handlers.tipus.ProcessDefinitionInfo;
 import net.conselldemallorca.helium.jbpm3.handlers.tipus.ProcessInstanceInfo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.fundaciobit.administraciodigital.helium.jbpm3.utils.CustomProcessDefinitionInfo;
 import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
@@ -29,6 +31,8 @@ import org.json.simple.parser.ParseException;
  * @author gdeignacio
  */
 public class SetVariableHandler extends HeliumActionHandler {
+    
+    private final Log log = LogFactory.getLog(getClass());
     
     String domini;
     String id;
@@ -109,9 +113,9 @@ public class SetVariableHandler extends HeliumActionHandler {
         
         Map<String, Object> variablesMap = (subProcessInstance!=null)?subProcessInstance.getContextInstance().getVariables():processInstance.getContextInstance().getVariables();
         
-        System.out.println("Control variables");
+        log.info("Control variables");
         if (variablesMap!= null){
-            System.out.println(variablesMap.toString());
+            log.info(variablesMap.toString());
         }
         
         String jsonVariables;
@@ -119,9 +123,9 @@ public class SetVariableHandler extends HeliumActionHandler {
         gson = gsonBuilder.create();
         jsonVariables = (variablesMap!=null)?gson.toJson(variablesMap):"";
         
-        System.out.println("Control variables json");
+        log.info("Control variables json");
         
-        System.out.println(jsonVariables);
+        log.info(jsonVariables);
         
         
         //if (variablesMap!=null) parametros.putAll(variablesMap);

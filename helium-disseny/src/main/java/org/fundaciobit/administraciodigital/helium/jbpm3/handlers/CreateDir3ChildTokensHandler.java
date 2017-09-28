@@ -5,6 +5,8 @@ import java.util.List;
 import net.conselldemallorca.helium.jbpm3.api.HeliumActionHandler;
 import net.conselldemallorca.helium.jbpm3.api.HeliumApi;
 import net.conselldemallorca.helium.jbpm3.handlers.exception.HeliumHandlerException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.jbpm.graph.exe.ExecutionContext;
@@ -18,6 +20,8 @@ import org.fundaciobit.administraciodigital.helium.jbpm3.utils.Dir3Client;
  * @author gdeignacio
  */
 public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
+    
+    private final Log log = LogFactory.getLog(getClass());
     
     private final static String NO_DIR3 = "NDIR3";
 
@@ -84,12 +88,12 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
             Token tokenFill = new Token(tokenPare, tokenName);
             executionContext.setVariable(varFilla, tokenSuffix);
             
-            System.out.println("Last item abans: "  + lastItem);
+            log.info("Last item abans: "  + lastItem);
             
             String description = fillDescription(lastItem);
             
-            System.out.println("Last item: "  + lastItem);
-            System.out.println("Descripcion: "  + description);
+            log.info("Last item: "  + lastItem);
+            log.info("Descripcion: "  + description);
             
             executionContext.setVariable(varFillaDesc, description);
             printInfo(tokenName, nodeDesti, varFilla, tokenSuffix);
@@ -112,9 +116,9 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
     
     private String fillDescription(String key) {
         Dir3Client client = Dir3Client.getClient();
-        System.out.println("Denominacion[" + key + "]: ");
+        log.info("Denominacion[" + key + "]: ");
         String denominacion = client.getDenominacion(key);
-        System.out.println(denominacion);
+        log.info(denominacion);
         return denominacion;
     }
     
@@ -146,7 +150,7 @@ public class CreateDir3ChildTokensHandler extends HeliumActionHandler {
                 + "nodeDesti=" + nodeDesti + ", "
                 + "varFilla=" + varFilla + ", "
                 + "varFillaValor=" + valor + ")";
-        System.out.println(s);
+        log.info(s);
     }
 
     private static String getTokenName(Token parent, String transitionName) {

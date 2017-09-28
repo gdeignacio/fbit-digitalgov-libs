@@ -23,12 +23,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
  * @author gdeignacio
  */
 public class Dir3Client {
+    
+    //private final Log log = LogFactory.getLog(getClass());
     
     private final static String NO_DIR3 = "NDIR3";
     
@@ -76,7 +80,6 @@ public class Dir3Client {
         
         String denominacion = null;
         
-        
         URL url;
         try {
             url = new URL(dir3Url + codigo);
@@ -85,7 +88,12 @@ public class Dir3Client {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
 
+            //System.out.println(conn.getResponseCode());
+            
             if (conn.getResponseCode() != 200) {
+                
+               // System.out.println(conn.getResponseCode());
+                
                 throw new RuntimeException("Failed : HTTP error code : "
                         + conn.getResponseCode());
             }
@@ -122,7 +130,7 @@ public class Dir3Client {
         
         //String codi = "E03143601"; // "E04096103";
         
-        String codi = "NDIR3Perico"; // "E04096103";
+        String codi =  "ARBITRARIO";  //"NDIR3Perico"; // "E04096103";
         
         System.out.println(codi);
                 

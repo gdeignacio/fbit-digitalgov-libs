@@ -43,7 +43,7 @@ public class ConsolidacioHandler extends HeliumActionHandler {
     @Override
     public void execute(HeliumApi api) throws HeliumHandlerException {
         
-        if (id != null) return;
+      
         
         JbpmContext context = JbpmConfiguration.getInstance().createJbpmContext();
         ProcessInstance processInstance = context.getToken(api.getToken().getId()).getProcessInstance();
@@ -109,7 +109,7 @@ public class ConsolidacioHandler extends HeliumActionHandler {
         
         Map<String, Object> variablesMap = (subProcessInstance!=null)?subProcessInstance.getContextInstance().getVariables():processInstance.getContextInstance().getVariables();
         
-        System.out.println("Control variables");
+        log.info("Control variables");
         if (variablesMap!= null){
             
             /**
@@ -123,7 +123,7 @@ public class ConsolidacioHandler extends HeliumActionHandler {
              */
 
 
-            System.out.println(variablesMap.toString());
+            log.info(variablesMap.toString());
         }
         
         String jsonVariables;
@@ -131,9 +131,9 @@ public class ConsolidacioHandler extends HeliumActionHandler {
         gson = gsonBuilder.create();
         jsonVariables = (variablesMap!=null)?gson.toJson(variablesMap):"";
         
-        System.out.println("Control variables json");
+        log.info("Control variables json");
         
-        System.out.println(jsonVariables);
+        log.info(jsonVariables);
         
         
         //if (variablesMap!=null) parametros.putAll(variablesMap);
