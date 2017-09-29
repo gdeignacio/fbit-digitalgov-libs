@@ -126,9 +126,8 @@ public class TramitacioClient {
     private static void dummy(TramitacioService port) {
 
         LOG.log(Level.INFO, "Invoking dummy...");
-        
-        // port.consultaFormulariTasca(_CODAPP, _CODAPP)
 
+        // port.consultaFormulariTasca(_CODAPP, _CODAPP)
     }
 
     public List<ExpedientInfo> consultaExpedients(String idEntorn, String numero) {
@@ -205,7 +204,6 @@ public class TramitacioClient {
         return null;
     }
 
-    
     public Map<String, CampProces> consultarVariablesProcesMap(String idEntorn, String idProces) {
 
         Map<String, CampProces> response = new HashMap<String, CampProces>();
@@ -218,7 +216,6 @@ public class TramitacioClient {
 
         return response;
     }
-    
 
     public Map<String, Object> consultarVariablesProcesMapValues(String idEntorn, String idProces) {
 
@@ -232,7 +229,6 @@ public class TramitacioClient {
 
         return response;
     }
-    
 
     public String consultarVariablesProcesJson(String idEntorn, String idProces) {
 
@@ -281,7 +277,6 @@ public class TramitacioClient {
         return json.toJSONString();
     }
 
-    
     public void setVariableProces(String idEntorn, String idProces, String idVariable, String valor) {
 
         TramitacioService port = getServicePort();
@@ -508,7 +503,7 @@ public class TramitacioClient {
         }
 
         numero = "AIAs/288a-2017";
-        
+
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Expedients");
         System.out.println("-----------------------------------------------------------------------------------------");
@@ -550,7 +545,6 @@ public class TramitacioClient {
         System.out.println("                                     Variables");
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        
         /*
         try {
             
@@ -561,113 +555,118 @@ public class TramitacioClient {
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-        */
-        
-        
-        
-
+         */
         List<CampProces> variables = null;
         //variables = port.consultarVariablesProces("EntornCMAIB","100694" /*"78000"*/ /**"60770"**/ /*"60941"*/ /*"45568"*/ /*"37185"*/);
 
         try {
             System.out.println("CONSULTAR VARIABLE PRE");
             variables = port.consultarVariablesProces("EntornCMAIB", "115002");
+
+          
+            
+            System.out.println(variables);
+
             System.out.println("CONSULTAR VARIABLE POST");
             //variables = port.consultarVariablesProces("EntornCMAIB","101022");
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        JSONObject json = new JSONObject();
+        if (variables != null) {
 
-        for (CampProces cp : variables) {
+            JSONObject json = new JSONObject();
 
-            if (cp.getValor() == null) {
-                continue;
-            }
+            for (CampProces cp : variables) {
 
-            Object valor = cp.getValor();
-
-            if (cp.getValor() instanceof AnyTypeArrayArray) {
-
-                AnyTypeArrayArray aa = (AnyTypeArrayArray) cp.getValor();
-                JSONArray jsonArrayArray = new JSONArray();
-
-                for (AnyTypeArray a : aa.getItem()) {
-                    JSONArray jsonArray = new JSONArray();
-                    jsonArray.addAll(a.getItem());
-                    jsonArrayArray.add(jsonArray);
+                if (cp.getValor() == null) {
+                    continue;
                 }
 
-                valor = jsonArrayArray;
+                Object valor = cp.getValor();
+
+                if (cp.getValor() instanceof AnyTypeArrayArray) {
+
+                    AnyTypeArrayArray aa = (AnyTypeArrayArray) cp.getValor();
+                    JSONArray jsonArrayArray = new JSONArray();
+
+                    for (AnyTypeArray a : aa.getItem()) {
+                        JSONArray jsonArray = new JSONArray();
+                        jsonArray.addAll(a.getItem());
+                        jsonArrayArray.add(jsonArray);
+                    }
+
+                    valor = jsonArrayArray;
+                    json.put(cp.getCodi(), valor);
+                    continue;
+                }
+
+                if (cp.getValor() instanceof AnyTypeArray) {
+
+                    AnyTypeArray a = (AnyTypeArray) cp.getValor();
+                    JSONArray jsonArray = new JSONArray();
+                    jsonArray.addAll(a.getItem());
+                    valor = jsonArray;
+                    json.put(cp.getCodi(), valor);
+                    continue;
+                }
+
                 json.put(cp.getCodi(), valor);
-                continue;
             }
 
-            if (cp.getValor() instanceof AnyTypeArray) {
+            System.out.println(json.toJSONString());
 
-                AnyTypeArray a = (AnyTypeArray) cp.getValor();
-                JSONArray jsonArray = new JSONArray();
-                jsonArray.addAll(a.getItem());
-                valor = jsonArray;
-                json.put(cp.getCodi(), valor);
-                continue;
+            for (CampProces variable : variables) {
+
+                String linea = variable.getCodi() + " " + variable.getDominiCampText() + " "
+                        + variable.getDominiCampValor() + " " + variable.getDominiId() + " "
+                        + variable.getObservacions() + " " + variable.getTipus() + " "
+                        //  + variable.getValor().toString() + " "
+                        + variable.getValor() + " "
+                        +//" " + variable.getJbpmAction() + " " + 
+                        variable.getDominiParams() + " " + variable.getEtiqueta();
+
+                System.out.println(linea);
+
+                String line = "public static final DVariablesAiaSimplificada " + variable.getCodi().toUpperCase()
+                        + " = new DVariablesAiaSimplificada(\"" + variable.getCodi() + "\",\"" + variable.getEtiqueta() + "\");";
+
+                //System.out.println("------------------------------Fin valores");
+                //System.out.println(line);
             }
 
-            json.put(cp.getCodi(), valor);
-        }
+            System.out.println("-----------------------------------------------------------------------------------------");
+            System.out.println("                                     Fi Variables");
+            System.out.println("-----------------------------------------------------------------------------------------");
 
-        System.out.println(json.toJSONString());
-
-        for (CampProces variable : variables) {
-
-            String linea = variable.getCodi() + " " + variable.getDominiCampText() + " "
-                    + variable.getDominiCampValor() + " " + variable.getDominiId() + " "
-                    + variable.getObservacions() + " " + variable.getTipus() + " "
-                    //  + variable.getValor().toString() + " "
-                    + variable.getValor() + " "
-                    +//" " + variable.getJbpmAction() + " " + 
-                    variable.getDominiParams() + " " + variable.getEtiqueta();
-
-            System.out.println(linea);
-
-            String line = "public static final DVariablesAiaSimplificada " + variable.getCodi().toUpperCase()
-                    + " = new DVariablesAiaSimplificada(\"" + variable.getCodi() + "\",\"" + variable.getEtiqueta() + "\");";
-
-            //System.out.println("------------------------------Fin valores");
-            //System.out.println(line);
-        }
-
-        System.out.println("-----------------------------------------------------------------------------------------");
-        System.out.println("                                     Fi Variables");
-        System.out.println("-----------------------------------------------------------------------------------------");
-
-        for (CampProces variable : variables) {
-            /*
+            for (CampProces variable : variables) {
+                /*
             String line = variable.getCodi() + " " +  variable.getDominiCampText()  + " " +
                     variable.getDominiCampValor() + " " + variable.getDominiId() + " " + 
                     variable.getObservacions() + " " + variable.getTipus() + " " + 
                     variable.getValor() + " " + variable.getJbpmAction() + " " + 
                     variable.getDominiParams() + " " + variable.getEtiqueta();
-             */
+                 */
 
-            String line = "DVariablesAiaSimplificada." + variable.getCodi().toUpperCase() + ",";
+                String line = "DVariablesAiaSimplificada." + variable.getCodi().toUpperCase() + ",";
 
-            System.out.println(line);
-        }
+                System.out.println(line);
+            }
 
-        List lista = consultaTasquesGrup(port, "EntornCMAIB");
-        System.out.println(lista);
+            List lista = consultaTasquesGrup(port, "EntornCMAIB");
+            System.out.println(lista);
 
-        lista = port.consultaTasquesPersonals("EntornCMAIB");
+            lista = port.consultaTasquesPersonals("EntornCMAIB");
 
-        for (Object tasca : lista) {
-            TascaTramitacio task = (TascaTramitacio) tasca;
-            System.out.println(task.getCodi() + " " + task.getExpedient() + " " + task.getId() + " " + task.getProcessInstanceId());
-            //System.out.println(tasca.toString());
-        }
+            for (Object tasca : lista) {
+                TascaTramitacio task = (TascaTramitacio) tasca;
+                System.out.println(task.getCodi() + " " + task.getExpedient() + " " + task.getId() + " " + task.getProcessInstanceId());
+                //System.out.println(tasca.toString());
+            }
 
 //        System.out.println(lista);
+        }
+
     }
 
 }
