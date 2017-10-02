@@ -93,9 +93,9 @@ public class Dir3Client {
             if (conn.getResponseCode() != 200) {
                 
                // System.out.println(conn.getResponseCode());
-                
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
+                return denominacion;
+                //throw new RuntimeException("Failed : HTTP error code : "
+                //        + conn.getResponseCode());
             }
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));

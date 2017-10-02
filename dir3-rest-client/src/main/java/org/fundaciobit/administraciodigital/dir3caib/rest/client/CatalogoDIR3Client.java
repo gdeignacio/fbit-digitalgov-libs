@@ -243,8 +243,9 @@ public class CatalogoDIR3Client {
             conn.setRequestProperty("Accept", "application/json");
 
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
+                return denominacion;
+                //throw new RuntimeException("Failed : HTTP error code : "
+                //        + conn.getResponseCode());
             }
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
@@ -296,8 +297,9 @@ public class CatalogoDIR3Client {
             conn.setRequestProperty("Accept", "application/json");
 
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
+                return listaCodigoValor;
+                //throw new RuntimeException("Failed : HTTP error code : "
+                //        + conn.getResponseCode());
             }
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
