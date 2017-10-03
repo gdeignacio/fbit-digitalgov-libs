@@ -454,8 +454,10 @@ public class CatalogoDIR3Client {
         
         System.setProperty(app + dadesConnexio.getCodClient() + ".username", "admin");
         System.setProperty(app + dadesConnexio.getCodClient()  + ".password", "admincmaib");
-        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://registre3.fundaciobit.org/dir3caib");
-
+        //System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://registre3.fundaciobit.org/dir3caib");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://192.168.35.151:8080/dir3caib");
+        
+        
         System.setProperty(app +  dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
         System.setProperty(app +  dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN");
 

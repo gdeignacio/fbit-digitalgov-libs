@@ -36,7 +36,10 @@ public class Dir3Client {
     
     private final static String NO_DIR3 = "NDIR3";
     
-    private String dir3RestUrlByCode = "http://registre3.fundaciobit.org/dir3caib/rest/unidad/denominacion?codigo=";
+    //private String dir3RestUrlByCode = "http://registre3.fundaciobit.org/dir3caib/rest/unidad/denominacion?codigo=";
+    private String dir3RestUrlByCode = "http://192.168.35.151:8080/dir3caib/rest/unidad/denominacion?codigo=";
+    
+    
     
     /**
      * Objecte que emmagatzema la instancia de la classe segons el patro
