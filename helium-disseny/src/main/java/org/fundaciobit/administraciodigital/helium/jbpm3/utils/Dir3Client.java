@@ -94,9 +94,10 @@ public class Dir3Client {
             //System.out.println(conn.getResponseCode());
             
             if (conn.getResponseCode() != 200) {
-                
+                System.out.println(conn.getResponseCode());
                // System.out.println(conn.getResponseCode());
-                return denominacion;
+                //return denominacion;
+                //return "Error 200";
                 //throw new RuntimeException("Failed : HTTP error code : "
                 //        + conn.getResponseCode());
             }
@@ -141,6 +142,8 @@ public class Dir3Client {
          
         String denom = client.getDenominacion(codi);
      
+        if ("".equals(denom)) System.out.println("Vacio");
+        
         System.out.println(denom);
      
     }
