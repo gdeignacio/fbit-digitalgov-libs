@@ -40,7 +40,7 @@ public class TimestampDeserializer implements JsonDeserializer<Timestamp>  {
 	
                 //    2017-05-24T00:00:00+02:00
        
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-d'T'hh:mm:ss'ZZZZ'");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dThh:mm:ssZZZZ");
 		
 		try {
 			return (Timestamp) formatter.parse(date);
