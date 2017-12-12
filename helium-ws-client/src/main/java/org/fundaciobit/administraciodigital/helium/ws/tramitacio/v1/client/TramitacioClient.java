@@ -540,6 +540,28 @@ public class TramitacioClient {
 
             //  System.out.println(gson.toJson(expedient));
         }
+        
+        
+        
+        System.out.println("-----------------------------------------------------------------------------------------");
+        System.out.println("                                     Variables JSON");
+        System.out.println("-----------------------------------------------------------------------------------------");
+        
+        
+        
+        
+        
+        System.out.println("-----------------------------------------------------------------------------------------");
+        System.out.println("                                     Fi Variables JSON");
+        System.out.println("-----------------------------------------------------------------------------------------");
+        
+        
+        //System.out.println("CONSULTAR VARIABLE PRE");
+        //String strVar;
+        //strVar = TramitacioClient.consultarVariablesProcesJson("EntornCMAIB", "115002");
+        //System.out.println(strVar);
+        //System.out.println("CONSULTAR VARIABLE POST");
+        
 
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Variables");
