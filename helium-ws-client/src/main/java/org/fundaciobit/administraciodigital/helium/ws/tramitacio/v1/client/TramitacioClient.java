@@ -285,7 +285,7 @@ public class TramitacioClient {
                 }
                 
                 JSONArray jsonArray = new JSONArray();
-                jsonArray.addAll(a.getItem());
+                jsonArray.addAll(items);
                 valor = jsonArray;
                 json.put(cp.getCodi(), valor);
                 continue;
