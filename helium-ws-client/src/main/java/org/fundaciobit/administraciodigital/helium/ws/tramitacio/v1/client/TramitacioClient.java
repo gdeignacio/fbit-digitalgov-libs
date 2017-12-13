@@ -5,6 +5,7 @@ import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -244,6 +245,15 @@ public class TramitacioClient {
             }
 
             Object valor = cp.getValor();
+            
+            if (cp.getValor() instanceof XMLGregorianCalendar) {
+
+                valor = ((XMLGregorianCalendar)cp.getValor()).toString();
+                
+                json.put(cp.getCodi(), valor);
+                continue;
+            }
+            
 
             if (cp.getValor() instanceof AnyTypeArrayArray) {
 
@@ -251,8 +261,12 @@ public class TramitacioClient {
                 JSONArray jsonArrayArray = new JSONArray();
 
                 for (AnyTypeArray a : aa.getItem()) {
+                    List<Object> items = new ArrayList<Object>();
+                    for (Object obj: a.getItem()){
+                        items.add((obj instanceof XMLGregorianCalendar)?obj.toString():obj);
+                    }
                     JSONArray jsonArray = new JSONArray();
-                    jsonArray.addAll(a.getItem());
+                    jsonArray.addAll(items);
                     jsonArrayArray.add(jsonArray);
                 }
 
@@ -264,6 +278,12 @@ public class TramitacioClient {
             if (cp.getValor() instanceof AnyTypeArray) {
 
                 AnyTypeArray a = (AnyTypeArray) cp.getValor();
+                
+                List<Object> items = new ArrayList<Object>();
+                for (Object obj: a.getItem()){
+                    items.add((obj instanceof XMLGregorianCalendar)?obj.toString():obj);
+                }
+                
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.addAll(a.getItem());
                 valor = jsonArray;

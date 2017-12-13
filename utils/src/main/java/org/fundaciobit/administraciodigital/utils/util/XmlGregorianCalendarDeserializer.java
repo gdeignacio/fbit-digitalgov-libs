@@ -26,28 +26,28 @@ import com.google.gson.JsonParseException;
 import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  *
  * @author gdeignacio
  */
-public class TimestampDeserializer implements JsonDeserializer<Timestamp>  {
+public class XmlGregorianCalendarDeserializer implements JsonDeserializer<XMLGregorianCalendar>  {
 
     @Override
-    public Timestamp deserialize(JsonElement je, Type type, JsonDeserializationContext jdc) throws JsonParseException {
-       String date = je.getAsString();
-	
-                //    2017-05-24T00:00:00+02:00
-       
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dThh:mm:ssZZZZ");
-		
-		try {
-			return (Timestamp) formatter.parse(date);
-		} catch (ParseException e) {
-			 Logger.getLogger(TimestampDeserializer.class.getName()).log(Level.SEVERE, null, e);
-			return null;
-		}
+    public XMLGregorianCalendar deserialize(JsonElement jsonElement, Type type,
+            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+
+        System.out.println("----------------------Deserializando");
+        
+        try {
+            return DatatypeFactory.newInstance().newXMLGregorianCalendar(jsonElement.getAsString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
     }
-    
+
 }
