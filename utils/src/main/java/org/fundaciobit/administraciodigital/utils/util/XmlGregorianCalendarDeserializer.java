@@ -39,7 +39,6 @@ public class XmlGregorianCalendarDeserializer implements JsonDeserializer<XMLGre
     public XMLGregorianCalendar deserialize(JsonElement jsonElement, Type type,
             JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 
-        System.out.println("----------------------Deserializando");
         
         try {
             return DatatypeFactory.newInstance().newXMLGregorianCalendar(jsonElement.getAsString());
