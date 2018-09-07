@@ -454,8 +454,8 @@ public class CatalogoDIR3Client {
         
         System.setProperty(app + dadesConnexio.getCodClient() + ".username", "admin");
         System.setProperty(app + dadesConnexio.getCodClient()  + ".password", "admincmaib");
-        //System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://registre3.fundaciobit.org/dir3caib");
-        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://192.168.35.151:8080/dir3caib");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://registre3.fundaciobit.org/dir3caib");
+        //System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://192.168.35.151:8080/dir3caib");
         
         
         System.setProperty(app +  dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
@@ -616,9 +616,10 @@ public class CatalogoDIR3Client {
         par.append("\"unidadRaiz\":\"false\",");
         par.append("\"provincia\":\"\",");
         par.append("\"localidad\":\"407\"");
+        par.append("\"vigentes\":\"true\",");
         par.append("}");
         
-        String wpar = "?codigo=&denominacion=&codNivelAdministracion=3&codComunidadAutonoma=&conOficinas=false&unidadRaiz=false&provincia=&localidad=407";
+        String wpar = "?codigo=&denominacion=&codNivelAdministracion=3&codComunidadAutonoma=&conOficinas=false&unidadRaiz=false&provincia=&localidad=407&vigentes=true";
         
         //parametrosMap.put("requestParams",  par.toString());
         parametrosMap.put("requestParams",  wpar);
@@ -638,7 +639,7 @@ public class CatalogoDIR3Client {
         
         url = client.getUrl(parametrosMap);        
         
-        System.out.println(url);
+        System.out.println("Url: " + url);
         
         
         l = list(url, "codigo", "denominacion");
