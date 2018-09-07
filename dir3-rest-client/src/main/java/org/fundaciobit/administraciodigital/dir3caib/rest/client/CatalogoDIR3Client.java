@@ -641,6 +641,9 @@ public class CatalogoDIR3Client {
         
         System.out.println("Url: " + url);
         
+        // http://registre3.fundaciobit.org/dir3caib/rest/busqueda/organismos?codigo=&denominacion=&codNivelAdministracion=3&codComunidadAutonoma=&conOficinas=false&unidadRaiz=false&provincia=&localidad=407&vigentes=true
+        
+        // Url: http://registre3.fundaciobit.org/dir3caib/rest/busqueda/organismos?codigo=&denominacion=&codNivelAdministracion=3&codComunidadAutonoma=&conOficinas=false&unidadRaiz=false&provincia=&localidad=407&vigentes=true
         
         l = list(url, "codigo", "denominacion");
         
