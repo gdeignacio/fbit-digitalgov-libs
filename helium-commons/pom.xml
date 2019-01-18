@@ -27,7 +27,18 @@
 
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.fundaciobit.administraciodigital</groupId>
+            <artifactId>fbit-digitalgov-libs-utils</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>net.conselldemallorca</groupId>
+            <artifactId>helium-core-api</artifactId>
+            <version>3.1</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <build>
         <finalName>fbit-digitalgov-libs-helium-commons</finalName>

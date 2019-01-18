@@ -653,10 +653,6 @@ public class CatalogoDIR3Client {
         
         
         
-        
-        
-        
-        
     }
 
 }
