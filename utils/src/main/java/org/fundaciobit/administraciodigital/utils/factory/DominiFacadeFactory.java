@@ -29,15 +29,15 @@ public abstract class DominiFacadeFactory<Facade> {
     
     private Facade dominiFacade;
     
-    private List<Data> parametros;
+    private List parametros;
     
-    private List<Data> resultado;
+    private List resultado;
 
-    public List<Data> getResultado() {
+    public List getResultado() {
         return resultado;
     }
 
-    public void setResultado(List<Data> resultado) {
+    public void setResultado(List resultado) {
         this.resultado = resultado;
     }
 
@@ -45,7 +45,7 @@ public abstract class DominiFacadeFactory<Facade> {
         this.facadeClass = facadeClass;
     }
     
-    public abstract List<Data> getResult();
+    public abstract List getResult();
     
     public Facade getDominiFacade(){
         return dominiFacade;
@@ -56,11 +56,11 @@ public abstract class DominiFacadeFactory<Facade> {
     }
     
     
-    public List<Data> getParametros() {
+    public List getParametros() {
         return parametros;
     }
 
-    public void setParametros(List<Data> parametros) {
+    public void setParametros(List parametros) {
         this.parametros = parametros;
     }
     

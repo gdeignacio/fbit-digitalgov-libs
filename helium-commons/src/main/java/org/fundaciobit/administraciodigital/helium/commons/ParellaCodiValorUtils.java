@@ -18,6 +18,7 @@ package org.fundaciobit.administraciodigital.helium.commons;
 import net.conselldemallorca.helium.core.extern.domini.FilaResultat;
 import net.conselldemallorca.helium.core.extern.domini.ParellaCodiValor;
 import org.fundaciobit.administraciodigital.utils.data.Data;
+import org.fundaciobit.administraciodigital.utils.data.DataAdapter;
 
 /**
  *
@@ -25,21 +26,10 @@ import org.fundaciobit.administraciodigital.utils.data.Data;
  */
 public class ParellaCodiValorUtils {
     
-    public static final String ID = "id";
-    public static final String VAL = "val";
-    
-    public FilaResultat novaFila(Data d, String id, String val) {
+    public FilaResultat novaFila(IDominiHeliumItem domini) {
         FilaResultat resposta = new FilaResultat();
-        resposta.getColumnes().add(novaParella(id, d.getCodigoLOV()));
-        resposta.getColumnes().add(novaParella(val, d.getValorLOV()));
-        return resposta;
-    }
-    
-    
-    public FilaResultat novaFila(Data d) {
-        FilaResultat resposta = new FilaResultat();
-        resposta.getColumnes().add(novaParella(ID, d.getCodigoLOV()));
-        resposta.getColumnes().add(novaParella(VAL, d.getValorLOV()));
+        resposta.getColumnes().add(novaParella(IDominiHeliumItem.ID, domini.getCodigoLOV()));
+        resposta.getColumnes().add(novaParella(IDominiHeliumItem.VAL, domini.getValorLOV()));
         return resposta;
     }
 
@@ -50,7 +40,7 @@ public class ParellaCodiValorUtils {
         return parella;
     }
 
-    public FilaResultat filaError(){
+    public FilaResultat filaError() {
         FilaResultat resposta = new FilaResultat();
         ParellaCodiValor parella = new ParellaCodiValor();
         parella.setCodi("");
@@ -59,24 +49,15 @@ public class ParellaCodiValorUtils {
         return resposta;
     }
 
-    public FilaResultat filaError(Exception e){
+    public FilaResultat filaError(Exception e) {
         FilaResultat resposta = new FilaResultat();
         ParellaCodiValor parella = new ParellaCodiValor();
         parella.setCodi("");
         parella.setValor(e.getMessage());
         resposta.getColumnes().add(parella);
         return resposta;
-        
+
     }
-    
-    
-    public Data novaData(ParellaCodiValor pcv){
-       return null;
-        
-    }
-    
-    
-    
     
     
 }
