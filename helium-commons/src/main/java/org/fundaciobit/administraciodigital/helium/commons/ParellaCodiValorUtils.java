@@ -28,7 +28,7 @@ public class ParellaCodiValorUtils {
     public static final String ID = "id";
     public static final String VAL = "val";
     
-    private FilaResultat novaFila(Data d, String id, String val) {
+    public FilaResultat novaFila(Data d, String id, String val) {
         FilaResultat resposta = new FilaResultat();
         resposta.getColumnes().add(novaParella(id, d.getCodigoLOV()));
         resposta.getColumnes().add(novaParella(val, d.getValorLOV()));
@@ -36,21 +36,21 @@ public class ParellaCodiValorUtils {
     }
     
     
-    private FilaResultat novaFila(Data d) {
+    public FilaResultat novaFila(Data d) {
         FilaResultat resposta = new FilaResultat();
         resposta.getColumnes().add(novaParella(ID, d.getCodigoLOV()));
         resposta.getColumnes().add(novaParella(VAL, d.getValorLOV()));
         return resposta;
     }
 
-    private ParellaCodiValor novaParella(String codi, Object valor) {
+    public ParellaCodiValor novaParella(String codi, Object valor) {
         ParellaCodiValor parella = new ParellaCodiValor();
         parella.setCodi(codi);
         parella.setValor(valor);
         return parella;
     }
 
-    private FilaResultat filaError(){
+    public FilaResultat filaError(){
         FilaResultat resposta = new FilaResultat();
         ParellaCodiValor parella = new ParellaCodiValor();
         parella.setCodi("");
@@ -59,7 +59,7 @@ public class ParellaCodiValorUtils {
         return resposta;
     }
 
-    private FilaResultat filaError(Exception e){
+    public FilaResultat filaError(Exception e){
         FilaResultat resposta = new FilaResultat();
         ParellaCodiValor parella = new ParellaCodiValor();
         parella.setCodi("");
@@ -70,7 +70,10 @@ public class ParellaCodiValorUtils {
     }
     
     
-    
+    public Data novaData(ParellaCodiValor pcv){
+       return null;
+        
+    }
     
     
     
