@@ -16,52 +16,39 @@
 package org.fundaciobit.administraciodigital.utils.factory;
 
 import java.util.List;
-import org.fundaciobit.administraciodigital.utils.data.Data;
 
 /**
  *
  * @author gdeignacio
  * @param <Facade>
+ * @param <ItemParam>
+ * @param <ItemResult>
  */
-public abstract class DominiFacadeFactory<Facade> {
-    
-    private Class<Facade> facadeClass;
-    
-    private Facade dominiFacade;
-    
-    private List parametros;
-    
-    private List resultado;
+public abstract class DominiFacadeFactory<Facade, ItemParam, ItemResult> {
 
-    public List getResultado() {
-        return resultado;
+    private Facade facade;
+
+    private List<ItemParam> param;
+
+    public DominiFacadeFactory(){
     }
 
-    public void setResultado(List resultado) {
-        this.resultado = resultado;
+    public abstract List<ItemResult> getResult();
+
+    public Facade getFacade() {
+        return facade;
     }
 
-    public DominiFacadeFactory(Class<Facade> facadeClass){
-        this.facadeClass = facadeClass;
-    }
-    
-    public abstract List getResult();
-    
-    public Facade getDominiFacade(){
-        return dominiFacade;
-    }
-    
-    public void setDominiFacade(Facade dominiFacade){
-        this.dominiFacade = dominiFacade;
-    }
-    
-    
-    public List getParametros() {
-        return parametros;
+    public void setFacade(Facade facade) {
+        this.facade = facade;
     }
 
-    public void setParametros(List parametros) {
-        this.parametros = parametros;
+    public List<ItemParam> getParam() {
+        return param;
     }
-    
+
+    public void setParam(List<ItemParam> param) {
+        this.param = param;
+    }
+
 }
