@@ -6,6 +6,7 @@ import java.util.HashMap;
  *
  * @author gdeignacio
  */
+@Deprecated
 public final class DominiHeliumItem extends HashMap<String, Object> implements IDominiHeliumItem {
    
     @Override

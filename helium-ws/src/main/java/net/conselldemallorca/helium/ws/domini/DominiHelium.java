@@ -8,6 +8,7 @@ package net.conselldemallorca.helium.ws.domini;
 import java.util.List;
 import javax.jws.WebService;
 
+@Deprecated
 @WebService(targetNamespace = "http://domini.integracio.helium.conselldemallorca.net/")
 public interface DominiHelium {
 

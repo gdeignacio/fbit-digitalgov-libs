@@ -15,13 +15,12 @@
  */
 package org.fundaciobit.administraciodigital.helium.commons;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import net.conselldemallorca.helium.core.extern.domini.FilaResultat;
 import net.conselldemallorca.helium.core.extern.domini.ParellaCodiValor;
-import org.fundaciobit.administraciodigital.utils.data.Data;
-import org.fundaciobit.administraciodigital.utils.data.DataAdapter;
 import org.fundaciobit.administraciodigital.utils.data.HashItemData;
 import org.fundaciobit.administraciodigital.utils.data.MapItemData;
 
@@ -31,7 +30,15 @@ import org.fundaciobit.administraciodigital.utils.data.MapItemData;
  */
 public class ParellaCodiValorUtils {
     
-     public static FilaResultat novaFila(IDominiHeliumItem domini) {
+    public static FilaResultat novaFila(MapItemData mid){
+        FilaResultat resposta = new FilaResultat();
+        resposta.getColumnes().add(novaParella(MapItemData.ID, mid.getCodigoLOV()));
+        resposta.getColumnes().add(novaParella(MapItemData.VAL, mid.getValorLOV()));
+        return resposta;
+    }
+    
+    @Deprecated
+    public static FilaResultat novaFila(IDominiHeliumItem domini) {
         FilaResultat resposta = new FilaResultat();
         resposta.getColumnes().add(novaParella(IDominiHeliumItem.ID, domini.getCodigoLOV()));
         resposta.getColumnes().add(novaParella(IDominiHeliumItem.VAL, domini.getValorLOV()));
@@ -84,14 +91,12 @@ public class ParellaCodiValorUtils {
             public MapItemData apply(ParellaCodiValor pcv) {
                 MapItemData mid  = new HashItemData();
                 
+                
                 return mid;
             }
         };
-
-        List<MapItemData> mids = Lists.transform(pcv, pcv2mid);
         
-        
-        
+        List<MapItemData> mids = Lists.transform(pcv, pcv2mid); 
         return mids;
     }
         

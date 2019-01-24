@@ -14,6 +14,7 @@ import java.util.List;
  *
  * @author Limit Tecnologies <limit@limit.es>
  */
+@Deprecated
 public class FilaResultat implements Serializable {
 
 	private List<ParellaCodiValor> columnes = new ArrayList<ParellaCodiValor>();

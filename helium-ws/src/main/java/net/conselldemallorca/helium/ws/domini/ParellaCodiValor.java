@@ -12,6 +12,7 @@ import java.io.Serializable;
  *
  * @author Limit Tecnologies <limit@limit.es>
  */
+@Deprecated
 public class ParellaCodiValor implements Serializable {
 
 	private String codi;

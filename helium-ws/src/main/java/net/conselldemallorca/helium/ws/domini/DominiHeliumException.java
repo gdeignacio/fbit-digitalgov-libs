@@ -10,6 +10,8 @@ package net.conselldemallorca.helium.ws.domini;
  *
  * @author Limit Tecnologies <limit@limit.es>
  */
+
+@Deprecated
 public class DominiHeliumException extends Exception {
 
 	private static final long serialVersionUID = 1L;
