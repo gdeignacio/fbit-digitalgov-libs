@@ -8,24 +8,47 @@ import java.util.HashMap;
  */
 public final class HashItemData extends HashMap<String, Object> implements MapItemData {
    
+    private String idKey;
+    private String valKey;
+    
+    public HashItemData(){
+        this.idKey = ID;
+        this.valKey = VAL;
+    }
+    
+    public HashItemData(String idKey, String valKey){
+        this.idKey = idKey;
+        this.valKey = valKey;
+    } 
+    
     @Override
     public Object getCodigoLOV() {
-        return get(ID);
+        return get(idKey);
     }
 
     @Override
     public Object getValorLOV() {
-        return get(VAL);
+        return get(valKey);
     }
 
     @Override
     public void setCodigoLOV(Object id) {
-        put(ID, id);
+        put(idKey, id);
     }
 
     @Override
     public void setValorLOV(Object val) {
-         put(VAL, val);
+         put(valKey, val);
+    }
+
+    @Override
+    public Object getIdKey() {
+        return idKey;
+    }
+
+    @Override
+    public Object getValKey() {
+        return valKey;
     }
   
 }

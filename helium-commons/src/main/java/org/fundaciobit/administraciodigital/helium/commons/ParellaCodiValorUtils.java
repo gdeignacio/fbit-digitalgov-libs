@@ -32,8 +32,8 @@ public class ParellaCodiValorUtils {
     
     public static FilaResultat novaFila(MapItemData mid){
         FilaResultat resposta = new FilaResultat();
-        resposta.getColumnes().add(novaParella(MapItemData.ID, mid.getCodigoLOV()));
-        resposta.getColumnes().add(novaParella(MapItemData.VAL, mid.getValorLOV()));
+        resposta.getColumnes().add(novaParella((String)mid.getIdKey(), mid.getCodigoLOV()));
+        resposta.getColumnes().add(novaParella((String)mid.getValKey(), mid.getValorLOV()));
         return resposta;
     }
     
@@ -83,21 +83,33 @@ public class ParellaCodiValorUtils {
         return resposta;
     }
     
+    public static MapItemData newItemData(ParellaCodiValor pcv){
+        MapItemData mid = new HashItemData();
+        mid.setCodigoLOV(pcv.getCodi());
+        mid.setValorLOV(pcv.getValor());
+        return mid;
+    }
     
-    public static List<MapItemData> pcvToMid(List<ParellaCodiValor> pcv){
-        
+    
+    public static List<MapItemData> transformParelles2Items(List<ParellaCodiValor> pcvs){
         Function<ParellaCodiValor, MapItemData> pcv2mid
                 = new Function<ParellaCodiValor, MapItemData>() {
             public MapItemData apply(ParellaCodiValor pcv) {
-                MapItemData mid  = new HashItemData();
-                
-                
-                return mid;
+                return newItemData(pcv);
             }
         };
-        
-        List<MapItemData> mids = Lists.transform(pcv, pcv2mid); 
-        return mids;
+        return Lists.transform(pcvs, pcv2mid); 
     }
         
+    
+    public static List<FilaResultat> transformItems2Resultats(List<MapItemData> mids){
+        Function<MapItemData, FilaResultat> mid2fres
+                = new Function<MapItemData, FilaResultat>() {
+            public FilaResultat apply(MapItemData mid) {
+                return novaFila(mid);
+            }
+        };
+        return Lists.transform(mids, mid2fres); 
+    }
+    
 }
