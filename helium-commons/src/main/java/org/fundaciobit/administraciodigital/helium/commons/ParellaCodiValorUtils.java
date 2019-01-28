@@ -18,7 +18,9 @@ package org.fundaciobit.administraciodigital.helium.commons;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import net.conselldemallorca.helium.core.extern.domini.FilaResultat;
 import net.conselldemallorca.helium.core.extern.domini.ParellaCodiValor;
 import org.fundaciobit.administraciodigital.utils.data.HashItemData;
@@ -111,5 +113,14 @@ public class ParellaCodiValorUtils {
         };
         return Lists.transform(mids, mid2fres); 
     }
+    
+    public static Map<String, Object> lPcv2Map(List<ParellaCodiValor> pcvs){
+        Map<String, Object> map = new HashMap<String, Object>();
+        for (ParellaCodiValor pcv:pcvs){
+            map.put(pcv.getCodi(), pcv.getValor());
+        }
+        return map;
+    }
+    
     
 }
