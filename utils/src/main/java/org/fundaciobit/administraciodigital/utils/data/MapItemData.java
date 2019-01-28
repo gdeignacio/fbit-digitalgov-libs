@@ -6,6 +6,7 @@ import java.util.Map;
  *
  * @author gdeignacio
  */
+@Deprecated
 public interface MapItemData extends Map<String, Object> {
     
     public static final String ID = "id";

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import net.conselldemallorca.helium.core.extern.domini.FilaResultat;
 import net.conselldemallorca.helium.core.extern.domini.ParellaCodiValor;
 import org.fundaciobit.administraciodigital.utils.data.HashItemData;
@@ -32,6 +33,10 @@ import org.fundaciobit.administraciodigital.utils.data.MapItemData;
  */
 public class ParellaCodiValorUtils {
     
+    public static final String ID = "id";
+    public static final String VAL = "val";
+    
+    @Deprecated
     public static FilaResultat novaFila(MapItemData mid){
         FilaResultat resposta = new FilaResultat();
         resposta.getColumnes().add(novaParella((String)mid.getIdKey(), mid.getCodigoLOV()));
@@ -47,6 +52,18 @@ public class ParellaCodiValorUtils {
         return resposta;
     }
 
+    public static FilaResultat novaFila(Map.Entry entry){
+        return novaFila(entry, ID, VAL);
+    }
+    
+    public static FilaResultat novaFila(Map.Entry entry, String id, String val){
+        FilaResultat resposta = new FilaResultat();
+        resposta.getColumnes().add(novaParella(id, entry.getKey()));
+        resposta.getColumnes().add(novaParella(val, entry.getValue()));
+        return resposta;
+    }
+    
+    
     public static ParellaCodiValor novaParella(String codi, Object valor) {
         ParellaCodiValor parella = new ParellaCodiValor();
         parella.setCodi(codi);
@@ -85,6 +102,7 @@ public class ParellaCodiValorUtils {
         return resposta;
     }
     
+    @Deprecated
     public static MapItemData newItemData(ParellaCodiValor pcv){
         MapItemData mid = new HashItemData();
         mid.setCodigoLOV(pcv.getCodi());
@@ -92,7 +110,7 @@ public class ParellaCodiValorUtils {
         return mid;
     }
     
-    
+    @Deprecated
     public static List<MapItemData> transformParelles2Items(List<ParellaCodiValor> pcvs){
         Function<ParellaCodiValor, MapItemData> pcv2mid
                 = new Function<ParellaCodiValor, MapItemData>() {
@@ -103,7 +121,7 @@ public class ParellaCodiValorUtils {
         return Lists.transform(pcvs, pcv2mid); 
     }
         
-    
+    @Deprecated
     public static List<FilaResultat> transformItems2Resultats(List<MapItemData> mids){
         Function<MapItemData, FilaResultat> mid2fres
                 = new Function<MapItemData, FilaResultat>() {
@@ -114,12 +132,40 @@ public class ParellaCodiValorUtils {
         return Lists.transform(mids, mid2fres); 
     }
     
-    public static Map<String, Object> lPcv2Map(List<ParellaCodiValor> pcvs){
+    public static Map parametresConsulta(List<ParellaCodiValor> pcvs){
         Map<String, Object> map = new HashMap<String, Object>();
+        if (pcvs==null) return map;
         for (ParellaCodiValor pcv:pcvs){
             map.put(pcv.getCodi(), pcv.getValor());
         }
         return map;
+    }
+   
+    
+    public static List<FilaResultat> resultatsConsulta(Map resultats){
+        
+        List<FilaResultat> resposta = new ArrayList<FilaResultat>();
+        
+        if (resultats==null) return resposta;
+        
+        String id = ID;
+        String val = VAL;
+       
+        if (resultats.containsKey(id)){
+            id = (String)resultats.get(id);
+            resultats.remove(id);
+        }
+        
+        if (resultats.containsKey(val)){
+            id = (String)resultats.get(val);
+            resultats.remove(val);
+        }
+      
+        for (Map.Entry entry:(Set<Map.Entry>)resultats.entrySet()){
+            resposta.add(novaFila(entry, id, val));
+        }
+        
+        return resposta;
     }
     
     

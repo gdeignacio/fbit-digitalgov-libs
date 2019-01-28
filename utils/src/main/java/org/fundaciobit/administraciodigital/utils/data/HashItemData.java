@@ -6,6 +6,8 @@ import java.util.HashMap;
  *
  * @author gdeignacio
  */
+
+@Deprecated
 public final class HashItemData extends HashMap<String, Object> implements MapItemData {
    
     private String idKey;

@@ -15,25 +15,23 @@
  */
 package org.fundaciobit.administraciodigital.utils.factory;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author gdeignacio
  * @param <Facade>
- * @param <ItemParam>
- * @param <ItemResult>
  */
-public abstract class DominiFacadeFactory<Facade, ItemParam, ItemResult> {
+public abstract class DominiFacadeFactory<Facade> {
 
     private Facade facade;
 
-    private List<ItemParam> param;
+    private Map param;
 
     public DominiFacadeFactory(){
     }
 
-    public abstract List<ItemResult> getResult();
+    public abstract Map getResult();
 
     public Facade getFacade() {
         return facade;
@@ -43,11 +41,11 @@ public abstract class DominiFacadeFactory<Facade, ItemParam, ItemResult> {
         this.facade = facade;
     }
 
-    public List<ItemParam> getParam() {
+    public Map getParam() {
         return param;
     }
 
-    public void setParam(List<ItemParam> param) {
+    public void setParam(Map param) {
         this.param = param;
     }
 
