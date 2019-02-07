@@ -19,12 +19,15 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.activation.MimetypesFileTypeMap;
 import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 
 
@@ -65,5 +68,52 @@ public class DataHandlers {
         return new DataHandler(dataSource);
 
     }
+    
+    public static void download(DataHandler dataHandler, HttpServletResponse response){
+        
+        String fileName = (dataHandler!=null)?dataHandler.getName():null;
+        download(dataHandler, fileName, response);
+        
+    }
+    
+    
+    public static void download(DataHandler dataHandler, String fileName, HttpServletResponse response){
+        
+        if (dataHandler == null) return;
+        if (response==null) return;
+        
+        String downloadFileName = (fileName!=null)?fileName:"DownloadContent";  
+        
+        byte[] b;
+        
+        try {
+            b = dataHandlerToByteArray(dataHandler);
+            response.setDateHeader("Date", System.currentTimeMillis());
+            response.setContentType(dataHandler.getContentType());
+            response.setHeader("Content-Disposition", "inline; filename=\"" + downloadFileName + "\"");
+            response.setContentLength(b.length);
+            
+            OutputStream os = response.getOutputStream();
+            os.write(b);
+            os.flush();
+            os.close();
+            
+        } catch (IOException ex) {
+   
+            String msg = "Error descarregant fitxer: " + downloadFileName + " " + ex.getMessage();
+            Logger.getLogger(DataHandlers.class.getName()).log(Level.SEVERE, msg, ex);
+            try {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (IOException ex1) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+            
+        }
+        
+        
+        
+        
+    }
+    
 
 }
