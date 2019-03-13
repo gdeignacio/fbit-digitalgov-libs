@@ -157,7 +157,7 @@ public class ParellaCodiValorUtils {
         }
         
         if (resultats.containsKey(val)){
-            id = (String)resultats.get(val);
+            val = (String)resultats.get(val);
             resultats.remove(val);
         }
       
