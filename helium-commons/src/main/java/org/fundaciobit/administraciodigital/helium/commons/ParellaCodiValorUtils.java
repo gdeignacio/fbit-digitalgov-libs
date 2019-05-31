@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import net.conselldemallorca.helium.core.extern.domini.FilaResultat;
 import net.conselldemallorca.helium.core.extern.domini.ParellaCodiValor;
+import net.conselldemallorca.helium.core.extern.formulari.RespostaIniciFormulari;
 import org.fundaciobit.administraciodigital.utils.data.HashItemData;
 import org.fundaciobit.administraciodigital.utils.data.MapItemData;
 
@@ -167,6 +168,18 @@ public class ParellaCodiValorUtils {
         
         return resposta;
     }
+    
+    
+    public static RespostaIniciFormulari formulariError() {
+        RespostaIniciFormulari resposta = new RespostaIniciFormulari();
+        return resposta;
+    }
+    
+    public static RespostaIniciFormulari formulariError(Exception e) {
+        RespostaIniciFormulari resposta = new RespostaIniciFormulari();
+        return resposta;
+    }
+    
     
     
 }
