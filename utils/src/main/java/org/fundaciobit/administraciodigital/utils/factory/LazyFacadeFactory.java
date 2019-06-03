@@ -18,18 +18,17 @@ package org.fundaciobit.administraciodigital.utils.factory;
 import java.util.Map;
 
 /**
- * @deprecated use LazyFacadeFactory instead
+ *
  * @author gdeignacio
  * @param <Facade>
  */
-@Deprecated
-public abstract class DominiFacadeFactory<Facade> {
+public abstract class LazyFacadeFactory<Facade> {
 
     private Facade facade;
 
     private Map param;
 
-    public DominiFacadeFactory(){
+    public LazyFacadeFactory(){
     }
 
     public abstract Map getResult();
