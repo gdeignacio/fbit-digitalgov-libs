@@ -5,7 +5,6 @@ import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +19,7 @@ import net.conselldemallorca.helium.ws.tramitacio.v1.CampProces;
 import net.conselldemallorca.helium.ws.tramitacio.v1.CampTasca;
 import net.conselldemallorca.helium.ws.tramitacio.v1.DocumentProces;
 import net.conselldemallorca.helium.ws.tramitacio.v1.ExpedientInfo;
+import net.conselldemallorca.helium.ws.tramitacio.v1.ParellaCodiValor;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TascaTramitacio;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Exception;
 import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
@@ -31,8 +31,6 @@ import org.apache.cxf.jaxb.JAXBToStringStyle;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioSOAP;
 
@@ -130,7 +128,61 @@ public class TramitacioClient {
 
         // port.consultaFormulariTasca(_CODAPP, _CODAPP)
     }
+    
+    
+    public String iniciExpedient(String entorn, String expedientTipus,
+            String numero, String titol, List<ParellaCodiValor> valors) {
 
+        TramitacioService port = getServicePort();
+
+        String response = null;
+
+        try {
+            response = iniciExpedient(port, entorn, expedientTipus, numero, titol, valors);
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
+
+    }
+    
+   
+    private static String iniciExpedient(TramitacioService port, 
+            String entorn, String expedientTipus, String numero, String titol,
+            List<ParellaCodiValor> valors) throws TramitacioException_Exception {
+
+        String _entorn = entorn;
+        String _expedientTipus = expedientTipus;
+        String _numero = numero;
+        String _titol = titol;
+        List<ParellaCodiValor> _valors = valors;
+        
+        String _iniciExpedient__return = port.iniciExpedient(_entorn, _expedientTipus, _numero, _titol, _valors);
+        return _iniciExpedient__return;
+       
+    }
+    
+    
+    /*
+    private static List<TascaTramitacio> consultaTasquesPersonalsByCodi(TramitacioService port, String entorn, String usuari, String codi) throws TramitacioException_Exception {
+
+        String _entorn = entorn;
+        String _usuari = null;
+        String _codi = codi;
+        
+        List<TascaTramitacio> _consultaTasquesPersonalsByCodi__return = port.consultaTasquesPersonalsByCodi(codi, codi)
+        
+        List<ExpedientInfo> _consultaExpedients__return = port.consultaExpedients(_entorn, _usuari, _numero,
+                _dataInici1, _dataInici2, _expedientTipusCodi, _estatCodi,
+                _iniciat, _finalitzat, _geoPosX, _geoPosY, _geoReferencia);
+
+        return _consultaExpedients__return;
+
+    }
+    */
+    
+    
     public List<ExpedientInfo> consultaExpedients(String idEntorn, String numero) {
 
         TramitacioService port = getServicePort();
