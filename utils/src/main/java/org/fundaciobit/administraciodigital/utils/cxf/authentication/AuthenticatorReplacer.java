@@ -17,6 +17,17 @@ package org.fundaciobit.administraciodigital.utils.cxf.authentication;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 
 /**
@@ -24,19 +35,74 @@ import java.net.PasswordAuthentication;
  * @author gdeignacio
  */
 public class AuthenticatorReplacer {
+    
+    
+        private static void verifyHost(){
+    
+          // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            @Override
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                // Trust always
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                // Trust always
+            }
+        } };
+        // Install the all-trusting trust manager
+        SSLContext sc = null;
+        try {
+            sc = SSLContext.getInstance("SSL");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(AuthenticatorReplacer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // Create empty HostnameVerifier
+        HostnameVerifier hv = new HostnameVerifier() {
+            @Override
+            public boolean verify(String arg0, SSLSession arg1) {
+                return true;
+            }
+        };
+        
+        try {
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        } catch (KeyManagementException ex) {
+            Logger.getLogger(AuthenticatorReplacer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HttpsURLConnection.setDefaultHostnameVerifier(hv);
+    
+    }
+    
+    
 
     public static void main(String args[]) throws Exception {
         
-           Authenticator.setDefault(new Authenticator() {
+        verifyHost();
+        
+        String arg0 = (args!=null && args.length>0)?args[0]:"";
+        String arg1 = (args!=null && args.length>1)?args[1]:"";
+        
+        final String user = arg0;
+        final String password = arg1;
+    
+        Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(
-                        "admin",
-                        "admincmaib".toCharArray()
-                 );
+                        user,
+                        password.toCharArray()
+                );
             }
         });
-        
+
     }
 
 }

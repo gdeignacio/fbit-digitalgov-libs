@@ -5,25 +5,36 @@ import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
-import net.conselldemallorca.helium.ws.tramitacio.v1.ArxiuProces;
-import net.conselldemallorca.helium.ws.tramitacio.v1.CampProces;
-import net.conselldemallorca.helium.ws.tramitacio.v1.CampTasca;
-import net.conselldemallorca.helium.ws.tramitacio.v1.DocumentProces;
-import net.conselldemallorca.helium.ws.tramitacio.v1.ExpedientInfo;
-import net.conselldemallorca.helium.ws.tramitacio.v1.ParellaCodiValor;
-import net.conselldemallorca.helium.ws.tramitacio.v1.TascaTramitacio;
-import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioException_Exception;
-import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioService;
-import net.conselldemallorca.helium.ws.tramitacio.v1.TramitacioServiceImplService;
+import net.conselldemallorca.helium.integracio.tramitacio.ArxiuProces;
+import net.conselldemallorca.helium.integracio.tramitacio.CampProces;
+import net.conselldemallorca.helium.integracio.tramitacio.CampTasca;
+import net.conselldemallorca.helium.integracio.tramitacio.DocumentProces;
+
+import net.conselldemallorca.helium.integracio.tramitacio.ExpedientInfo;
+import net.conselldemallorca.helium.integracio.tramitacio.ParellaCodiValor;
+import net.conselldemallorca.helium.integracio.tramitacio.TascaTramitacio;
+import net.conselldemallorca.helium.integracio.tramitacio.TramitacioException_Exception;
+import net.conselldemallorca.helium.integracio.tramitacio.TramitacioService;
+import net.conselldemallorca.helium.integracio.tramitacio.TramitacioService_Service;
+
 import net.java.dev.jaxb.array.AnyTypeArray;
 import net.java.dev.jaxb.array.AnyTypeArrayArray;
 import org.apache.cxf.jaxb.JAXBToStringBuilder;
@@ -77,11 +88,52 @@ public class TramitacioClient {
 
     private TramitacioService getServicePort() {
 
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            @Override
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                // Trust always
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                // Trust always
+            }
+        }};
+        // Install the all-trusting trust manager
+        SSLContext sc = null;
+        try {
+            sc = SSLContext.getInstance("SSL");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // Create empty HostnameVerifier
+        HostnameVerifier hv = new HostnameVerifier() {
+            @Override
+            public boolean verify(String arg0, SSLSession arg1) {
+                return true;
+            }
+        };
+
+        try {
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        } catch (KeyManagementException ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HttpsURLConnection.setDefaultHostnameVerifier(hv);
+
         URL wsdlURL = null;
 
         final DadesConnexioSOAP dadesConnexio = new DadesConnexioTramitacio(propertyBase);
 
         try {
+            LOG.info(dadesConnexio.getWsdlLocation());
             wsdlURL = new URL(dadesConnexio.getWsdlLocation());
         } catch (MalformedURLException ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -97,17 +149,10 @@ public class TramitacioClient {
             }
         });
 
-        /*
-         btnPrevious = (ImageButton) findViewById(R.id.btnPrevious);
-        btnPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                anteriorContacto();
-            }
-});
-         */
-        TramitacioServiceImplService ss = new TramitacioServiceImplService(wsdlURL, SERVICE_NAME);
-        TramitacioService port = ss.getTramitacioServiceImplPort();
+        System.out.println("Servicio:  " + SERVICE_NAME);
+        System.out.println("uRL:  " + wsdlURL);
+        TramitacioService_Service ss = new TramitacioService_Service(wsdlURL, SERVICE_NAME);
+        TramitacioService port = ss.getTramitacioPort();
 
         Map<String, Object> req = ((BindingProvider) port).getRequestContext();
 
@@ -116,8 +161,6 @@ public class TramitacioClient {
         req.put(BindingProvider.USERNAME_PROPERTY, dadesConnexio.getUserName());
         req.put(BindingProvider.PASSWORD_PROPERTY, dadesConnexio.getPassword());
 
-        //req.put("com.sun.xml.ws.request.timeout", 60000);
-        //req.put("com.sun.xml.ws.connect.timeout", 60000);
         return port;
 
     }
@@ -128,9 +171,8 @@ public class TramitacioClient {
 
         // port.consultaFormulariTasca(_CODAPP, _CODAPP)
     }
-    
-    
-    public String iniciExpedient(String entorn, String expedientTipus,
+
+    public String iniciExpedient(String entorn, String expedientTipus, String usuari,
             String numero, String titol, List<ParellaCodiValor> valors) {
 
         TramitacioService port = getServicePort();
@@ -138,7 +180,7 @@ public class TramitacioClient {
         String response = null;
 
         try {
-            response = iniciExpedient(port, entorn, expedientTipus, numero, titol, valors);
+            response = iniciExpedient(port, entorn, expedientTipus, usuari, numero, titol, valors);
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -146,51 +188,30 @@ public class TramitacioClient {
         return response;
 
     }
-    
-   
-    private static String iniciExpedient(TramitacioService port, 
-            String entorn, String expedientTipus, String numero, String titol,
+
+    private static String iniciExpedient(TramitacioService port,
+            String entorn, String expedientTipus, String usuari, String numero, String titol,
             List<ParellaCodiValor> valors) throws TramitacioException_Exception {
 
         String _entorn = entorn;
         String _expedientTipus = expedientTipus;
+        String _usuari = usuari;
         String _numero = numero;
         String _titol = titol;
         List<ParellaCodiValor> _valors = valors;
-        
-        String _iniciExpedient__return = port.iniciExpedient(_entorn, _expedientTipus, _numero, _titol, _valors);
+        String _iniciExpedient__return = port.iniciExpedient(_entorn, _expedientTipus, _usuari, _numero, _titol, _valors);
         return _iniciExpedient__return;
-       
-    }
-    
-    
-    /*
-    private static List<TascaTramitacio> consultaTasquesPersonalsByCodi(TramitacioService port, String entorn, String usuari, String codi) throws TramitacioException_Exception {
-
-        String _entorn = entorn;
-        String _usuari = null;
-        String _codi = codi;
-        
-        List<TascaTramitacio> _consultaTasquesPersonalsByCodi__return = port.consultaTasquesPersonalsByCodi(codi, codi)
-        
-        List<ExpedientInfo> _consultaExpedients__return = port.consultaExpedients(_entorn, _usuari, _numero,
-                _dataInici1, _dataInici2, _expedientTipusCodi, _estatCodi,
-                _iniciat, _finalitzat, _geoPosX, _geoPosY, _geoReferencia);
-
-        return _consultaExpedients__return;
 
     }
-    */
-    
-    
-    public List<ExpedientInfo> consultaExpedients(String idEntorn, String numero) {
+
+    public List<TascaTramitacio> consultaTasquesPersonals(String entorn, String usuari) {
 
         TramitacioService port = getServicePort();
 
-        List<ExpedientInfo> response = null;
+        List<TascaTramitacio> response = new ArrayList<TascaTramitacio>();
 
         try {
-            response = consultaExpedients(port, idEntorn, numero);
+            response = consultaTasquesPersonals(port, entorn, usuari);
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -199,54 +220,79 @@ public class TramitacioClient {
 
     }
 
-    private static List<ExpedientInfo> consultaExpedients(TramitacioService port, String entorn, String numero) throws TramitacioException_Exception {
+    private static List<TascaTramitacio> consultaTasquesPersonals(TramitacioService port,
+            String entorn, String usuari) throws TramitacioException_Exception {
 
         String _entorn = entorn;
-        String _usuari = null;
-        String _numero = numero;
-        //Date _dataInici1 = null;
-        //Date _dataInici2 = null;
-        XMLGregorianCalendar _dataInici1 = null;
-        XMLGregorianCalendar _dataInici2 = null;
-        String _expedientTipusCodi = null;
-        String _estatCodi = null;
-        boolean _iniciat = false;
-        boolean _finalitzat = false;
-        Double _geoPosX = null;
-        Double _geoPosY = null;
-        String _geoReferencia = null;
+        String _usuari = usuari;
 
-        List<ExpedientInfo> _consultaExpedients__return = port.consultaExpedients(_entorn, _usuari, _numero,
-                _dataInici1, _dataInici2, _expedientTipusCodi, _estatCodi,
-                _iniciat, _finalitzat, _geoPosX, _geoPosY, _geoReferencia);
-
-        return _consultaExpedients__return;
-
+        List<TascaTramitacio> _consultaTasquesPersonals__return = port.consultaTasquesPersonals(_entorn, _usuari);
+        return _consultaTasquesPersonals__return;
     }
 
-    public ExpedientInfo consultaExpedient(String idEntorn, String numero) {
+    
+
+
+    public List<TascaTramitacio> consultaTasquesGrup(String entorn, String usuari) {
 
         TramitacioService port = getServicePort();
 
-        ExpedientInfo response = null;
+        List<TascaTramitacio> response = new ArrayList<TascaTramitacio>();
 
-        List<ExpedientInfo> expedients = null;
         try {
-            expedients = consultaExpedients(port, idEntorn, numero);
+            response = consultaTasquesGrup(port, entorn, usuari);
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        for (ExpedientInfo expedient : expedients) {
-            response = expedient;
-            break;
         }
 
         return response;
     }
+    
+    
+    private static List<TascaTramitacio> consultaTasquesGrup(TramitacioService port, String entorn, String usuari) throws TramitacioException_Exception {
 
-    public CampProces consultarVariableProces(String idEntorn, String idProces, String variable) {
+        String _entorn = entorn;
+        String _usuari = usuari;
 
-        List<CampProces> variables = consultarVariablesProces(idEntorn, idProces);
+        List<TascaTramitacio> _consultaTasquesGrup__return = port.consultaTasquesGrup(_entorn, _usuari);
+        return _consultaTasquesGrup__return;
+
+    }
+    
+    
+    public List<CampTasca> consultaFormulariTasca(String entorn, String usuari, String tascaId) {
+
+        TramitacioService port = getServicePort();
+
+        List<CampTasca> response = new ArrayList<CampTasca>();
+
+        try {
+            response = consultaFormulariTasca(port, entorn, usuari, tascaId);
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
+    }
+    
+    
+
+    private static List<CampTasca> consultaFormulariTasca(TramitacioService port, String entorn, String usuari, String tascaId) throws TramitacioException_Exception {
+
+        String _entorn = entorn;
+        String _usuari = usuari;
+        String _tascaId = tascaId;
+        
+        List<CampTasca> _consultaFormulariTasca__return = port.consultaFormulariTasca(_entorn, _usuari, _tascaId);
+        return _consultaFormulariTasca__return;
+
+    }
+
+ 
+
+    public CampProces consultarVariableProces(String entorn, String usuari, String processInstanceId, String variable) {
+
+        List<CampProces> variables = consultarVariablesProces(entorn, usuari, processInstanceId);
 
         for (CampProces cp : variables) {
             if (cp.getCodi().equals(variable)) {
@@ -257,11 +303,11 @@ public class TramitacioClient {
         return null;
     }
 
-    public Map<String, CampProces> consultarVariablesProcesMap(String idEntorn, String idProces) {
+    public Map<String, CampProces> consultarVariablesProcesMap(String entorn, String usuari, String processInstanceId) {
 
         Map<String, CampProces> response = new HashMap<String, CampProces>();
 
-        List<CampProces> variables = consultarVariablesProces(idEntorn, idProces);
+        List<CampProces> variables = consultarVariablesProces(entorn, usuari, processInstanceId);
 
         for (CampProces cp : variables) {
             response.put(cp.getCodi(), cp);
@@ -270,11 +316,11 @@ public class TramitacioClient {
         return response;
     }
 
-    public Map<String, Object> consultarVariablesProcesMapValues(String idEntorn, String idProces) {
+    public Map<String, Object> consultarVariablesProcesMapValues(String entorn, String usuari, String processInstanceId) {
 
         Map<String, Object> response = new HashMap<String, Object>();
 
-        List<CampProces> variables = consultarVariablesProces(idEntorn, idProces);
+        List<CampProces> variables = consultarVariablesProces(entorn, usuari, processInstanceId);
 
         for (CampProces cp : variables) {
             response.put(cp.getCodi(), cp.getValor());
@@ -283,12 +329,11 @@ public class TramitacioClient {
         return response;
     }
 
-    public String consultarVariablesProcesJson(String idEntorn, String idProces) {
+    public String consultarVariablesProcesJson(String entorn, String usuari, String processInstanceId) {
 
         JSONObject json = new JSONObject();
 
-        //Map<String, Object> variablesMap = new HashMap<String, Object>();
-        List<CampProces> variables = consultarVariablesProces(idEntorn, idProces);
+        List<CampProces> variables = consultarVariablesProces(entorn, usuari, processInstanceId);
 
         for (CampProces cp : variables) {
 
@@ -297,15 +342,14 @@ public class TramitacioClient {
             }
 
             Object valor = cp.getValor();
-            
+
             if (cp.getValor() instanceof XMLGregorianCalendar) {
 
-                valor = ((XMLGregorianCalendar)cp.getValor()).toString();
-                
+                valor = ((XMLGregorianCalendar) cp.getValor()).toString();
+
                 json.put(cp.getCodi(), valor);
                 continue;
             }
-            
 
             if (cp.getValor() instanceof AnyTypeArrayArray) {
 
@@ -314,8 +358,8 @@ public class TramitacioClient {
 
                 for (AnyTypeArray a : aa.getItem()) {
                     List<Object> items = new ArrayList<Object>();
-                    for (Object obj: a.getItem()){
-                        items.add((obj instanceof XMLGregorianCalendar)?obj.toString():obj);
+                    for (Object obj : a.getItem()) {
+                        items.add((obj instanceof XMLGregorianCalendar) ? obj.toString() : obj);
                     }
                     JSONArray jsonArray = new JSONArray();
                     jsonArray.addAll(items);
@@ -330,12 +374,12 @@ public class TramitacioClient {
             if (cp.getValor() instanceof AnyTypeArray) {
 
                 AnyTypeArray a = (AnyTypeArray) cp.getValor();
-                
+
                 List<Object> items = new ArrayList<Object>();
-                for (Object obj: a.getItem()){
-                    items.add((obj instanceof XMLGregorianCalendar)?obj.toString():obj);
+                for (Object obj : a.getItem()) {
+                    items.add((obj instanceof XMLGregorianCalendar) ? obj.toString() : obj);
                 }
-                
+
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.addAll(items);
                 valor = jsonArray;
@@ -349,26 +393,57 @@ public class TramitacioClient {
         return json.toJSONString();
     }
 
-    public void setVariableProces(String idEntorn, String idProces, String idVariable, String valor) {
+    public List<CampProces> consultarVariablesProces(String entorn, String usuari, String processInstanceId) {
+
+        TramitacioService port = getServicePort();
+        List<CampProces> response = new ArrayList<CampProces>();
+
+        try {
+            response = consultarVariablesProces(port, entorn, usuari, processInstanceId);
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            return response;
+        }
+
+    }
+
+    private static List<CampProces> consultarVariablesProces(TramitacioService port, String entorn, String usuari, String processInstanceId) throws TramitacioException_Exception {
+
+        String _entorn = entorn;
+        String _usuari = usuari;
+        String _processInstanceId = processInstanceId;
+
+        List<CampProces> _consultarVariablesProces__return = port.consultarVariablesProces(_entorn, _usuari, _processInstanceId);
+
+        return _consultarVariablesProces__return;
+
+    }
+
+    public void setVariableProces(String entorn, String usuari, String processInstanceId, String varCodi, Object valor) {
 
         TramitacioService port = getServicePort();
 
         try {
-            setVariableProces(port, idEntorn, idProces, idVariable, valor);
+            setVariableProces(port, entorn, usuari, processInstanceId, varCodi, valor);
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return;
-
     }
 
-    private static void setVariableProces(TramitacioService port, String idEntorn, String idProces, String idVariable, String valor) throws TramitacioException_Exception {
+    private static void setVariableProces(TramitacioService port, String entorn, String usuari, String processInstanceId, String varCodi, Object valor) throws TramitacioException_Exception {
 
-        port.setVariableProces(idEntorn, idProces, idVariable, valor);
-        return;
+        String _entorn = entorn;
+        String _usuari = usuari;
+        String _processInstanceId = processInstanceId;
+        String _varCodi = varCodi;
+        Object _valor = valor;
+
+        port.setVariableProces(_entorn, _usuari, _processInstanceId, _varCodi, _valor);
     }
 
+    /*
     private static void setVariableProcesOnHelium(TramitacioService port, String idEntorn, String idProces, String idVariable, String valor) throws TramitacioException_Exception {
 
         // entorn, usuari, prodesinstanceid, 
@@ -378,15 +453,41 @@ public class TramitacioClient {
         //port.setVariableProces(idEntorn, idProces, idVariable, valor);
         return;
     }
+     */
+    public List<DocumentProces> consultarDocumentsProces(String entorn, String usuari, String processInstanceId) {
 
-    public ArxiuProces getArxiuProces(String idEntorn, Long idArxiuProces) {
+        TramitacioService port = getServicePort();
+        List<DocumentProces> response = new ArrayList<DocumentProces>();
+
+        try {
+            response = consultarDocumentsProces(port, entorn, usuari, processInstanceId);
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
+
+    }
+
+    private static List<DocumentProces> consultarDocumentsProces(TramitacioService port, String entorn, String usuari, String processInstanceId) throws TramitacioException_Exception {
+
+        String _entorn = entorn;
+        String _usuari = usuari;
+        String _processInstanceId = processInstanceId;
+
+        List<DocumentProces> _consultarDocumentsProces__return = port.consultarDocumentsProces(_entorn, _usuari, _processInstanceId);
+        return _consultarDocumentsProces__return;
+
+    }
+
+    public ArxiuProces getArxiuProces(String entorn, Long documentId) {
 
         TramitacioService port = getServicePort();
 
         ArxiuProces response = null;
 
         try {
-            response = getArxiuProces(port, idArxiuProces);
+            response = getArxiuProces(port, documentId);
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -395,81 +496,47 @@ public class TramitacioClient {
 
     }
 
-    private static ArxiuProces getArxiuProces(TramitacioService port, Long idArxiuProces) throws TramitacioException_Exception {
+    private static ArxiuProces getArxiuProces(TramitacioService port, Long documentId) throws TramitacioException_Exception {
 
-        ArxiuProces _getArxiuProces__return = port.getArxiuProces(idArxiuProces);
+        Long _documentId = documentId;
+        ArxiuProces _getArxiuProces__return = port.getArxiuProces(_documentId);
         return _getArxiuProces__return;
 
     }
 
-    private static List<DocumentProces> consultarDocumentsProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException_Exception {
-
-        List<DocumentProces> _consultarDocumentsProces__return = port.consultarDocumentsProces(idEntorn, idProces);
-        return _consultarDocumentsProces__return;
-
-    }
-
-    public List<DocumentProces> consultarDocumentsProces(String idEntorn, String idProces) {
+    public ExpedientInfo consultaExpedient(String entorn, String usuari, String numero) {
 
         TramitacioService port = getServicePort();
-        List<DocumentProces> response = new ArrayList<DocumentProces>();
 
+        ExpedientInfo response = null;
+
+        List<ExpedientInfo> expedients = null;
         try {
-            response = consultarDocumentsProces(port, idEntorn, idProces);
+            expedients = consultaExpedients(port, entorn, usuari, numero);
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return response;
-
-    }
-
-    private static List<CampProces> consultarVariablesProces(TramitacioService port, String idEntorn, String idProces) throws TramitacioException_Exception {
-
-        /*
-        btnPrevious = (ImageButton) findViewById(R.id.btnPrevious);
-        btnPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                anteriorContacto();
-            }
-        });
-         */
-        List<CampProces> _consultarVariablesProces__return = port.consultarVariablesProces(idEntorn, idProces);
-        return _consultarVariablesProces__return;
-
-    }
-
-    public List<CampProces> consultarVariablesProces(String idEntorn, String idProces) {
-
-        TramitacioService port = getServicePort();
-        List<CampProces> response = new ArrayList<CampProces>();
-
-        try {
-            response = consultarVariablesProces(port, idEntorn, idProces);
-        } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        if (expedients == null) {
             return response;
         }
 
+        for (ExpedientInfo expedient : expedients) {
+            response = expedient;
+            break;
+        }
+
+        return response;
     }
 
-    private static List<TascaTramitacio> consultaTasquesGrup(TramitacioService port, String idEntorn) throws TramitacioException_Exception {
-
-        List<TascaTramitacio> _consultaTasquesGrup__return = port.consultaTasquesGrup(idEntorn);
-        return _consultaTasquesGrup__return;
-
-    }
-
-    public String consultaTasquesGrup(String idEntorn) {
+    public List<ExpedientInfo> consultaExpedients(String entorn, String usuari, String numero) {
 
         TramitacioService port = getServicePort();
 
-        String response = null;
+        List<ExpedientInfo> response = null;
 
         try {
-            response = consultaTasquesGrup(port, idEntorn).toString();
+            response = consultaExpedients(port, entorn, usuari, numero);
         } catch (TramitacioException_Exception ex) {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -477,26 +544,28 @@ public class TramitacioClient {
         return response;
     }
 
-    private static List<CampTasca> consultaFormulariTasca(TramitacioService port, String idEntorn, String idTasca) throws TramitacioException_Exception {
+    private static List<ExpedientInfo> consultaExpedients(TramitacioService port, String entorn, String usuari, String numero) throws TramitacioException_Exception {
 
-        List<CampTasca> _consultaFormulariTasca__return = port.consultaFormulariTasca(idEntorn, idTasca);
-        return _consultaFormulariTasca__return;
+        String _entorn = entorn;
+        String _usuari = usuari;
+        String _titol = null;
+        String _numero = numero;
+        //Date _dataInici1 = null;
+        //Date _dataInici2 = null;
+        XMLGregorianCalendar _dataInici1 = null;
+        XMLGregorianCalendar _dataInici2 = null;
+        String _expedientTipusCodi = null;
+        String _estatCodi = null;
+        boolean _iniciat = false;
+        boolean _finalitzat = false;
+        Double _geoPosX = null;
+        Double _geoPosY = null;
+        String _geoReferencia = null;
 
-    }
+        List<ExpedientInfo> _consultaExpedients__return = port.consultaExpedients(_entorn, _usuari, _titol, _numero,
+                _dataInici2, _dataInici2, _expedientTipusCodi, _estatCodi, _iniciat, _finalitzat, _geoPosY, _geoPosY, _geoReferencia);
+        return _consultaExpedients__return;
 
-    public String consultaFormulariTasca(String idEntorn, String idTasca) {
-
-        TramitacioService port = getServicePort();
-
-        String response = null;
-
-        try {
-            response = consultaFormulariTasca(port, idEntorn, idTasca).toString();
-        } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return response;
     }
 
     /*
@@ -535,12 +604,12 @@ public class TramitacioClient {
 
         DadesConnexioTramitacio dadesConnexio = new DadesConnexioTramitacio(app);
 
-        System.setProperty(app + dadesConnexio.getCodClient() + ".username", "admin");
-        System.setProperty(app + dadesConnexio.getCodClient() + ".password", "admincmaib");
-        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://helium.fundaciobit.org/helium");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".username", "$cmaib_helium");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".password", "cmaib_helium");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "https://proves.caib.es/helium");
 
-        System.setProperty(app + dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
-        System.setProperty(app + dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".entorno", "CBMA");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".grupo", "CMI_USER");
 
         //System.setProperty("es.caib.subdepen.helium.client.entorno", "CONAFESOC");
         //System.setProperty("es.caib.subdepen.helium.client.usuario", "u82545");
@@ -553,33 +622,37 @@ public class TramitacioClient {
         //List lista = consultaFormulariTasca(port, "EntornCMAIB", "5990");
         //System.out.println(lista);
         //port.consultaExpedients(_CODAPP, _CODAPP, _CODAPP, dataInici1, dataInici2, _CODCLIENT, _CODAPP, true, true, Double.NaN, Double.NaN, _CODCLIENT)
-        String entorn = "EntornCMAIB";
-        String usuari = null;
+        String entorn = "CBMA";
+        String usuari = "$cmaib_helium" ;
         //String titol = null;
 
         String numero = "";
 
-        numero = "AIAs/261a-2017";
-        numero = "AIAs/288a-2017";  // "AIAs/212a-2017";
+        String processInstanceId = "50340598";
+       
+        numero = "AIA-7a-2019";  // "AIAs/212a-2017";
         //numero = "AIAs/212a-2017";  // "AIAs/212a-2017";
 
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Expedient");
         System.out.println("-----------------------------------------------------------------------------------------");
 
-        ExpedientInfo expediente = client.consultaExpedient(entorn, numero);
+        ExpedientInfo expediente = client.consultaExpedient(entorn, usuari, numero);
 
-        for (Field fi : expediente.getClass().getDeclaredFields()) {
-            fi.setAccessible(true);
-            System.out.println(fi.getName() + ":   " + fi.get(expediente));
+        if (expediente != null) {
+
+            for (Field fi : expediente.getClass().getDeclaredFields()) {
+                fi.setAccessible(true);
+                System.out.println(fi.getName() + ":   " + fi.get(expediente));
+            }
         }
 
-        numero = "AIAs/288a-2017";
+        numero = "AIA-7a-2019"; 
 
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Expedients");
         System.out.println("-----------------------------------------------------------------------------------------");
-
+        String titol = null;
         //numero = null; 
         //Date dataInici1 = null;//GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()-System.currentTimeMillis()));
         //Date dataInici2 = null;// GregorianCalendarUtils.timestampToXMLGregorianCalendar(new Timestamp(System.currentTimeMillis()));
@@ -594,11 +667,10 @@ public class TramitacioClient {
         String geoReferencia = null;
 
         //port.consultaExpedients(usuari, usuari, usuari, dataInici2, dataInici2, usuari, usuari, iniciat, iniciat, geoPosY, geoPosY, numero)
-        List<ExpedientInfo> expedients = port.consultaExpedients(entorn, usuari, numero,
-                dataInici1, dataInici2, expedientTipusCodi, estatCodi,
-                iniciat, finalitzat, geoPosX, geoPosY,
-                geoReferencia);
-
+        List<ExpedientInfo> expedients = port.consultaExpedients(entorn, usuari, numero, titol, dataInici1, dataInici2, 
+                expedientTipusCodi, estatCodi, iniciat, iniciat, geoPosY, geoPosY, geoReferencia);
+        
+        
         //Gson gson = new Gson();
         for (ExpedientInfo expedient : expedients) {
 
@@ -612,29 +684,20 @@ public class TramitacioClient {
 
             //  System.out.println(gson.toJson(expedient));
         }
-        
-        
-        
+
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Variables JSON");
         System.out.println("-----------------------------------------------------------------------------------------");
-        
-        
-        
-        
-        
+
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Fi Variables JSON");
         System.out.println("-----------------------------------------------------------------------------------------");
-        
-        
+
         //System.out.println("CONSULTAR VARIABLE PRE");
         //String strVar;
         //strVar = TramitacioClient.consultarVariablesProcesJson("EntornCMAIB", "115002");
         //System.out.println(strVar);
         //System.out.println("CONSULTAR VARIABLE POST");
-        
-
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("                                     Variables");
         System.out.println("-----------------------------------------------------------------------------------------");
@@ -655,10 +718,8 @@ public class TramitacioClient {
 
         try {
             System.out.println("CONSULTAR VARIABLE PRE");
-            variables = port.consultarVariablesProces("EntornCMAIB", "115002");
+            variables = port.consultarVariablesProces(entorn, usuari,  processInstanceId);
 
-          
-            
             System.out.println(variables);
 
             System.out.println("CONSULTAR VARIABLE POST");
@@ -747,10 +808,10 @@ public class TramitacioClient {
                 System.out.println(line);
             }
 
-            List lista = consultaTasquesGrup(port, "EntornCMAIB");
+            List lista = consultaTasquesGrup(port, entorn, usuari);
             System.out.println(lista);
 
-            lista = port.consultaTasquesPersonals("EntornCMAIB");
+            lista = port.consultaTasquesPersonals(entorn, usuari);
 
             for (Object tasca : lista) {
                 TascaTramitacio task = (TascaTramitacio) tasca;
