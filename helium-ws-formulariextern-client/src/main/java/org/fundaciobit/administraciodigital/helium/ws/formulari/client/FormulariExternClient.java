@@ -1,6 +1,6 @@
 package org.fundaciobit.administraciodigital.helium.ws.formulari.client;
 
-import org.fundaciobit.administraciodigital.helium.commons.IDominiHeliumItem;
+//import org.fundaciobit.administraciodigital.helium.commons.IDominiHeliumItem;
 //import static org.fundaciobit.administraciodigital.helium.ws.formulari.client.DadesConnexioFormulariExtern._CODAPP;
 //import static org.fundaciobit.administraciodigital.helium.ws.formulari.client.DadesConnexioFormulariExtern._CODCLIENT;
 import java.net.Authenticator;
@@ -125,13 +125,13 @@ public class FormulariExternClient {
         return port;
 
     }
-   
+   /*
     public void guardar(String idFormulari, List<IDominiHeliumItem> variables){
         
         GuardarFormulari port = getServicePort();
         
         
-    }
+    }*/
     
     private static void guardar(GuardarFormulari port, String idFormulari, List<ParellaCodiValor> lVariables){
         port.guardar(idFormulari, lVariables);

@@ -7,7 +7,7 @@
         <version>1.0.0
         </version>
     </parent>
-    <artifactId>fbit-digitalgov-libs-helium-ws-client</artifactId>
+    <artifactId>fbit-digitalgov-libs-helium-ws-formulariextern-client</artifactId>
     <packaging>jar</packaging>
 
     <licenses>
@@ -18,8 +18,8 @@
         </license>
     </licenses>
 
-    <name>DIGITALGOV Libs Helium WS Client</name>
-    <description>Mòdulo Utils de fbit digitalgov libs</description>
+    <name>DIGITALGOV Libs Helium WS FormulariExtern Client</name>
+    <description>Mòdulo Formulari Extern WS de fbit digitalgov libs</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,12 +34,6 @@
             <artifactId>fbit-digitalgov-libs-utils</artifactId>
             <version>1.0.0</version>
             
-        </dependency>
-
-        <dependency>
-            <groupId>org.fundaciobit.administraciodigital</groupId>
-            <artifactId>fbit-digitalgov-libs-helium-commons</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <dependency>
@@ -89,7 +83,7 @@
 
 
     <build>
-        <finalName>fbit-digitalgov-libs-helium-ws-client</finalName>
+        <finalName>fbit-digitalgov-libs-helium-ws-formulariextern-client</finalName>
         <plugins>
 
 
@@ -144,8 +138,8 @@
                 <configuration>
                     <mainClass>org.fundaciobit.administraciodigital.utils.cxf.authentication.AuthenticatorReplacer</mainClass>
                     <arguments>
-                        <argument>user</argument>
-                        <argument>password</argument>
+                        <argument>$cmaib_helium</argument>
+                        <argument>cmaib_helium</argument>
                     </arguments>
                 </configuration>
             </plugin>
@@ -158,25 +152,6 @@
                 <artifactId>cxf-codegen-plugin</artifactId>
                 <version>${cxf.version}</version>
                 <executions>
-                    <execution>
-                        <id>helium-ws-v1-tramitacio</id>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <!--sourceRoot>${basedir}/target/generated/cxf-codegen-plugin</sourceRoot-->
-                            <wsdlOptions>
-                                <wsdlOption>
-                                    <!--wsdl>${basedir}/src/main/resources/wsdl/v1/Tramitacio.wsdl</wsdl-->
-                                    <wsdl>https://proves.caib.es/helium/ws/TramitacioService?wsdl</wsdl>
-                                    <extraargs>
-                                        <extraarg>-xjc-Xts</extraarg>
-                                    </extraargs>
-                                </wsdlOption>
-                            </wsdlOptions>
-                        </configuration>
-                        <goals>
-                            <goal>wsdl2java</goal>
-                        </goals>
-                    </execution>
                     <execution>
                         <id>helium-ws-formulariextern</id>
                         <phase>generate-sources</phase>

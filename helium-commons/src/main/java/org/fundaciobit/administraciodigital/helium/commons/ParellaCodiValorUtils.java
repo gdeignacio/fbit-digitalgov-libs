@@ -31,6 +31,7 @@ import org.fundaciobit.administraciodigital.utils.data.MapItemData;
  *
  * @author gdeignacio
  */
+@Deprecated
 public class ParellaCodiValorUtils {
     
     public static final String ID = "id";
