@@ -36,6 +36,10 @@ public abstract class DadesConnexioSOAP {
     
     protected abstract String getCodClient();
     
+    public final String getCodapp(){
+        return this.codapp;
+    }
+    
     public final String getUserName(){
         return  NVL.nvl(System.getProperty(this.codapp +  getCodClient() + ".username"), "").trim();
     }

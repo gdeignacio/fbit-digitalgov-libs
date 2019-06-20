@@ -199,7 +199,7 @@ public class TramitacioClient {
         String _numero = numero;
         String _titol = titol;
         List<ParellaCodiValor> _valors = valors;
-        String _iniciExpedient__return = port.iniciExpedient(_entorn, _expedientTipus, _usuari, _numero, _titol, _valors);
+        String _iniciExpedient__return = port.iniciExpedient(_entorn, _usuari, _expedientTipus, _numero, _titol, _valors);
         return _iniciExpedient__return;
 
     }
@@ -608,7 +608,7 @@ public class TramitacioClient {
         System.setProperty(app + dadesConnexio.getCodClient() + ".password", "cmaib_helium");
         System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "https://proves.caib.es/helium");
 
-        System.setProperty(app + dadesConnexio.getCodClient() + ".entorno", "CBMA");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".entorn", "CBMA");
         System.setProperty(app + dadesConnexio.getCodClient() + ".grupo", "CMI_USER");
 
         //System.setProperty("es.caib.subdepen.helium.client.entorno", "CONAFESOC");

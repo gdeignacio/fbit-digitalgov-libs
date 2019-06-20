@@ -45,6 +45,12 @@ public class DominiHeliumUtils {
         return resposta;
     }
     
+     public static ParellaCodiValor novaParella(Map.Entry entry) {
+        ParellaCodiValor parella = new ParellaCodiValor();
+        parella.setCodi((String)entry.getKey());
+        parella.setValor(entry.getValue());
+        return parella;
+    }
     
     public static ParellaCodiValor novaParella(String codi, Object valor) {
         ParellaCodiValor parella = new ParellaCodiValor();
@@ -94,6 +100,21 @@ public class DominiHeliumUtils {
         }
         return map;
     }
+    
+    
+    public static List<ParellaCodiValor> parellesModel(Map model){
+        
+        List<ParellaCodiValor> parelles = new ArrayList<ParellaCodiValor>();
+        
+        if (model == null) return parelles;
+        
+        for (Map.Entry entry:(Set<Map.Entry>)model.entrySet()){
+            parelles.add(novaParella(entry));
+        }
+        
+        return parelles;
+    }
+    
     
     public static List<FilaResultat> resultatsConsulta(Map resultats){
         

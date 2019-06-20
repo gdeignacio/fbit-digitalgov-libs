@@ -1,6 +1,8 @@
 
 package org.fundaciobit.administraciodigital.helium.ws.tramitacio.client;
 
+import org.fundaciobit.administraciodigital.utils.util.NVL;
+import org.fundaciobit.administraciodigital.utils.ws.connexio.BadConfiguredConnectionException;
 import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioSOAP;
 
 
@@ -26,6 +28,7 @@ public class DadesConnexioTramitacio extends DadesConnexioSOAP {
 
     public DadesConnexioTramitacio(String codapp) {
         super(codapp);
+        check();
     }
     
     @Override
@@ -53,8 +56,20 @@ public class DadesConnexioTramitacio extends DadesConnexioSOAP {
         return _QNAME;
     }
 
-    //public String getEntorno() {
-    //    return NVL.nvl(System.getProperty(codapp + "." + _CODCLIENT + ".entorno"), "").trim();
-    //}
+    public String getEntorn() {
+        return NVL.nvl(System.getProperty(getCodapp() + "." + getCodClient() + ".entorn"), "").trim();
+    }
+    
+    public String getAplicacio() {
+        return NVL.nvl(System.getProperty(getCodapp() + "." + getCodClient() + ".aplicacio"), "").trim();
+    }
+    
+     private void check(){
+        
+        NVL.nvl(getEntorn(), new BadConfiguredConnectionException("La propiedad " + getCodapp()  + getCodClient() + ".entorn no está bien definida."));
+        NVL.nvl(getAplicacio(), new BadConfiguredConnectionException("La propiedad " + getCodapp()  + getCodClient() + ".aplicacio no está bien definida."));
+        
+      
+    }
     
 }
