@@ -51,7 +51,8 @@ import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioSOAP;
  */
 public class TramitacioClient {
 
-    private String propertyBase = "es.caib.cmaib.";
+    private String propertyBase;
+    private DadesConnexioSOAP dadesConnexio;
 
     protected static final Logger LOG = Logger.getLogger(TramitacioClient.class.getName());
 
@@ -81,6 +82,11 @@ public class TramitacioClient {
 
     public void setPropertyBase(String propertyBase) {
         this.propertyBase = propertyBase;
+        this.dadesConnexio = new DadesConnexioTramitacio(propertyBase);
+    }
+    
+    public DadesConnexioSOAP getDadesConnexio(){
+        return this.dadesConnexio;
     }
 
     private static final QName SERVICE_NAME = new QName(DadesConnexioTramitacio._QNAME,
@@ -130,7 +136,7 @@ public class TramitacioClient {
 
         URL wsdlURL = null;
 
-        final DadesConnexioSOAP dadesConnexio = new DadesConnexioTramitacio(propertyBase);
+        //final DadesConnexioSOAP dadesConnexio = new DadesConnexioTramitacio(propertyBase);
 
         try {
             LOG.info(dadesConnexio.getWsdlLocation());
@@ -150,7 +156,7 @@ public class TramitacioClient {
         });
 
         System.out.println("Servicio:  " + SERVICE_NAME);
-        System.out.println("uRL:  " + wsdlURL);
+        System.out.println("URL:  " + wsdlURL);
         TramitacioService_Service ss = new TramitacioService_Service(wsdlURL, SERVICE_NAME);
         TramitacioService port = ss.getTramitacioPort();
 

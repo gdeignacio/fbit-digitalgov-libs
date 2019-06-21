@@ -57,11 +57,11 @@ public class DadesConnexioTramitacio extends DadesConnexioSOAP {
     }
 
     public String getEntorn() {
-        return NVL.nvl(System.getProperty(getCodapp() + "." + getCodClient() + ".entorn"), "").trim();
+        return NVL.nvl(System.getProperty(getCodapp() + getCodClient() + ".entorn"), "").trim();
     }
     
     public String getAplicacio() {
-        return NVL.nvl(System.getProperty(getCodapp() + "." + getCodClient() + ".aplicacio"), "").trim();
+        return NVL.nvl(System.getProperty(getCodapp() + getCodClient() + ".aplicacio"), "").trim();
     }
     
      private void check(){
