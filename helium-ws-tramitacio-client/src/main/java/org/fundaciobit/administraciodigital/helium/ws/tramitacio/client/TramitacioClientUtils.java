@@ -32,9 +32,13 @@ public class TramitacioClientUtils {
     public static final String VAL = "val";
     
     
-     public static ParellaCodiValor novaParella(Map.Entry entry) {
+    public static ParellaCodiValor novaParella(Map.Entry entry) {
         ParellaCodiValor parella = new ParellaCodiValor();
         parella.setCodi((String)entry.getKey());
+        if (entry.getValue() instanceof Object[]){
+            parella.setValor((Object[])entry.getValue());
+            return parella;
+        }
         parella.setValor(entry.getValue());
         return parella;
     }

@@ -27,7 +27,9 @@ public class VariableHeliumUtils {
 
     
     public static String getVariableName(String expedientTipus, String tableName, String fieldName){
-        String variableName = expedientTipus + "_" + tableName + "_" + fieldName;
+        String variableName = expedientTipus + "_" + tableName;
+        variableName+=("".equals(fieldName))?"":"_";
+        variableName+=fieldName;
         return variableName.toUpperCase();
     }
     

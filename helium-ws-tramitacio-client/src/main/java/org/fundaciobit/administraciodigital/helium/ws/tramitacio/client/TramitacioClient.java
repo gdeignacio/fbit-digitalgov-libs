@@ -181,6 +181,9 @@ public class TramitacioClient {
     public String iniciExpedient(String entorn, String expedientTipus, String usuari,
             String numero, String titol, List<ParellaCodiValor> valors) {
 
+        
+        LOG.log(Level.INFO, valors.toString());
+        
         TramitacioService port = getServicePort();
 
         String response = null;
