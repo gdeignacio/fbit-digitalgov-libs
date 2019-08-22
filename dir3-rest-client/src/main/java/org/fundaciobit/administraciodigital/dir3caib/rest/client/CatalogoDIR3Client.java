@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.fundaciobit.administraciodigital.utils.util.Strings;
@@ -62,53 +61,6 @@ public class CatalogoDIR3Client {
         this.propertyBase = propertyBase;
     }
 
-    //rivate static final String REST_URL = ;
-    
-    /*
-    private static final QName SERVICE_NAME = new QName(DadesConnexioTramitacio._QNAME,
-            DadesConnexioTramitacio._SERVICE_NAME);
-    */
-    
-    /*
-    private TramitacioService getServicePort() {
-
-        URL wsdlURL = null;
-        
-        final DadesConnexio dadesConnexio = new DadesConnexioTramitacio(propertyBase);
-
-        try {
-            wsdlURL = new URL(dadesConnexio.getWsdlLocation());
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        Authenticator.setDefault(new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(
-                        dadesConnexio.getUserName(),
-                        dadesConnexio.getPassword().toCharArray()
-                 );
-            }
-        });
-
-       
-        
-        TramitacioServiceImplService ss = new TramitacioServiceImplService(wsdlURL, SERVICE_NAME);
-        TramitacioService port = ss.getTramitacioServiceImplPort();
-
-        Map<String, Object> req = ((BindingProvider) port).getRequestContext();
-
-        req.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, dadesConnexio.getEndPoint());
-
-        req.put(BindingProvider.USERNAME_PROPERTY, dadesConnexio.getUserName());
-        req.put(BindingProvider.PASSWORD_PROPERTY, dadesConnexio.getPassword());
- 
-        return port;
-
-    }
-    */
-    
     
     private URL getUrl(String requestMapping, String requestParams){
         
@@ -175,33 +127,7 @@ public class CatalogoDIR3Client {
         return getUrl(requestMapping, requestParams);
     }
     
-    /*
-    private URL getUrl(Map parametrosMap){
-        
-        final DadesConnexioREST dadesConnexio = new DadesConnexioDIR3(propertyBase);
-        
-        String endPoint = dadesConnexio.getEndPoint();
-        
-        String requestMapping= (String)parametrosMap.get("requestMapping");
-        String requestParams = (String)parametrosMap.get("requestParams");
-        StringBuffer strbUrl = new StringBuffer();
-        
-        strbUrl.append(endPoint);
-        strbUrl.append(requestMapping);
-        strbUrl.append(requestParams);
-        
-        URL url;
-        try {
-            url = new URL(strbUrl.toString());
-            return url;
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         
-        
-        return null;
-    }
-    */
+   
 
     private static void dummy(HttpURLConnection conn) {
 
@@ -346,106 +272,6 @@ public class CatalogoDIR3Client {
     }
     
 
-    /*
-    public List<Map<String, Object>> dir3Busqueda(Map parametrosMap) throws I18NException {
-        
-        List<Map<String, Object>> listaCodigoValor = new ArrayList<Map<String, Object>>();
-    
-        String urlBase = System.getProperty(dir3PropertyBaseUrl);
-        String urlRest = "/rest/busqueda/unidades/denominacion/comunidad";
-
-        String param = (String) parametrosMap.get("param");
-        
-        //String denominacionParam = (String) parametrosMap.get("denominacion");
-        //String codComunidadParam = (String) parametrosMap.get("codComunidad");
-
-        String denominacion = (denominacionParam != null && !denominacionParam.isEmpty()) ? denominacionParam : "";
-        String codComunidad = (codComunidadParam != null && !codComunidadParam.isEmpty()) ? codComunidadParam : "-1";
-
-        try {
-
-            URL url = new URL(urlBase + urlRest + "?denominacion=" + denominacion + "&codComunidad=" + codComunidad);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-
-            if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-
-            String output;
-            StringBuffer stringResult = new StringBuffer();
-            while ((output = br.readLine()) != null) {
-                stringResult.append(output);
-            }
-
-            String jsonString = stringResult.toString();
-
-            JSONParser parser = new JSONParser();
-
-            try {
-
-                JSONArray jsonUnidades = (JSONArray) parser.parse(jsonString);
-
-                for (Object obj : jsonUnidades) {
-                    JSONObject jsonUnidad = (JSONObject) parser.parse(obj.toString());
-                    Map<String, Object> unidadMap = new HashMap<String, Object>();
-                    unidadMap.put("codigo", jsonUnidad.get("codigo"));
-                    unidadMap.put("denominacion", jsonUnidad.get("denominacion"));
-                    listaCodigoValor.add(unidadMap);
-
-                }
-
-            } catch (ParseException ex) {
-                Logger.getLogger(DominiHeliumLogicaEJB.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                conn.disconnect();
-            }
-
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(DominiHeliumLogicaEJB.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(DominiHeliumLogicaEJB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-        return listaCodigoValor;
-    }
-    
-    */
-    
-    /*
-
-    private static List<CampTasca> consultaFormulariTasca(TramitacioService port, String idEntorn, String idTasca) throws TramitacioException_Exception {
-
-        List<CampTasca> _consultaFormulariTasca__return = port.consultaFormulariTasca(idEntorn, idTasca);
-        return _consultaFormulariTasca__return;
-
-    }
-
-    public String consultaFormulariTasca(String idEntorn, String idTasca) {
-
-        TramitacioService port = getServicePort();
-
-        String response = null;
-
-        try {
-            response = consultaFormulariTasca(port, idEntorn, idTasca).toString();
-        } catch (TramitacioException_Exception ex) {
-            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return response;
-    }
-
-*/  
-  
-    
-    
     public static void main(String args[]) throws Exception {
 
         String app = "es.caib.cmaib.";
@@ -689,3 +515,185 @@ public class CatalogoDIR3Client {
         } 
         
         */
+
+
+
+
+ /*
+    private URL getUrl(Map parametrosMap){
+        
+        final DadesConnexioREST dadesConnexio = new DadesConnexioDIR3(propertyBase);
+        
+        String endPoint = dadesConnexio.getEndPoint();
+        
+        String requestMapping= (String)parametrosMap.get("requestMapping");
+        String requestParams = (String)parametrosMap.get("requestParams");
+        StringBuffer strbUrl = new StringBuffer();
+        
+        strbUrl.append(endPoint);
+        strbUrl.append(requestMapping);
+        strbUrl.append(requestParams);
+        
+        URL url;
+        try {
+            url = new URL(strbUrl.toString());
+            return url;
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        
+        return null;
+    }
+    */
+
+
+
+  /*
+    public List<Map<String, Object>> dir3Busqueda(Map parametrosMap) throws I18NException {
+        
+        List<Map<String, Object>> listaCodigoValor = new ArrayList<Map<String, Object>>();
+    
+        String urlBase = System.getProperty(dir3PropertyBaseUrl);
+        String urlRest = "/rest/busqueda/unidades/denominacion/comunidad";
+
+        String param = (String) parametrosMap.get("param");
+        
+        //String denominacionParam = (String) parametrosMap.get("denominacion");
+        //String codComunidadParam = (String) parametrosMap.get("codComunidad");
+
+        String denominacion = (denominacionParam != null && !denominacionParam.isEmpty()) ? denominacionParam : "";
+        String codComunidad = (codComunidadParam != null && !codComunidadParam.isEmpty()) ? codComunidadParam : "-1";
+
+        try {
+
+            URL url = new URL(urlBase + urlRest + "?denominacion=" + denominacion + "&codComunidad=" + codComunidad);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+            String output;
+            StringBuffer stringResult = new StringBuffer();
+            while ((output = br.readLine()) != null) {
+                stringResult.append(output);
+            }
+
+            String jsonString = stringResult.toString();
+
+            JSONParser parser = new JSONParser();
+
+            try {
+
+                JSONArray jsonUnidades = (JSONArray) parser.parse(jsonString);
+
+                for (Object obj : jsonUnidades) {
+                    JSONObject jsonUnidad = (JSONObject) parser.parse(obj.toString());
+                    Map<String, Object> unidadMap = new HashMap<String, Object>();
+                    unidadMap.put("codigo", jsonUnidad.get("codigo"));
+                    unidadMap.put("denominacion", jsonUnidad.get("denominacion"));
+                    listaCodigoValor.add(unidadMap);
+
+                }
+
+            } catch (ParseException ex) {
+                Logger.getLogger(DominiHeliumLogicaEJB.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                conn.disconnect();
+            }
+
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(DominiHeliumLogicaEJB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(DominiHeliumLogicaEJB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        return listaCodigoValor;
+    }
+    
+    */
+    
+    /*
+
+    private static List<CampTasca> consultaFormulariTasca(TramitacioService port, String idEntorn, String idTasca) throws TramitacioException_Exception {
+
+        List<CampTasca> _consultaFormulariTasca__return = port.consultaFormulariTasca(idEntorn, idTasca);
+        return _consultaFormulariTasca__return;
+
+    }
+
+    public String consultaFormulariTasca(String idEntorn, String idTasca) {
+
+        TramitacioService port = getServicePort();
+
+        String response = null;
+
+        try {
+            response = consultaFormulariTasca(port, idEntorn, idTasca).toString();
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
+    }
+
+*/  
+
+
+
+//private static final String REST_URL = ;
+    
+    /*
+    private static final QName SERVICE_NAME = new QName(DadesConnexioTramitacio._QNAME,
+            DadesConnexioTramitacio._SERVICE_NAME);
+    */
+    
+    /*
+    private TramitacioService getServicePort() {
+
+        URL wsdlURL = null;
+        
+        final DadesConnexio dadesConnexio = new DadesConnexioTramitacio(propertyBase);
+
+        try {
+            wsdlURL = new URL(dadesConnexio.getWsdlLocation());
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Authenticator.setDefault(new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(
+                        dadesConnexio.getUserName(),
+                        dadesConnexio.getPassword().toCharArray()
+                 );
+            }
+        });
+
+       
+        
+        TramitacioServiceImplService ss = new TramitacioServiceImplService(wsdlURL, SERVICE_NAME);
+        TramitacioService port = ss.getTramitacioServiceImplPort();
+
+        Map<String, Object> req = ((BindingProvider) port).getRequestContext();
+
+        req.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, dadesConnexio.getEndPoint());
+
+        req.put(BindingProvider.USERNAME_PROPERTY, dadesConnexio.getUserName());
+        req.put(BindingProvider.PASSWORD_PROPERTY, dadesConnexio.getPassword());
+ 
+        return port;
+
+    }
+    */
+
+  
