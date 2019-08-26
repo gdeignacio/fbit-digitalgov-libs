@@ -195,6 +195,25 @@ public class CatalogoDIR3Client {
         return denominacion;
     }
     
+    public List<Map<String, Object>> listNivelesAdministracion(){
+        
+        Map parametrosMap = new HashMap<String, Object>();
+        
+        parametrosMap.put("requestMapping", "/catalogo/nivelesAdministracion");
+        parametrosMap.put("requestParams", "");
+        
+        //parametrosMap.put("requestParams", "{\"codigo\":\"coduno\", \"valor\":\"valor\"}");
+        
+        URL url = client.getUrl(parametrosMap);        
+        
+        
+        
+        List<Map<String, Object>> l = list(url, "id", "descripcion");
+        
+        return l;
+    }
+    
+    
     
     public List<Map<String, Object>> list(Map parametrosMap, String codigo, String valor){
         
