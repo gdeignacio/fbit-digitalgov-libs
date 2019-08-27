@@ -195,24 +195,69 @@ public class CatalogoDIR3Client {
         return denominacion;
     }
     
-    public List<Map<String, Object>> listNivelesAdministracion(){
+    public List<Map<String, Object>> getNivelesAdministracion(){
         
         Map parametrosMap = new HashMap<String, Object>();
         
         parametrosMap.put("requestMapping", "/catalogo/nivelesAdministracion");
         parametrosMap.put("requestParams", "");
         
-        //parametrosMap.put("requestParams", "{\"codigo\":\"coduno\", \"valor\":\"valor\"}");
-        
-        URL url = client.getUrl(parametrosMap);        
-        
-        
-        
+        URL url = getUrl(parametrosMap);        
         List<Map<String, Object>> l = list(url, "id", "descripcion");
-        
         return l;
     }
     
+    public List<Map<String, Object>> getEntidadesGeograficas(){
+        
+        Map parametrosMap = new HashMap<String, Object>();
+        
+        parametrosMap.put("requestMapping", "/catalogo/entidadesGeograficas");
+        parametrosMap.put("requestParams", "");
+        
+        URL url = getUrl(parametrosMap);        
+        List<Map<String, Object>> l = list(url, "id", "descripcion");
+        return l;
+    }
+    
+    
+    public List<Map<String, Object>> getComunidadesAutonomas(){
+        
+        Map parametrosMap = new HashMap<String, Object>();
+        
+        parametrosMap.put("requestMapping", "/catalogo/comunidadesAutonomas");
+        parametrosMap.put("requestParams", "");
+        
+        URL url = getUrl(parametrosMap);        
+        List<Map<String, Object>> l = list(url, "id", "descripcion");
+        return l;
+    }
+    
+    
+     public List<Map<String, Object>> getProvinciasIllesBalears() {
+
+        Map parametrosMap = new HashMap<String, Object>();
+
+        parametrosMap.put("requestMapping", "/catalogo/provincias/comunidadAutonoma");
+        parametrosMap.put("requestParams", "?id=4");
+
+        URL url = getUrl(parametrosMap);
+        List<Map<String, Object>> l = list(url, "id", "descripcion");
+        return l;
+    }
+    
+     
+    public List<Map<String, Object>> getMunicipiosIllesBalears() {
+
+        Map parametrosMap = new HashMap<String, Object>();
+
+        parametrosMap.put("requestMapping", "/catalogo/localidades/provincia/entidadGeografica");
+        parametrosMap.put("requestParams", "?codigoProvincia=7&codigoEntidadGeografica=01");
+        
+
+        URL url = getUrl(parametrosMap);
+        List<Map<String, Object>> l = list(url, "id", "descripcion");
+        return l;
+    }
     
     
     public List<Map<String, Object>> list(Map parametrosMap, String codigo, String valor){
