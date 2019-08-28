@@ -232,6 +232,20 @@ public class CatalogoDIR3Client {
         return l;
     }
     
+    public List<Map<String, Object>> getProvinciasByComunidadAutonoma(String comunidadautonoma) {
+
+        String id = (comunidadautonoma!=null)?comunidadautonoma:"4";
+        
+        Map parametrosMap = new HashMap<String, Object>();
+
+        parametrosMap.put("requestMapping", "/catalogo/provincias/comunidadAutonoma");
+        parametrosMap.put("requestParams", "?id=".concat(id));
+
+        URL url = getUrl(parametrosMap);
+        List<Map<String, Object>> l = list(url, "id", "descripcion");
+        return l;
+    }
+    
     
      public List<Map<String, Object>> getProvinciasIllesBalears() {
 
@@ -254,6 +268,22 @@ public class CatalogoDIR3Client {
         parametrosMap.put("requestParams", "?codigoProvincia=7&codigoEntidadGeografica=01");
         
 
+        URL url = getUrl(parametrosMap);
+        List<Map<String, Object>> l = list(url, "id", "descripcion");
+        return l;
+    }
+    
+    
+     public List<Map<String, Object>> getLocalidadesByProvinciaEntidadGeografica(String codigoProvincia, String codigoEntidadGeografica) {
+
+        String idProvincia = (codigoProvincia!=null)?codigoProvincia:"7";
+        String idEntidadGeografica = (codigoEntidadGeografica!=null)?codigoEntidadGeografica:"01"; 
+        
+        Map parametrosMap = new HashMap<String, Object>();
+
+        parametrosMap.put("requestMapping", "/catalogo/localidades/provincia/entidadGeografica");
+        parametrosMap.put("requestParams", "?codigoProvincia=" + idProvincia + "&codigoEntidadGeografica="+ idEntidadGeografica);
+        
         URL url = getUrl(parametrosMap);
         List<Map<String, Object>> l = list(url, "id", "descripcion");
         return l;
@@ -408,7 +438,7 @@ public class CatalogoDIR3Client {
         
         parametrosMap.put("requestMapping", "/catalogo/provincias/comunidadAutonoma");
         //parametrosMap.put("requestParams", "{\"id\":\"4\"}");
-        parametrosMap.put("requestParams", "?id=4");
+        parametrosMap.put("requestParams", "?id=8");
         
         url = client.getUrl(parametrosMap);        
         
