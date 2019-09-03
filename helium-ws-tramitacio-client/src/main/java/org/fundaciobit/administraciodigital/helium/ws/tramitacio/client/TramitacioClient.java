@@ -512,7 +512,46 @@ public class TramitacioClient {
         return _getArxiuProces__return;
 
     }
+    
+    
+    
+    
+    private static ExpedientInfo getExpedientInfo(TramitacioService port, String entorn, String usuari, String numero) throws TramitacioException_Exception {
 
+        String _entorn = entorn;
+        String _usuari = usuari;
+        String _numero = numero;
+        
+        ExpedientInfo _getExpedientInfo__return = port.getExpedientInfo(_entorn, _usuari, _numero);
+        return _getExpedientInfo__return;
+
+    }
+    
+    
+    public ExpedientInfo getExpedientInfo(String entorn, String usuari, String numero) {
+
+        TramitacioService port = getServicePort();
+
+        ExpedientInfo response = null;
+        try {
+            response = getExpedientInfo(port, entorn, usuari, numero);
+        } catch (TramitacioException_Exception ex) {
+            Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
+        
+    }
+    
+    /**
+     *
+     * @param entorn
+     * @param usuari
+     * @param numero
+     * @return
+     * @deprecated
+     * use {@link #getExpedientInfo()} instead.
+     */
+    @Deprecated
     public ExpedientInfo consultaExpedient(String entorn, String usuari, String numero) {
 
         TramitacioService port = getServicePort();

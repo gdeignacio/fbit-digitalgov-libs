@@ -45,9 +45,9 @@ public class CreateChildTokensHandler extends HeliumActionHandler {
         boolean esMultiple = "true".equalsIgnoreCase(multiple);
         if (obj == null) {return;}
         Object[] tokenSuffixes = (esMultiple && obj instanceof Object[]) ? (Object[]) obj : new Object[]{obj};
-        String tokenName = null;
+        
         for (Object tokenSuffix : tokenSuffixes) {
-            tokenName=destinationNode;
+            String tokenName=destinationNode;
             tokenName+="_";
             JSONObject json = new JSONObject();
             json.put(varChild, tokenSuffix);
