@@ -138,18 +138,27 @@ public class CatalogoDIR3Client {
 
     public String getByCodigo(String codigo){
         
+        
+        //List<Map<String, Object>> l = list(url, "id", "descripcion");
+        //return l;
+        
         if (codigo == null) return null;
         
         if ("".equals(codigo)) return "";
         
         if (NO_DIR3.equals(codigo)) return "Altres";
         
+        Map parametrosMap = new HashMap<String, Object>();
+        
         String requestMapping = "/unidad/denominacion";
         String requestParams = "?codigo=" + codigo;
         
+        parametrosMap.put("requestMapping", requestMapping);
+        parametrosMap.put("requestParams", requestParams);
+        
         Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, requestMapping + requestParams);
         
-        URL url = getUrl(requestMapping, requestParams);
+        URL url = getUrl(parametrosMap);
         
         //URL url = getUrl(parametrosMap);     
         Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, url.toString());
@@ -290,6 +299,32 @@ public class CatalogoDIR3Client {
     }
     
     
+    public List<Map<String, Object>> getCodigosByFiltro(
+            String denominacion, String codNivelAdministracion, String codComunidadAutonoma, String provincia, String localidad) {
+        
+        String idDenominacion = (denominacion!=null)?denominacion:"";
+        String idNivelAdministracion = (codNivelAdministracion!=null)?codNivelAdministracion:"3";
+        String idComunidadAutonoma = (codComunidadAutonoma!=null)?codComunidadAutonoma:"4";
+        String idProvincia = (provincia!=null)?provincia:"7";
+        String idLocalidad = (localidad!=null)?localidad:"407"; 
+        
+        Map parametrosMap = new HashMap<String, Object>();
+
+        parametrosMap.put("requestMapping", "/busqueda/organismos");
+        
+        String wpar = "?codigo=&denominacion=&codNivelAdministracion=" + idNivelAdministracion 
+                + "&codComunidadAutonoma=" + idComunidadAutonoma 
+                + "&conOficinas=false&unidadRaiz=false&provincia=" + idProvincia 
+                + "&localidad=" + idLocalidad + "&vigentes=true";
+        
+        parametrosMap.put("requestParams",  wpar);
+        
+        URL url = getUrl(parametrosMap);
+        List<Map<String, Object>> l = list(url, "codigo", "denominacion");
+        return l;
+    }
+     
+     
     public List<Map<String, Object>> list(Map parametrosMap, String codigo, String valor){
         
         if (!isDir3(parametrosMap)){
@@ -491,6 +526,13 @@ public class CatalogoDIR3Client {
             System.out.println(miembro);
         }
       
+           
+        String codigo = "LA0008237"; 
+          
+        String resultado = client.getByCodigo(codigo);
+        
+        System.out.println(resultado);
+           
         
         
    /*
@@ -544,7 +586,6 @@ public class CatalogoDIR3Client {
         //parametrosMap.put("requestParams",  par.toString());
         parametrosMap.put("requestParams",  wpar);
         
-        
         System.out.println(par.toString());
         
         System.out.println(par.toString().replace("\"", "_").replace(":", "-").replace(",", "|"));
@@ -574,6 +615,8 @@ public class CatalogoDIR3Client {
         
         
     }
+
+    
 
 }
 
