@@ -299,9 +299,10 @@ public class CatalogoDIR3Client {
     }
     
     
-    public List<Map<String, Object>> getCodigosByFiltro(
+    public List<Map<String, Object>> getCodigosByFiltro(String codigo,
             String denominacion, String codNivelAdministracion, String codComunidadAutonoma, String provincia, String localidad) {
         
+        String id = (codigo!=null)?codigo:"";
         String idDenominacion = (denominacion!=null)?denominacion:"";
         String idNivelAdministracion = (codNivelAdministracion!=null)?codNivelAdministracion:"3";
         String idComunidadAutonoma = (codComunidadAutonoma!=null)?codComunidadAutonoma:"4";
@@ -312,7 +313,8 @@ public class CatalogoDIR3Client {
 
         parametrosMap.put("requestMapping", "/busqueda/organismos");
         
-        String wpar = "?codigo=&denominacion=&codNivelAdministracion=" + idNivelAdministracion 
+        String wpar = "?codigo=" + id + "&denominacion=" + idDenominacion 
+                + "&codNivelAdministracion=" + idNivelAdministracion 
                 + "&codComunidadAutonoma=" + idComunidadAutonoma 
                 + "&conOficinas=false&unidadRaiz=false&provincia=" + idProvincia 
                 + "&localidad=" + idLocalidad + "&vigentes=true";
@@ -324,7 +326,37 @@ public class CatalogoDIR3Client {
         return l;
     }
      
+    public List<Map<String, Object>> getOrganismosByFiltro(String codigo,
+            String denominacion, String codNivelAdministracion, String codComunidadAutonoma, String provincia, String localidad) {
+        
+        String id = (codigo!=null)?codigo:"";
+        String idDenominacion = (denominacion!=null)?denominacion:"";
+        String idNivelAdministracion = (codNivelAdministracion!=null)?codNivelAdministracion:"";
+        String idComunidadAutonoma = (codComunidadAutonoma!=null)?codComunidadAutonoma:"";
+        String idProvincia = (provincia!=null)?provincia:"";
+        String idLocalidad = (localidad!=null)?localidad:""; 
+        
+        Map parametrosMap = new HashMap<String, Object>();
+
+        parametrosMap.put("requestMapping", "/busqueda/organismos");
+        
+        String wpar = "?codigo=" + id + "&denominacion=" + idDenominacion 
+                + "&codNivelAdministracion=" + idNivelAdministracion 
+                + "&codComunidadAutonoma=" + idComunidadAutonoma 
+                + "&conOficinas=false&unidadRaiz=false&provincia=" + idProvincia 
+                + "&localidad=" + idLocalidad + "&vigentes=true";
+        
+        parametrosMap.put("requestParams",  wpar);
+        
+        URL url = getUrl(parametrosMap);
+        List<Map<String, Object>> l = list(url);
+        return l;
+    }
      
+    
+    
+    
+    
     public List<Map<String, Object>> list(Map parametrosMap, String codigo, String valor){
         
         if (!isDir3(parametrosMap)){
@@ -336,6 +368,75 @@ public class CatalogoDIR3Client {
         return list(url, codigo, valor);
        
     }
+    
+    
+    private static List<Map<String, Object>> list(URL url) {
+
+        List<Map<String, Object>> listaCodigoValor = new ArrayList<Map<String, Object>>();
+        
+        if (url == null) {
+            return listaCodigoValor;
+        }
+        
+        try {
+            
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+
+            if (conn.getResponseCode() != 200) {
+                return listaCodigoValor;
+                //throw new RuntimeException("Failed : HTTP error code : "
+                //        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+            String output;
+            StringBuffer stringResult = new StringBuffer();
+            while ((output = br.readLine()) != null) {
+                stringResult.append(output);
+            }
+
+            String jsonString = stringResult.toString();
+
+            JSONParser parser = new JSONParser();
+
+            JSONArray jsonUnidades;
+            
+            try {
+                jsonUnidades = (JSONArray) parser.parse(jsonString);
+                for (Object obj : jsonUnidades) {
+                    JSONObject jsonUnidad = (JSONObject) parser.parse(obj.toString());
+                    Map<String, Object> unidadMap = new HashMap<String, Object>();
+                   
+                    for (Object key:jsonUnidad.keySet()){
+                        unidadMap.put((String)key, jsonUnidad.get(key));
+                    }
+                    
+                    //Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, "Recuperat: " + unidadMap.get("id")+ " " + unidadMap.get("val"));
+                    listaCodigoValor.add(unidadMap);
+                }
+            } catch (ParseException ex) {
+                Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                conn.disconnect();
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        /*
+        for (Map<String, Object> unidadMap: listaCodigoValor){
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, "Testing: " + unidadMap.get("id")+ " " + unidadMap.get("val"));
+        }
+        */
+        
+        return listaCodigoValor;
+    }
+    
+    
     
     private static List<Map<String, Object>> list(URL url, String codigo, String valor) {
 
@@ -399,6 +500,58 @@ public class CatalogoDIR3Client {
         
         return listaCodigoValor;
     }
+    
+    
+    
+    
+    
+    private static JSONArray getJSONOrganismos(URL url) {
+        
+        JSONArray jsonUnidades = new JSONArray();
+        
+        if (url == null) {
+            return jsonUnidades;
+        }
+        
+        try {
+            
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+
+            if (conn.getResponseCode() != 200) {
+                return jsonUnidades;
+                //throw new RuntimeException("Failed : HTTP error code : "
+                //        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+            String output;
+            StringBuffer stringResult = new StringBuffer();
+            while ((output = br.readLine()) != null) {
+                stringResult.append(output);
+            }
+
+            String jsonString = stringResult.toString();
+            JSONParser parser = new JSONParser();
+
+            try {
+                jsonUnidades = (JSONArray) parser.parse(jsonString);        
+            } catch (ParseException ex) {
+                Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                conn.disconnect();
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return jsonUnidades;
+    }
+    
+    
     
 
     public static void main(String args[]) throws Exception {
@@ -529,7 +682,7 @@ public class CatalogoDIR3Client {
            
         String codigo = "LA0008237"; 
           
-        String resultado = client.getByCodigo(codigo);
+        String resultado = client.getOrganismosByFiltro(codigo, "", "3", "", "", "407").toString();
         
         System.out.println(resultado);
            
@@ -608,9 +761,10 @@ public class CatalogoDIR3Client {
         
         l = list(url, "codigo", "denominacion");
         
+        /*
         for (Map mp: l){
             System.out.println(mp.entrySet());
-        }
+        }*/
         
         
         
