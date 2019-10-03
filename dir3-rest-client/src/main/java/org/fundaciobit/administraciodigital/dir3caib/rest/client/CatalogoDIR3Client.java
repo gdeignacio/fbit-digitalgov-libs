@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.fundaciobit.administraciodigital.utils.cxf.authentication.AuthenticatorReplacer;
 import org.fundaciobit.administraciodigital.utils.util.Strings;
 import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioREST;
 
@@ -76,6 +77,8 @@ public class CatalogoDIR3Client {
         strbUrl.append(endPoint);
         strbUrl.append(requestMapping);
         strbUrl.append(requestParams);
+        
+        AuthenticatorReplacer.verifyHost();
         
         URL url;
         try {
@@ -562,7 +565,7 @@ public class CatalogoDIR3Client {
         
         System.setProperty(app + dadesConnexio.getCodClient() + ".username", "admin");
         System.setProperty(app + dadesConnexio.getCodClient()  + ".password", "admincmaib");
-        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://registre3.fundaciobit.org/dir3caib");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "https://proves.caib.es/dir3caib");
         //System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://192.168.35.151:8080/dir3caib");
         
         

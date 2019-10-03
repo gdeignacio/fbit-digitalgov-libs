@@ -39,6 +39,7 @@ import net.java.dev.jaxb.array.AnyTypeArray;
 import net.java.dev.jaxb.array.AnyTypeArrayArray;
 import org.apache.cxf.jaxb.JAXBToStringBuilder;
 import org.apache.cxf.jaxb.JAXBToStringStyle;
+import org.fundaciobit.administraciodigital.utils.cxf.authentication.AuthenticatorReplacer;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -134,6 +135,8 @@ public class TramitacioClient {
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         HttpsURLConnection.setDefaultHostnameVerifier(hv);
 
+        //AuthenticatorReplacer.verifyHost();
+        
         URL wsdlURL = null;
 
         //final DadesConnexioSOAP dadesConnexio = new DadesConnexioTramitacio(propertyBase);

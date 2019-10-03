@@ -37,7 +37,7 @@ import javax.net.ssl.X509TrustManager;
 public class AuthenticatorReplacer {
     
     
-        private static void verifyHost(){
+        public static void verifyHost(){
     
           // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
@@ -81,6 +81,21 @@ public class AuthenticatorReplacer {
     
     }
     
+    public static void setAuthenticator(String user, String password){
+        
+        final String _user = user;
+        final String _password = password;
+        
+        Authenticator.setDefault(new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(
+                        _user,
+                        _password.toCharArray()
+                );
+            }
+        });
+    }    
     
 
     public static void main(String args[]) throws Exception {
@@ -92,7 +107,8 @@ public class AuthenticatorReplacer {
         
         final String user = arg0;
         final String password = arg1;
-    
+
+        
         Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
