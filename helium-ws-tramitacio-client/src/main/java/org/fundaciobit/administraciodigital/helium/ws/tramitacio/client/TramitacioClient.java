@@ -1,25 +1,14 @@
 package org.fundaciobit.administraciodigital.helium.ws.tramitacio.client;
 
 import java.lang.reflect.Field;
-import java.net.Authenticator;
 import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
@@ -94,7 +83,8 @@ public class TramitacioClient {
             DadesConnexioTramitacio._SERVICE_NAME);
 
     private TramitacioService getServicePort() {
-
+        
+        /*
         // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
             @Override
@@ -134,8 +124,8 @@ public class TramitacioClient {
         }
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         HttpsURLConnection.setDefaultHostnameVerifier(hv);
-
-        //AuthenticatorReplacer.verifyHost();
+        */
+        AuthenticatorReplacer.verifyHost();
         
         URL wsdlURL = null;
 
@@ -148,6 +138,7 @@ public class TramitacioClient {
             Logger.getLogger(TramitacioClient.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        /*
         Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -157,7 +148,13 @@ public class TramitacioClient {
                 );
             }
         });
-
+        */
+        
+        String userName = dadesConnexio.getUserName();
+        String password = dadesConnexio.getPassword();
+        
+        AuthenticatorReplacer.setAuthenticator(userName, password);
+        
         System.out.println("Servicio:  " + SERVICE_NAME);
         System.out.println("URL:  " + wsdlURL);
         TramitacioService_Service ss = new TramitacioService_Service(wsdlURL, SERVICE_NAME);
@@ -167,8 +164,8 @@ public class TramitacioClient {
 
         req.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, dadesConnexio.getEndPoint());
 
-        req.put(BindingProvider.USERNAME_PROPERTY, dadesConnexio.getUserName());
-        req.put(BindingProvider.PASSWORD_PROPERTY, dadesConnexio.getPassword());
+        req.put(BindingProvider.USERNAME_PROPERTY, userName);
+        req.put(BindingProvider.PASSWORD_PROPERTY, password);
 
         return port;
 
@@ -667,7 +664,9 @@ public class TramitacioClient {
         //System.setProperty("es.caib.subdepen.helium.client.grupo", "SDE_TRAMIT_JEFSEC");
         //System.setProperty("es.caib.subdepen.helium.client.baseURL", "http://sdesapplin1.caib.es:28080/helium/ws");
         TramitacioClient client = TramitacioClient.getClient();
-
+        
+        client.setPropertyBase(app);
+        
         TramitacioService port = client.getServicePort();
 
         //List lista = consultaFormulariTasca(port, "EntornCMAIB", "5990");

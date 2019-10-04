@@ -563,8 +563,8 @@ public class CatalogoDIR3Client {
         
         DadesConnexioDIR3 dadesConnexio = new DadesConnexioDIR3(app);
         
-        System.setProperty(app + dadesConnexio.getCodClient() + ".username", "admin");
-        System.setProperty(app + dadesConnexio.getCodClient()  + ".password", "admincmaib");
+        System.setProperty(app + dadesConnexio.getCodClient() + ".username", "");
+        System.setProperty(app + dadesConnexio.getCodClient()  + ".password", "");
         System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "https://proves.caib.es/dir3caib");
         //System.setProperty(app + dadesConnexio.getCodClient() + ".baseURL", "http://192.168.35.151:8080/dir3caib");
         
