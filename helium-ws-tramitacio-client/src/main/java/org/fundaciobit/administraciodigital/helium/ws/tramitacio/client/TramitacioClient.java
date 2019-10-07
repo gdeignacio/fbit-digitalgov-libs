@@ -41,7 +41,6 @@ import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioSOAP;
  */
 public class TramitacioClient {
 
-    //private String propertyBase
     private DadesConnexioSOAP dadesConnexio;
 
     public DadesConnexioSOAP getDadesConnexio() {
