@@ -41,9 +41,17 @@ import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioSOAP;
  */
 public class TramitacioClient {
 
-    private String propertyBase;
+    //private String propertyBase
     private DadesConnexioSOAP dadesConnexio;
 
+    public DadesConnexioSOAP getDadesConnexio() {
+        return dadesConnexio;
+    }
+
+    public void setDadesConnexio(DadesConnexioSOAP dadesConnexio) {
+        this.dadesConnexio = dadesConnexio;
+    }
+    
     protected static final Logger LOG = Logger.getLogger(TramitacioClient.class.getName());
 
     /**
@@ -66,19 +74,16 @@ public class TramitacioClient {
      *
      * @return objete singleton de la clase CMAIBDocumentOrganismeWsClient.
      */
-    public static TramitacioClient getClient() {
+    public static TramitacioClient getClient(DadesConnexioTramitacio dadesConnexio) {
+        client.setDadesConnexio(dadesConnexio);
         return client;
     }
 
-    public void setPropertyBase(String propertyBase) {
-        this.propertyBase = propertyBase;
-        this.dadesConnexio = new DadesConnexioTramitacio(propertyBase);
-    }
-    
-    public DadesConnexioSOAP getDadesConnexio(){
-        return this.dadesConnexio;
-    }
-
+    //public void setPropertyBase(String propertyBase) {
+    //    this.propertyBase = propertyBase;
+    //    this.dadesConnexio = new DadesConnexioTramitacio(propertyBase);
+    //}
+   
     private static final QName SERVICE_NAME = new QName(DadesConnexioTramitacio._QNAME,
             DadesConnexioTramitacio._SERVICE_NAME);
 
@@ -155,8 +160,9 @@ public class TramitacioClient {
         
         AuthenticatorReplacer.setAuthenticator(userName, password);
         
-        System.out.println("Servicio:  " + SERVICE_NAME);
-        System.out.println("URL:  " + wsdlURL);
+        LOG.log(Level.INFO, "Servicio:  {0}", SERVICE_NAME);
+        LOG.log(Level.INFO, "URL: {0}", wsdlURL);
+        
         TramitacioService_Service ss = new TramitacioService_Service(wsdlURL, SERVICE_NAME);
         TramitacioService port = ss.getTramitacioPort();
 
@@ -646,7 +652,9 @@ public class TramitacioClient {
      */
     public static void main(String args[]) throws Exception {
 
-        String app = "es.caib.cmaib.";
+        String app = "org.fundaciobit.administraciodigital.";
+        
+        //String app = "es.caib.cmaib.";
 
         String str = JAXBToStringBuilder.valueOf(app, JAXBToStringStyle.DEFAULT_STYLE);
 
@@ -663,9 +671,10 @@ public class TramitacioClient {
         //System.setProperty("es.caib.subdepen.helium.client.usuario", "u82545");
         //System.setProperty("es.caib.subdepen.helium.client.grupo", "SDE_TRAMIT_JEFSEC");
         //System.setProperty("es.caib.subdepen.helium.client.baseURL", "http://sdesapplin1.caib.es:28080/helium/ws");
-        TramitacioClient client = TramitacioClient.getClient();
         
-        client.setPropertyBase(app);
+        TramitacioClient client = TramitacioClient.getClient(dadesConnexio);
+        
+        //client.setPropertyBase(app);
         
         TramitacioService port = client.getServicePort();
 
