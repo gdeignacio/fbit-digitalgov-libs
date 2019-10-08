@@ -36,12 +36,7 @@
             
         </dependency>
 
-        <dependency>
-            <groupId>org.fundaciobit.administraciodigital</groupId>
-            <artifactId>fbit-digitalgov-libs-helium-commons</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
+    
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-common-utilities</artifactId>
@@ -129,7 +124,7 @@
             </plugin>
 
 
-            <plugin>
+         <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.4.0</version>

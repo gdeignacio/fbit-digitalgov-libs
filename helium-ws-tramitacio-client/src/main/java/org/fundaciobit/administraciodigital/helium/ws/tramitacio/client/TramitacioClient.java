@@ -71,13 +71,41 @@ public class TramitacioClient {
     /**
      * Recupera l objecte singleton.
      *
-     * @return objete singleton de la clase CMAIBDocumentOrganismeWsClient.
+     * @return objete singleton de la clase.
      */
-    public static TramitacioClient getClient(DadesConnexioTramitacio dadesConnexio) {
+    private static TramitacioClient _getClient(DadesConnexioTramitacio dadesConnexio) {
         client.setDadesConnexio(dadesConnexio);
         return client;
     }
-
+    
+    /**
+     * Recupera el singleton amb dadesConnexio prèviament inicialitzat
+     * new DadesConnexioTramitacio("foo.bar")
+     * properties foo.bar.helium.client.xxx
+     * @param dadesConnexio
+     * @return 
+     * @see DadesConnexioTramitacio
+     * @see TramitacioClient
+     */
+    public static TramitacioClient getClient(DadesConnexioTramitacio dadesConnexio) {
+        DadesConnexioTramitacio dct = (dadesConnexio!=null)?dadesConnexio:new DadesConnexioTramitacio("");
+        return _getClient(dct);
+    }
+    
+    /**
+     * Recupera el singleton i inicialitza DadesConnexio 
+     * new DadesConnexio("")
+     * properties helium.client.xxx
+     * @return 
+     * @see DadesConnexioTramitacio
+     * @see TramitacioClient
+     */
+    public static TramitacioClient getClient(){
+        DadesConnexioTramitacio dct = new DadesConnexioTramitacio("");
+        return _getClient(dct);
+    }
+    
+    
     //public void setPropertyBase(String propertyBase) {
     //    this.propertyBase = propertyBase;
     //    this.dadesConnexio = new DadesConnexioTramitacio(propertyBase);
@@ -680,6 +708,7 @@ public class TramitacioClient {
         //List lista = consultaFormulariTasca(port, "EntornCMAIB", "5990");
         //System.out.println(lista);
         //port.consultaExpedients(_CODAPP, _CODAPP, _CODAPP, dataInici1, dataInici2, _CODCLIENT, _CODAPP, true, true, Double.NaN, Double.NaN, _CODCLIENT)
+        
         String entorn = "CBMA";
         String usuari = "$cmaib_helium" ;
         //String titol = null;
