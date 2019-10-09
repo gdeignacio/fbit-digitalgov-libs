@@ -34,7 +34,7 @@
         <module>helium-commons</module>
         <module>helium-disseny</module>
         <module>helium-ws-tramitacio-client</module>
-        <module>helium-ws-v1-tramitacio-client</module>
+        <!--module>helium-ws-v1-tramitacio-client</module-->
         <module>helium-ws-formulariextern-client</module>
         <module>helium-ws</module>
         <module>dir3-rest-client</module>

@@ -28,10 +28,18 @@ import org.json.simple.parser.ParseException;
  */
 public class CatalogoDIR3Client {
     
+    private DadesConnexioREST dadesConnexio;
+
+    public DadesConnexioREST getDadesConnexio() {
+        return dadesConnexio;
+    }
+
+    public void setDadesConnexio(DadesConnexioREST dadesConnexio) {
+        this.dadesConnexio = dadesConnexio;
+    }
+    
     private final static String NO_DIR3 = "NDIR3";
     
-    private String propertyBase = "es.caib.cmaib.";
-
     protected static final Logger LOG = Logger.getLogger(CatalogoDIR3Client.class.getName());
 
     /**
@@ -49,30 +57,54 @@ public class CatalogoDIR3Client {
         super();
     }
 
-    /**
+     /**
      * Recupera l objecte singleton.
      *
-     * @return objete singleton de la clase CMAIBDocumentOrganismeWsClient.
+     * @return objete singleton de la clase.
      */
-    public static CatalogoDIR3Client getClient() {
+    private static CatalogoDIR3Client _getClient(DadesConnexioDIR3 dadesConnexio) {
+        client.setDadesConnexio(dadesConnexio);
         return client;
     }
-
-    public void setPropertyBase(String propertyBase) {
-        this.propertyBase = propertyBase;
+    
+    /**
+     * Recupera el singleton amb dadesConnexio prèviament inicialitzat
+     * new DadesConnexioDIR3("foo.bar")
+     * properties foo.bar.dir3caib.client.xxx
+     * @param dadesConnexio
+     * @return 
+     * @see DadesConnexioDIR3
+     * @see CatalogoDIR3Client
+     */
+    public static CatalogoDIR3Client getClient(DadesConnexioDIR3 dadesConnexio) {
+        DadesConnexioDIR3 dct = (dadesConnexio!=null)?dadesConnexio:new DadesConnexioDIR3("");
+        return _getClient(dct);
     }
-
+    
+    /**
+     * Recupera el singleton i inicialitza DadesConnexio 
+     * new DadesConnexio("")
+     * properties dir3caib.client.xxx
+     * @return 
+     * @see DadesConnexioDIR3
+     * @see CatalogoDIR3Client
+     */
+    public static CatalogoDIR3Client getClient(){
+        DadesConnexioDIR3 dct = new DadesConnexioDIR3("");
+        return _getClient(dct);
+    }
+    
     
     private URL getUrl(String requestMapping, String requestParams){
         
-        final DadesConnexioREST dadesConnexio = new DadesConnexioDIR3(propertyBase);
+        //final DadesConnexioREST dadesConnexio = new DadesConnexioDIR3(propertyBase);
         
         String endPoint = dadesConnexio.getEndPoint();
         
         //String requestMapping= (String)parametrosMap.get("requestMapping");
         //String requestParams = (String)parametrosMap.get("requestParams");
         
-        StringBuffer strbUrl = new StringBuffer();
+        StringBuilder strbUrl = new StringBuilder();
         
         strbUrl.append(endPoint);
         strbUrl.append(requestMapping);
@@ -159,7 +191,7 @@ public class CatalogoDIR3Client {
         parametrosMap.put("requestMapping", requestMapping);
         parametrosMap.put("requestParams", requestParams);
         
-        Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, requestMapping + requestParams);
+        Logger.getLogger(CatalogoDIR3Client.class.getName()).log(Level.INFO, "{0}{1}", new Object[]{requestMapping, requestParams});
         
         URL url = getUrl(parametrosMap);
         
@@ -189,7 +221,7 @@ public class CatalogoDIR3Client {
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 
             String output;
-            StringBuffer stringResult = new StringBuffer();
+            StringBuilder stringResult = new StringBuilder();
             while ((output = br.readLine()) != null) {
                 stringResult.append(output);
             }
@@ -396,7 +428,7 @@ public class CatalogoDIR3Client {
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 
             String output;
-            StringBuffer stringResult = new StringBuffer();
+            StringBuilder stringResult = new StringBuilder();
             while ((output = br.readLine()) != null) {
                 stringResult.append(output);
             }
@@ -464,7 +496,7 @@ public class CatalogoDIR3Client {
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 
             String output;
-            StringBuffer stringResult = new StringBuffer();
+            StringBuilder stringResult = new StringBuilder();
             while ((output = br.readLine()) != null) {
                 stringResult.append(output);
             }
@@ -531,7 +563,7 @@ public class CatalogoDIR3Client {
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 
             String output;
-            StringBuffer stringResult = new StringBuffer();
+            StringBuilder stringResult = new StringBuilder();
             while ((output = br.readLine()) != null) {
                 stringResult.append(output);
             }
@@ -559,7 +591,7 @@ public class CatalogoDIR3Client {
 
     public static void main(String args[]) throws Exception {
 
-        String app = "es.caib.cmaib.";
+        String app = "org.fundaciobit.administraciodigital.";
         
         DadesConnexioDIR3 dadesConnexio = new DadesConnexioDIR3(app);
         
@@ -572,7 +604,7 @@ public class CatalogoDIR3Client {
         System.setProperty(app +  dadesConnexio.getCodClient() + ".entorno", "EntornCMAIB");
         System.setProperty(app +  dadesConnexio.getCodClient() + ".grupo", "CMI_ADMIN");
 
-        CatalogoDIR3Client client = CatalogoDIR3Client.getClient();
+        CatalogoDIR3Client client = CatalogoDIR3Client.getClient(dadesConnexio);
 
         Map parametrosMap = new HashMap<String, Object>();
         
@@ -698,7 +730,7 @@ public class CatalogoDIR3Client {
         
         parametrosMap.put("requestMapping", "/busqueda/organismos");
         
-        StringBuffer par = new StringBuffer();
+        StringBuilder par = new StringBuilder();
         /*
         par.append("{");
         par.append("\"codigo\":\"\"");

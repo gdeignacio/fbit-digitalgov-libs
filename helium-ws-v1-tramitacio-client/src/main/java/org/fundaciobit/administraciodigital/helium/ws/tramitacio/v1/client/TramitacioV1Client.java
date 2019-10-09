@@ -1,24 +1,12 @@
 package org.fundaciobit.administraciodigital.helium.ws.tramitacio.v1.client;
 
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
-
-import org.apache.cxf.jaxb.JAXBToStringBuilder;
-import org.apache.cxf.jaxb.JAXBToStringStyle;
 import org.fundaciobit.administraciodigital.utils.cxf.authentication.AuthenticatorReplacer;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import org.fundaciobit.administraciodigital.utils.ws.connexio.DadesConnexioSOAP;
 
